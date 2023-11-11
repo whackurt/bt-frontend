@@ -1,4 +1,4 @@
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/screens/view_complaint.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/view_complaint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

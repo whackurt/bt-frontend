@@ -1,5 +1,5 @@
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
-import 'package:bt_frontend/features/establishment_features/entry_logs/presentation/screens/entry_logs.dart';
+import 'package:bt_frontend/features/establishment_features/entry_logs/screens/entry_logs.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/widgets/complaint_text.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/widgets/complaint_text.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 

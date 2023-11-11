@@ -1,4 +1,4 @@
-import 'package:bt_frontend/features/establishment_features/entry_logs/presentation/widgets/entry_log_card.dart';
+import 'package:bt_frontend/features/establishment_features/entry_logs/screens/widgets/entry_log_card.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';

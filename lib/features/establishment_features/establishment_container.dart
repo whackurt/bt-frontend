@@ -1,6 +1,6 @@
 import 'package:bt_frontend/features/establishment_features/home_screen.dart';
-import 'package:bt_frontend/features/establishment_features/profile/presentation/screens/establishment_profile.dart';
-import 'package:bt_frontend/features/establishment_features/scan_qr/presentation/screens/scan_qr_code.dart';
+import 'package:bt_frontend/features/establishment_features/profile/screens/establishment_profile.dart';
+import 'package:bt_frontend/features/establishment_features/scan_qr/screens/scan_qr_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

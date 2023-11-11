@@ -1,8 +1,8 @@
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/essential_providers.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/tourist_spots.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/va_desk_main.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/data/va_state.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/essential_providers.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/tourist_spots.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/va_desk_main.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/models/va_state.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/material.dart';
 

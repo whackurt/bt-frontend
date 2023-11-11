@@ -1,14 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:bt_frontend/core/constants/screens/landing_screen.dart';
 import 'package:bt_frontend/core/constants/screens/loading_screen.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/login/login_screen.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/establishment/create_account.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/establishment/upload_picture.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/establishment/verify_details.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/select_user_type.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/tourist/create_account.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/tourist/upload_picture.dart';
-import 'package:bt_frontend/features/auth_features/presentation/screens/signup/tourist/verify_details.dart';
+import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/establishment/create_account.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/establishment/upload_picture.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/establishment/verify_details.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/select_user_type.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/tourist/create_account.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/tourist/upload_picture.dart';
+import 'package:bt_frontend/features/auth_features/screens/signup/tourist/verify_details.dart';
 import 'package:bt_frontend/features/establishment_features/establishment_container.dart';
 import 'package:bt_frontend/features/tourist_features/tourist_container.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,6 +1,6 @@
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/screens/write_feedback.dart';
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/widgets/pending_complaint_card.dart';
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/widgets/resolved_complaint_card.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/write_feedback.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/widgets/pending_complaint_card.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/widgets/resolved_complaint_card.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';

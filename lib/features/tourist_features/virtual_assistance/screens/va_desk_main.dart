@@ -1,6 +1,6 @@
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/essential_providers.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/tourist_spots.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/widgets/hotlines.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/essential_providers.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/tourist_spots.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/widgets/hotlines.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:bt_frontend/widgets/custom_buttons/white_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';

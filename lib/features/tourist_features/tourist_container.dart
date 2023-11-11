@@ -1,7 +1,7 @@
-import 'package:bt_frontend/features/tourist_features/feedback_complaints/presentation/screens/feedback_complaints.dart';
+import 'package:bt_frontend/features/tourist_features/feedback_complaints/screens/feedback_complaints.dart';
 import 'package:bt_frontend/features/tourist_features/home_screen.dart';
-import 'package:bt_frontend/features/tourist_features/profile/presentation/screens/tourist_profile.dart';
-import 'package:bt_frontend/features/tourist_features/virtual_assistance/presentation/screens/va_desk_main.dart';
+import 'package:bt_frontend/features/tourist_features/profile/screens/tourist_profile.dart';
+import 'package:bt_frontend/features/tourist_features/virtual_assistance/screens/va_desk_main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
