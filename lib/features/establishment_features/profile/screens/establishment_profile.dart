@@ -1,3 +1,4 @@
+import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
 import 'package:bt_frontend/features/establishment_features/profile/screens/update_profile.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
@@ -6,6 +7,7 @@ import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BTEstProfile extends StatefulWidget {
   const BTEstProfile({super.key});
@@ -30,6 +32,16 @@ class _BTEstProfileState extends State<BTEstProfile> {
       'phone': '09956299588'
     }
   };
+
+  void logout(context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    pref.clear();
+
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +126,7 @@ class _BTEstProfileState extends State<BTEstProfile> {
               ));
             },
             height: 50.0,
-            child: Text(
+            child: const Text(
               'Update Profile',
               style: TextStyle(
                   color: Colors.white,
@@ -124,7 +136,7 @@ class _BTEstProfileState extends State<BTEstProfile> {
           ),
           BTRedBtnWithBorder(
             height: 45.0,
-            labelText: 'Log Out',
+            labelText: 'LOG OUT',
             action: () {
               showDialog(
                   context: context,
@@ -145,8 +157,7 @@ class _BTEstProfileState extends State<BTEstProfile> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Close the alert dialog
+                            logout(context);
                           },
                           child: const Text(
                             'Log out',
