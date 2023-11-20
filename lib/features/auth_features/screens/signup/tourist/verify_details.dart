@@ -39,13 +39,6 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(builder: (context) => const TouristContainer()),
             (route) => false);
-      } else {
-        AnimatedSnackBar.material(
-          'Login failed.',
-          type: AnimatedSnackBarType.error,
-          mobileSnackBarPosition: MobileSnackBarPosition.top,
-          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
-        ).show(context);
       }
     });
   }

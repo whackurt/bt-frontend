@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
-import 'package:bt_frontend/widgets/appbar.dart';
+import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -76,9 +76,9 @@ class _BTTouristHomeState extends State<BTTouristHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Home'),
-      body: Center(
+    return BTContentWrapper(
+      title: 'Home',
+      child: Center(
           child: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: Column(

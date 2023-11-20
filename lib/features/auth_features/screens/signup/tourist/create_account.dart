@@ -366,7 +366,7 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                   // Navigator.pushNamed(context, '/signup/tourist/uploadPic');
                 },
                 height: 50.0,
-                child: Text(
+                child: const Text(
                   'Proceed',
                   style: TextStyle(
                       color: Colors.white,
