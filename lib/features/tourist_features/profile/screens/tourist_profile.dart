@@ -1,3 +1,4 @@
+import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
 import 'package:bt_frontend/features/tourist_features/profile/screens/update_profile.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
@@ -6,6 +7,7 @@ import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BTTouristProfile extends StatefulWidget {
   const BTTouristProfile({super.key});
@@ -30,6 +32,17 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
       "city_municipality": "Cagayan de Oro City"
     }
   };
+
+  void logout(context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    pref.clear();
+
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
@@ -100,7 +113,13 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
             ));
           },
           height: 45.0,
-          label: 'Update Profile',
+          child: const Text(
+            'Update Profile',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 20.0),
+          ),
         ),
         BTRedBtnWithBorder(
           height: 45.0,
@@ -118,13 +137,13 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                     actions: [
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the alert dialog
+                          Navigator.of(context).pop();
                         },
                         child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the alert dialog
+                          logout(context);
                         },
                         child: const Text(
                           'Log out',

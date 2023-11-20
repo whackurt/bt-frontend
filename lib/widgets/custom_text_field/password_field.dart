@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 class BTPasswordField extends StatefulWidget {
   final String? label;
   final String? placeholder;
-  final TextEditingController? textController;
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
-  const BTPasswordField({
-    super.key,
-    this.label,
-    this.placeholder,
-    this.textController,
-  });
+  const BTPasswordField(
+      {super.key,
+      this.label,
+      this.placeholder,
+      this.controller,
+      this.validator});
 
   @override
   State<BTPasswordField> createState() => _BTPasswordFieldState();
@@ -33,9 +34,11 @@ class _BTPasswordFieldState extends State<BTPasswordField> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text('${widget.label}'),
           ),
-          TextField(
-            controller: widget.textController,
+          TextFormField(
+            controller: widget.controller,
             obscureText: _obscureText,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: widget.validator,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               hintText: '${widget.placeholder}',

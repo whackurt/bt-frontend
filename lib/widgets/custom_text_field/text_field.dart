@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class BTTextField extends StatefulWidget {
   final String? placeholder;
-  const BTTextField({super.key, this.placeholder});
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+  const BTTextField(
+      {super.key, this.placeholder, this.controller, this.validator});
 
   @override
   State<BTTextField> createState() => _BTTextFieldState();
 }
 
 class _BTTextFieldState extends State<BTTextField> {
-  final _textController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,15 +20,16 @@ class _BTTextFieldState extends State<BTTextField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextField(
-            controller: _textController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              hintText: '${widget.placeholder}',
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
+          TextFormField(
+              controller: widget.controller,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText: '${widget.placeholder}',
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: widget.validator),
         ],
       ),
     );

@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 class BTTextFieldWithLabel extends StatefulWidget {
   final String? label;
   final String? placeholder;
-  final TextEditingController? textController;
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
-  const BTTextFieldWithLabel({
-    Key? key,
-    this.label,
-    this.placeholder,
-    this.textController,
-  }) : super(key: key);
+  const BTTextFieldWithLabel(
+      {Key? key, this.label, this.placeholder, this.controller, this.validator})
+      : super(key: key);
 
   @override
   _BTTextFieldWithLabelState createState() => _BTTextFieldWithLabelState();
@@ -31,15 +29,16 @@ class _BTTextFieldWithLabelState extends State<BTTextFieldWithLabel> {
             padding: const EdgeInsets.symmetric(vertical: 2.0),
             child: Text('${widget.label}'),
           ),
-          TextField(
-            controller: widget.textController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: '${widget.placeholder}',
-              filled: true,
-              fillColor: Colors.white,
-            ),
-          ),
+          TextFormField(
+              controller: widget.controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: '${widget.placeholder}',
+                filled: true,
+                fillColor: Colors.white,
+              ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: widget.validator),
           const SizedBox(
             height: 10.0,
           ),
