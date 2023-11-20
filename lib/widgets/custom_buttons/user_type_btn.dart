@@ -18,8 +18,9 @@ class _BTUserTypeButtonState extends State<BTUserTypeButton> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(),
-      ),
+          border: Border.all(
+              width: 4.0, color: const Color.fromARGB(255, 97, 97, 97)),
+          borderRadius: BorderRadius.circular(5.0)),
       child: ElevatedButton(
           onPressed: widget.onPressed,
           style: ButtonStyle(

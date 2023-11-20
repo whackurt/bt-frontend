@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 class BTFullWidthButton extends StatefulWidget {
   final double? height;
   final Function()? onPressed;
-  final String? label;
+  final Widget? child;
 
-  const BTFullWidthButton({super.key, this.height, this.onPressed, this.label});
+  const BTFullWidthButton({super.key, this.height, this.onPressed, this.child});
 
   @override
   State<BTFullWidthButton> createState() => _BTFullWidthButtonState();
@@ -22,7 +22,7 @@ class _BTFullWidthButtonState extends State<BTFullWidthButton> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: Container(
-        height: 35.0,
+        height: 40.0,
         decoration: appColor.btnLinearGradient(),
         child: SizedBox(
           height: widget.height,
@@ -35,13 +35,7 @@ class _BTFullWidthButtonState extends State<BTFullWidthButton> {
               shadowColor: Colors.transparent,
               //make color or elevated button transparent
             ),
-            child: Text(
-              '${widget.label}',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20.0),
-            ),
+            child: widget.child,
           ),
         ),
       ),

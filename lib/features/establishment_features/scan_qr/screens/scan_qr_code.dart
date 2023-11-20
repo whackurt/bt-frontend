@@ -100,7 +100,15 @@ class _BTScanQRState extends State<BTScanQR> {
                 height: 100.0,
               ),
               BTFullWidthButton(
-                  onPressed: () => scanQR(), label: 'Scan QR Code'),
+                onPressed: () => scanQR(),
+                child: Text(
+                  'Scan QR Code',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0),
+                ),
+              ),
             ],
           ),
         ),

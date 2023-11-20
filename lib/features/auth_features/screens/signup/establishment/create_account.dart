@@ -134,7 +134,13 @@ class _EstablishmentCreateAccountState
                       context, '/signup/establishment/uploadPic');
                 },
                 height: 50.0,
-                label: 'Proceed',
+                child: Text(
+                  'Proceed',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0),
+                ),
               )
             ],
           ),

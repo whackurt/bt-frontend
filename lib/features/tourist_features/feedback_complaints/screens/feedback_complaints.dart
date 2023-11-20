@@ -57,7 +57,6 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                     'As part of our ongoing efforts to enhance the tourist experience, we invite you to share your feedback or any issues you may have encountered.'),
             BTFullWidthButton(
               height: 45.0,
-              label: 'Write a Feedback',
               onPressed: () {
                 Navigator.push(context, CupertinoPageRoute(
                   builder: (context) {
@@ -65,6 +64,13 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                   },
                 ));
               },
+              child: Text(
+                'Write a Feedback',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.0),
+              ),
             ),
             const SizedBox(
               height: 20.0,

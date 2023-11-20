@@ -237,7 +237,13 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                 }));
           },
           height: 50.0,
-          label: 'Save Changes',
+          child: Text(
+            'Save Changes',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 20.0),
+          ),
         ),
         BTRedBtnWithBorder(
           height: 45.0,

@@ -131,7 +131,13 @@ class _EstablishmentVerifyDetailsState
                     submitSignUp();
                   },
                   height: 50.0,
-                  label: 'Submit',
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.0),
+                  ),
                 )
               ]),
         ),

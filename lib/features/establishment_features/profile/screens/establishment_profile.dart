@@ -114,7 +114,13 @@ class _BTEstProfileState extends State<BTEstProfile> {
               ));
             },
             height: 50.0,
-            label: 'Update Profile',
+            child: Text(
+              'Update Profile',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20.0),
+            ),
           ),
           BTRedBtnWithBorder(
             height: 45.0,

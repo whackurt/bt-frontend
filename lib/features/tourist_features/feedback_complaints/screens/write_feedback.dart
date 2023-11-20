@@ -211,7 +211,6 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
             ),
             BTFullWidthButton(
               height: 45.0,
-              label: 'Submit',
               onPressed: () {
                 showDialog(
                     context: context,
@@ -242,6 +241,13 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                       );
                     }));
               },
+              child: Text(
+                'Submit',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.0),
+              ),
             ),
             const SizedBox(
               height: 30.0,
