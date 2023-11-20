@@ -118,7 +118,7 @@ class _SelectUserTypeState extends State<SelectUserType> {
                             child: Column(
                               children: [
                                 Icon(
-                                  Icons.person_2_outlined,
+                                  Icons.domain,
                                   size: 100.0,
                                   color: selectedUser == 'Establishment'
                                       ? Colors.indigo
