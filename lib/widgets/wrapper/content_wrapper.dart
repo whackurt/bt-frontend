@@ -29,7 +29,7 @@ class _BTContentWrapperState extends State<BTContentWrapper> {
                 child: widget.child,
               ),
               const SizedBox(
-                height: 60.0,
+                height: 20.0,
               ),
             ],
           ),
