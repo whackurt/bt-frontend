@@ -23,7 +23,7 @@ class _BTDropdownBtnState extends State<BTDropdownBtn> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4.0),
             color: Colors.white,
-            border: Border.all(color: Colors.grey)),
+            border: Border.all(color: Color.fromARGB(255, 97, 97, 97))),
         child: DropdownButton<String>(
           value: selectedValue,
           underline: Container(),
