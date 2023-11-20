@@ -4,7 +4,7 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:bt_frontend/features/auth_features/controllers/auth.controller.dart';
 import 'package:bt_frontend/features/auth_features/models/tourist.model.dart';
 import 'package:bt_frontend/features/auth_features/models/user.model.dart';
-import 'package:bt_frontend/features/auth_features/screens/providers/tourist_auth.provider.dart';
+import 'package:bt_frontend/features/auth_features/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/features/tourist_features/tourist_container.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';

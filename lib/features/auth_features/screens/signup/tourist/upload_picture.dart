@@ -7,7 +7,7 @@ import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:bt_frontend/features/auth_features/screens/providers/tourist_auth.provider.dart';
+import 'package:bt_frontend/features/auth_features/providers/tourist_auth.provider.dart';
 
 class TouristUploadPicture extends StatefulWidget {
   const TouristUploadPicture({super.key});

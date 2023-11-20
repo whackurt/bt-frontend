@@ -1,4 +1,4 @@
-import 'package:bt_frontend/features/auth_features/screens/providers/tourist_auth.provider.dart';
+import 'package:bt_frontend/features/auth_features/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
