@@ -2,6 +2,7 @@
 import 'package:bt_frontend/core/constants/screens/landing_screen.dart';
 import 'package:bt_frontend/core/constants/screens/loading_screen.dart';
 import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
+import 'package:bt_frontend/features/auth_features/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/features/auth_features/screens/signup/establishment/create_account.dart';
 import 'package:bt_frontend/features/auth_features/screens/signup/establishment/upload_picture.dart';
 import 'package:bt_frontend/features/auth_features/screens/signup/establishment/verify_details.dart';
@@ -13,74 +14,92 @@ import 'package:bt_frontend/features/establishment_features/establishment_contai
 import 'package:bt_frontend/features/tourist_features/tourist_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(
-      fontFamily: 'ProximaNova',
-    ),
-    initialRoute: '/landing',
-    // home: const TouristContainer(),
-    onGenerateRoute: (RouteSettings settings) {
-      switch (settings.name) {
-        case '/loading':
-          return CupertinoPageRoute(
-              builder: (_) => const Loading(), settings: settings);
+  runApp(const MyApp());
+}
 
-        case '/landing':
-          return CupertinoPageRoute(
-              builder: (_) => const Landing(), settings: settings);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-        case '/login':
-          return CupertinoPageRoute(
-              builder: (_) => const LoginScreen(), settings: settings);
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TouristAuthProvider())
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          fontFamily: 'ProximaNova',
+        ),
+        initialRoute: '/landing',
+        // home: const TouristContainer(),
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case '/loading':
+              return CupertinoPageRoute(
+                  builder: (_) => const Loading(), settings: settings);
 
-        case '/signup/select':
-          return CupertinoPageRoute(
-              builder: (_) => const SelectUserType(), settings: settings);
+            case '/landing':
+              return CupertinoPageRoute(
+                  builder: (_) => const Landing(), settings: settings);
 
-        // TOURIST
-        case '/signup/tourist/create':
-          return CupertinoPageRoute(
-              builder: (_) => const TouristCreateAccount(), settings: settings);
+            case '/login':
+              return CupertinoPageRoute(
+                  builder: (_) => const LoginScreen(), settings: settings);
 
-        case '/signup/tourist/uploadPic':
-          return CupertinoPageRoute(
-              builder: (_) => const TouristUploadPicture(), settings: settings);
+            case '/signup/select':
+              return CupertinoPageRoute(
+                  builder: (_) => const SelectUserType(), settings: settings);
 
-        case '/signup/tourist/verify':
-          return CupertinoPageRoute(
-              builder: (_) => const TouristVerifyDetails(), settings: settings);
+            // TOURIST
+            case '/signup/tourist/create':
+              return CupertinoPageRoute(
+                  builder: (_) => const TouristCreateAccount(),
+                  settings: settings);
 
-        case '/tourist':
-          return CupertinoPageRoute(
-              builder: (_) => const TouristContainer(), settings: settings);
+            case '/signup/tourist/uploadPic':
+              return CupertinoPageRoute(
+                  builder: (_) => const TouristUploadPicture(),
+                  settings: settings);
 
-        // ESTABLISHMENT
-        case '/signup/establishment/create':
-          return CupertinoPageRoute(
-              builder: (_) => const EstablishmentCreateAccount(),
-              settings: settings);
+            case '/signup/tourist/verify':
+              return CupertinoPageRoute(
+                  builder: (_) => const TouristVerifyDetails(),
+                  settings: settings);
 
-        case '/signup/establishment/uploadPic':
-          return CupertinoPageRoute(
-              builder: (_) => const EstablishmentUploadPicture(),
-              settings: settings);
+            case '/tourist':
+              return CupertinoPageRoute(
+                  builder: (_) => const TouristContainer(), settings: settings);
 
-        case '/signup/establishment/verify':
-          return CupertinoPageRoute(
-              builder: (_) => const EstablishmentVerifyDetails(),
-              settings: settings);
+            // ESTABLISHMENT
+            case '/signup/establishment/create':
+              return CupertinoPageRoute(
+                  builder: (_) => const EstablishmentCreateAccount(),
+                  settings: settings);
 
-        case '/establishment':
-          return CupertinoPageRoute(
-              builder: (_) => const EstablishmentContainer(),
-              settings: settings);
+            case '/signup/establishment/uploadPic':
+              return CupertinoPageRoute(
+                  builder: (_) => const EstablishmentUploadPicture(),
+                  settings: settings);
 
-        default:
-          return CupertinoPageRoute(
-              builder: (_) => const Landing(), settings: settings);
-      }
-    },
-  ));
+            case '/signup/establishment/verify':
+              return CupertinoPageRoute(
+                  builder: (_) => const EstablishmentVerifyDetails(),
+                  settings: settings);
+
+            case '/establishment':
+              return CupertinoPageRoute(
+                  builder: (_) => const EstablishmentContainer(),
+                  settings: settings);
+
+            default:
+              return CupertinoPageRoute(
+                  builder: (_) => const Landing(), settings: settings);
+          }
+        },
+      ),
+    );
+  }
 }
