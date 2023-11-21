@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 
 class TouristAuthProvider extends ChangeNotifier {
@@ -13,5 +12,6 @@ class TouristAuthProvider extends ChangeNotifier {
 
   void updatePicture({required image}) {
     picture = image;
+    notifyListeners();
   }
 }
