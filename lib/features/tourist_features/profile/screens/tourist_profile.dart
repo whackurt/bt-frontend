@@ -155,6 +155,9 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                 }));
           },
         ),
+        const SizedBox(
+          height: 40.0,
+        )
       ]),
     );
   }
