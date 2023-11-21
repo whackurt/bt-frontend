@@ -16,15 +16,6 @@ class TouristUploadPicture extends StatefulWidget {
   State<TouristUploadPicture> createState() => _TouristUploadPictureState();
 }
 
-pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
-  }
-  return null;
-}
-
 bool photoError = false;
 
 class _TouristUploadPictureState extends State<TouristUploadPicture> {

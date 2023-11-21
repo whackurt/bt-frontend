@@ -78,16 +78,15 @@ class _EstablishmentVerifyDetailsState
                 'Please ensure that all information you entered is correct.'),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
-          child: CircleAvatar(
-            radius: 90,
-            backgroundImage: MemoryImage(estAuthProvider.picture!),
-            backgroundColor: Colors.white,
+          child: ClipOval(
+            child: Image.file(
+              context.watch<EstablishmentAuthProvider>().picture!,
+              fit: BoxFit.cover, // Adjust the BoxFit as needed
+              width: 200, // Set the width and height as needed
+              height: 200,
+            ),
           ),
         ),
-        // Text(context
-        //     .watch<EstablishmentAuthProvider>()
-        //     .registeringEstablishment
-        //     .toString()),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -165,6 +164,9 @@ class _EstablishmentVerifyDetailsState
               listen: false,
             );
 
+            var imageUrl =
+                await AuthController().uploadImage(estProvider.picture);
+
             Establishment establishment = Establishment(
                 name: estProvider.registeringEstablishment['name'],
                 email: estProvider.registeringEstablishment['email'],
@@ -180,14 +182,14 @@ class _EstablishmentVerifyDetailsState
                 oName: estProvider.registeringEstablishment['owner_name'],
                 oEmail: estProvider.registeringEstablishment['owner_email'],
                 oContactNo: estProvider.registeringEstablishment['owner_phone'],
-                photoUrl:
-                    "https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/store.png");
+                photoUrl: "$imageUrl");
 
             setState(() {
               loading = true;
             });
 
             await registerEstablishment(establishment);
+
             await loginEstablishment(User(
                 email: establishment.email,
                 password: establishment.password,
