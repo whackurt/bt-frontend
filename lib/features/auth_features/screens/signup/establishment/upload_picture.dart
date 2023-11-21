@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
 
 import 'dart:typed_data';
+import 'package:bt_frontend/features/auth_features/providers/establishment_auth.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class EstablishmentUploadPicture extends StatefulWidget {
   const EstablishmentUploadPicture({super.key});
@@ -24,17 +26,26 @@ pickImage(ImageSource source) async {
   print('No image selected');
 }
 
+Uint8List? image;
+bool photoError = false;
+
 class _EstablishmentUploadPictureState
     extends State<EstablishmentUploadPicture> {
   AppText appText = AppText();
 
-  Uint8List? image;
-
   void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
-    setState(() {
-      image = img;
-    });
+    Uint8List? img = await pickImage(ImageSource.gallery);
+
+    if (img != null) {
+      setState(() {
+        image = img;
+        photoError = false;
+      });
+    } else {
+      setState(() {
+        photoError = true;
+      });
+    }
   }
 
   @override
@@ -51,6 +62,10 @@ class _EstablishmentUploadPictureState
           SizedBox(
             height: MediaQuery.of(context).size.height * .20,
           ),
+          // Text(context
+          //     .watch<EstablishmentAuthProvider>()
+          //     .registeringEstablishment
+          //     .toString()),
           Stack(
             children: [
               image != null
@@ -78,8 +93,17 @@ class _EstablishmentUploadPictureState
               ),
             ],
           ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          photoError
+              ? Text(
+                  'Photo is required.',
+                  style: TextStyle(color: Colors.red[600], fontSize: 15.0),
+                )
+              : const SizedBox(),
           SizedBox(
-            height: MediaQuery.of(context).size.height * .25,
+            height: MediaQuery.of(context).size.height * .20,
           ),
           Column(
             children: [
@@ -87,7 +111,20 @@ class _EstablishmentUploadPictureState
                   'By clicking "Verify", you hereby authorize Bantay Turista-Camiguin PPO to collect and process the above information.'),
               BTFullWidthButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signup/establishment/verify');
+                  setState(() {
+                    photoError = false;
+                  });
+                  if (image == null) {
+                    setState(() {
+                      photoError = true;
+                    });
+                  } else {
+                    context
+                        .read<EstablishmentAuthProvider>()
+                        .updatePicture(image: image);
+                    Navigator.pushNamed(
+                        context, '/signup/establishment/verify');
+                  }
                 },
                 height: 50.0,
                 child: Text(

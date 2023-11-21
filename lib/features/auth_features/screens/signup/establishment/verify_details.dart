@@ -1,11 +1,20 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bt_frontend/features/auth_features/controllers/auth.controller.dart';
+import 'package:bt_frontend/features/auth_features/models/establishment.model.dart';
+import 'package:bt_frontend/features/auth_features/models/user.model.dart';
+import 'package:bt_frontend/features/auth_features/providers/establishment_auth.provider.dart';
 import 'package:bt_frontend/features/establishment_features/establishment_container.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EstablishmentVerifyDetails extends StatefulWidget {
   const EstablishmentVerifyDetails({super.key});
@@ -18,27 +27,46 @@ class EstablishmentVerifyDetails extends StatefulWidget {
 class _EstablishmentVerifyDetailsState
     extends State<EstablishmentVerifyDetails> {
   AppText appText = AppText();
-  String name = 'Kurt Vincent Timajo';
 
-  Map details = {
-    'establishment_name': 'Jonard\'s Grill',
-    'establishment_type': 'Restaurant',
-    "email_address": "jonardsgrill@gmail.com",
-    "contact_no": "09123456999",
-    "owner_info": {
-      "name": "Bhoxs Mapagm4h4l",
-      "email": "bhoxszmapagm4h4l@gmail.com",
-      "contact_no": "09368903676",
-    },
-    "location": {
-      "municipality": "Catarman",
-      "brgy": "Bonbon",
-      "complete_address": "Bonbon, Catarman, Camiguin",
-    }
-  };
+  bool loading = false;
+  bool error = false;
+
+  Future loginEstablishment(User user) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    await AuthController().login(user).then((res) {
+      if (res['success']) {
+        pref.setString('token', res['data']['token']);
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            CupertinoPageRoute(
+                builder: (context) => const EstablishmentContainer()),
+            (route) => false);
+      }
+    });
+  }
+
+  Future registerEstablishment(Establishment establishment) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    await AuthController().registerEstablishment(establishment).then((res) {
+      if (res['success']) {
+        pref.setInt('userId', res['data']['id']['user_id']);
+        pref.setInt('establishmentId', res['data']['id']['establishment_id']);
+      } else {
+        AnimatedSnackBar.material(
+          '${res['data']['message']}: The email has already been taken.',
+          type: AnimatedSnackBarType.error,
+          mobileSnackBarPosition: MobileSnackBarPosition.top,
+          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
+        ).show(context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final estAuthProvider = context.watch<EstablishmentAuthProvider>();
+
     return BTContentWrapper(
       title: '',
       child:
@@ -51,31 +79,36 @@ class _EstablishmentVerifyDetailsState
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
           child: CircleAvatar(
-            radius: 64,
-            backgroundImage: NetworkImage(
-                'https://static.vecteezy.com/system/resources/previews/020/865/538/original/main-establishment-icon-design-free-vector.jpg'),
+            radius: 90,
+            backgroundImage: MemoryImage(estAuthProvider.picture!),
             backgroundColor: Colors.white,
           ),
         ),
+        // Text(context
+        //     .watch<EstablishmentAuthProvider>()
+        //     .registeringEstablishment
+        //     .toString()),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
             children: [
               BTReadonlyTextField(
                 label: 'Establishment Name',
-                text: '${details['establishment_name']}',
+                text: '${estAuthProvider.registeringEstablishment['name']}',
               ),
               BTReadonlyTextField(
                 label: 'Establishment Type',
-                text: '${details['establishment_type']}',
+                text:
+                    '${estAuthProvider.registeringEstablishment['type_name']}',
               ),
               BTReadonlyTextField(
                 label: 'Email Address',
-                text: '${details['email_address']}',
+                text: '${estAuthProvider.registeringEstablishment['email']}',
               ),
               BTReadonlyTextField(
                 label: 'Contact No.',
-                text: '${details['contact_no']}',
+                text:
+                    '${estAuthProvider.registeringEstablishment['contact_number']}',
               ),
             ],
           ),
@@ -86,17 +119,18 @@ class _EstablishmentVerifyDetailsState
             children: [
               appText.heading(text: 'Location'),
               BTReadonlyTextField(
-                label: 'Municipality',
-                text: '${details['location']['municipality']}',
+                label: 'City/Municipality',
+                text:
+                    '${estAuthProvider.registeringEstablishment['city_municipality']}',
               ),
               BTReadonlyTextField(
                 label: 'Barangay',
-                text: '${details['location']['brgy']}',
+                text: '${estAuthProvider.registeringEstablishment['barangay']}',
               ),
               BTReadonlyTextField(
-                label: 'Complete Address',
+                label: 'Address 1',
                 text:
-                    '${details['location']['brgy']}, ${details['location']['municipality']}, Camiguin',
+                    '${estAuthProvider.registeringEstablishment['address_1']}',
               ),
             ],
           ),
@@ -108,43 +142,77 @@ class _EstablishmentVerifyDetailsState
               appText.heading(text: 'Owner\'s Information'),
               BTReadonlyTextField(
                 label: 'Name',
-                text: '${details['owner_info']['name']}',
+                text:
+                    '${estAuthProvider.registeringEstablishment['owner_name']}',
               ),
               BTReadonlyTextField(
                 label: 'Email Address',
-                text: '${details['owner_info']['email']}',
+                text:
+                    '${estAuthProvider.registeringEstablishment['owner_email']}',
               ),
               BTReadonlyTextField(
                 label: 'Contact No.',
-                text: '${details['owner_info']['contact_no']}',
+                text:
+                    '${estAuthProvider.registeringEstablishment['owner_phone']}',
               ),
             ],
           ),
         ),
         BTFullWidthButton(
-          onPressed: () {
-            submitSignUp();
+          onPressed: () async {
+            var estProvider = Provider.of<EstablishmentAuthProvider>(
+              context,
+              listen: false,
+            );
+
+            Establishment establishment = Establishment(
+                name: estProvider.registeringEstablishment['name'],
+                email: estProvider.registeringEstablishment['email'],
+                password: estProvider.registeringEstablishment['password'],
+                contactNo:
+                    estProvider.registeringEstablishment['contact_number'],
+                type:
+                    int.parse(estProvider.registeringEstablishment['type_id']),
+                cityMunicipality:
+                    estProvider.registeringEstablishment['city_municipality'],
+                barangay: estProvider.registeringEstablishment['barangay'],
+                address1: estProvider.registeringEstablishment['address_1'],
+                oName: estProvider.registeringEstablishment['owner_name'],
+                oEmail: estProvider.registeringEstablishment['owner_email'],
+                oContactNo: estProvider.registeringEstablishment['owner_phone'],
+                photoUrl:
+                    "https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/store.png");
+
+            setState(() {
+              loading = true;
+            });
+
+            await registerEstablishment(establishment);
+            await loginEstablishment(User(
+                email: establishment.email,
+                password: establishment.password,
+                userType: 2));
+
+            setState(() {
+              loading = false;
+            });
           },
           height: 50.0,
-          child: Text(
-            'Submit',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 20.0),
-          ),
+          child: loading
+              ? const SpinKitRing(
+                  color: Colors.white,
+                  lineWidth: 3.0,
+                  size: 25.0,
+                )
+              : Text(
+                  'Submit',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0),
+                ),
         )
       ]),
     );
-  }
-
-  void submitSignUp() {
-    bool success = true;
-    if (success) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => EstablishmentContainer()),
-          (route) => false);
-    }
   }
 }
