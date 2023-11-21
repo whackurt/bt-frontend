@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:bt_frontend/core/constants/screens/landing_screen.dart';
 import 'package:bt_frontend/core/constants/screens/loading_screen.dart';
+import 'package:bt_frontend/features/auth_features/providers/establishment_auth.provider.dart';
 import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
 import 'package:bt_frontend/features/auth_features/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/features/auth_features/screens/signup/establishment/create_account.dart';
@@ -27,7 +28,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => TouristAuthProvider())
+        ChangeNotifierProvider(create: (context) => TouristAuthProvider()),
+        ChangeNotifierProvider(
+            create: (context) => EstablishmentAuthProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
