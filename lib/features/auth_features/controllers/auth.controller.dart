@@ -51,7 +51,7 @@ class AuthController {
   }
 
   Future uploadImage(File? imageFile) async {
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/dyi2sla5u/upload');
+    final url = Uri.parse(api.cloudinaryUrl);
     final request = http.MultipartRequest('POST', url);
     request.fields['upload_preset'] = 'vh4uwkje';
     request.files
