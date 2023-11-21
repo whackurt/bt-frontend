@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
 
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:bt_frontend/features/auth_features/providers/establishment_auth.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -17,35 +17,21 @@ class EstablishmentUploadPicture extends StatefulWidget {
       _EstablishmentUploadPictureState();
 }
 
-pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
-  }
-  print('No image selected');
-}
-
-Uint8List? image;
 bool photoError = false;
 
 class _EstablishmentUploadPictureState
     extends State<EstablishmentUploadPicture> {
   AppText appText = AppText();
 
-  void selectImage() async {
-    Uint8List? img = await pickImage(ImageSource.gallery);
+  File? _imageFile;
 
-    if (img != null) {
-      setState(() {
-        image = img;
-        photoError = false;
-      });
-    } else {
-      setState(() {
-        photoError = true;
-      });
-    }
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) _imageFile = File(pickedFile.path);
+    });
   }
 
   @override
@@ -62,29 +48,32 @@ class _EstablishmentUploadPictureState
           SizedBox(
             height: MediaQuery.of(context).size.height * .20,
           ),
-          // Text(context
-          //     .watch<EstablishmentAuthProvider>()
-          //     .registeringEstablishment
-          //     .toString()),
           Stack(
             children: [
-              image != null
-                  ? CircleAvatar(
-                      radius: 85,
-                      backgroundImage: MemoryImage(image!),
-                      backgroundColor: Colors.indigo,
+              _imageFile != null
+                  ? ClipOval(
+                      child: Image.file(
+                        _imageFile!,
+                        fit: BoxFit.cover,
+                        width: 200,
+                        height: 200,
+                      ),
                     )
-                  : CircleAvatar(
-                      radius: 85,
-                      backgroundImage: NetworkImage(
-                          'https://cdn-icons-png.flaticon.com/512/6915/6915987.png'),
-                      backgroundColor: Colors.white,
+                  : ClipOval(
+                      child: Image.network(
+                        'https://cdn-icons-png.flaticon.com/512/6915/6915987.png',
+                        fit: BoxFit.cover,
+                        width: 200,
+                        height: 200,
+                      ),
                     ),
               Positioned(
                 bottom: -8,
-                left: 110,
+                left: 125,
                 child: IconButton(
-                    onPressed: selectImage,
+                    onPressed: () {
+                      _pickImage(ImageSource.gallery);
+                    },
                     icon: Icon(
                       Icons.add_a_photo,
                       size: 33.0,
@@ -114,14 +103,14 @@ class _EstablishmentUploadPictureState
                   setState(() {
                     photoError = false;
                   });
-                  if (image == null) {
+                  if (_imageFile == null) {
                     setState(() {
                       photoError = true;
                     });
                   } else {
                     context
                         .read<EstablishmentAuthProvider>()
-                        .updatePicture(image: image);
+                        .updatePicture(image: _imageFile);
                     Navigator.pushNamed(
                         context, '/signup/establishment/verify');
                   }

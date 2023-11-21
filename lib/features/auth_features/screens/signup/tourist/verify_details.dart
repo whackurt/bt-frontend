@@ -61,6 +61,8 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
     });
   }
 
+  String? imgUrl;
+
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
@@ -74,13 +76,16 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
                 'Please ensure that all information you entered is correct.'),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
-          child: CircleAvatar(
-            radius: 90,
-            backgroundImage:
-                MemoryImage(context.watch<TouristAuthProvider>().picture!),
-            backgroundColor: Colors.white,
+          child: ClipOval(
+            child: Image.file(
+              context.watch<TouristAuthProvider>().picture!,
+              fit: BoxFit.cover, // Adjust the BoxFit as needed
+              width: 200, // Set the width and height as needed
+              height: 200,
+            ),
           ),
         ),
+        // Text('$imgUrl'),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(
@@ -158,8 +163,22 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
         ),
         BTFullWidthButton(
           onPressed: () async {
+            setState(() {
+              loading = true;
+            });
+
             var touristProvider =
                 Provider.of<TouristAuthProvider>(context, listen: false);
+
+            var imageUrl =
+                await AuthController().uploadImage(touristProvider.picture);
+
+            setState(() {
+              imgUrl = imageUrl;
+            });
+
+            print(imageUrl);
+
             Tourist tourist = Tourist(
                 firstName: touristProvider.registeringTourist['first_name'],
                 lastName: touristProvider.registeringTourist['last_name'],
@@ -182,12 +201,7 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
                 email: touristProvider.registeringTourist['auth']['email'],
                 password: touristProvider.registeringTourist['auth']
                     ['password'],
-                photoUrl:
-                    'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSJYV5oxwGMJxH0jDyp7NqGOQN1yZ3EOu4wsayqJkyNjO2XHSXy');
-
-            setState(() {
-              loading = true;
-            });
+                photoUrl: '$imageUrl');
 
             await registerTourist(tourist);
 

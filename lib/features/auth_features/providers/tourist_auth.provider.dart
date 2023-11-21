@@ -1,9 +1,9 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class TouristAuthProvider extends ChangeNotifier {
   Map registeringTourist = {};
-  Uint8List? picture;
+  File? picture;
 
   void updateData({required Map touristInfo}) {
     registeringTourist = touristInfo;

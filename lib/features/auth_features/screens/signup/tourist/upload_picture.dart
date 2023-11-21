@@ -1,6 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
@@ -16,34 +16,20 @@ class TouristUploadPicture extends StatefulWidget {
   State<TouristUploadPicture> createState() => _TouristUploadPictureState();
 }
 
-pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
-  }
-  return null;
-}
-
-Uint8List? image;
 bool photoError = false;
 
 class _TouristUploadPictureState extends State<TouristUploadPicture> {
   AppText appText = AppText();
 
-  void selectImage() async {
-    Uint8List? img = await pickImage(ImageSource.gallery);
+  File? _imageFile;
 
-    if (img != null) {
-      setState(() {
-        image = img;
-        photoError = false;
-      });
-    } else {
-      setState(() {
-        photoError = true;
-      });
-    }
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) _imageFile = File(pickedFile.path);
+    });
   }
 
   @override
@@ -60,27 +46,34 @@ class _TouristUploadPictureState extends State<TouristUploadPicture> {
           Column(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * .20,
+                height: MediaQuery.of(context).size.height * .15,
               ),
               Stack(
                 children: [
-                  image != null
-                      ? CircleAvatar(
-                          radius: 90,
-                          backgroundImage: MemoryImage(image!),
-                          backgroundColor: Colors.grey,
+                  _imageFile != null
+                      ? ClipOval(
+                          child: Image.file(
+                            _imageFile!,
+                            fit: BoxFit.cover,
+                            width: 200,
+                            height: 200,
+                          ),
                         )
-                      : const CircleAvatar(
-                          radius: 90,
-                          backgroundImage: NetworkImage(
-                              'https://cdn-icons-png.flaticon.com/512/6915/6915987.png'),
-                          backgroundColor: Colors.white,
+                      : ClipOval(
+                          child: Image.network(
+                            'https://cdn-icons-png.flaticon.com/512/6915/6915987.png',
+                            fit: BoxFit.cover,
+                            width: 200,
+                            height: 200,
+                          ),
                         ),
                   Positioned(
                     bottom: -8,
-                    left: 110,
+                    left: 125,
                     child: IconButton(
-                        onPressed: selectImage,
+                        onPressed: () {
+                          _pickImage(ImageSource.gallery);
+                        },
                         icon: Icon(
                           Icons.add_a_photo,
                           size: 33.0,
@@ -114,14 +107,14 @@ class _TouristUploadPictureState extends State<TouristUploadPicture> {
                   setState(() {
                     photoError = false;
                   });
-                  if (image == null) {
+                  if (_imageFile == null) {
                     setState(() {
                       photoError = true;
                     });
                   } else {
                     context
                         .read<TouristAuthProvider>()
-                        .updatePicture(image: image);
+                        .updatePicture(image: _imageFile);
                     Navigator.pushNamed(context, '/signup/tourist/verify');
                   }
                 },

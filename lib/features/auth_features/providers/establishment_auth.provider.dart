@@ -1,9 +1,9 @@
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class EstablishmentAuthProvider extends ChangeNotifier {
   Map registeringEstablishment = {};
-  Uint8List? picture;
+  File? picture;
   List establishmentTypes = [];
 
   void updateData({required Map establishmentInfo}) {

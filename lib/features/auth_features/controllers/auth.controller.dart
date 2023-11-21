@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:bt_frontend/config/api.dart';
 import 'package:bt_frontend/features/auth_features/models/establishment.model.dart';
 import 'package:bt_frontend/features/auth_features/models/tourist.model.dart';
@@ -46,6 +47,24 @@ class AuthController {
       return {"success": true, "data": jsonRes};
     } else {
       return {"success": false, "data": jsonRes};
+    }
+  }
+
+  Future uploadImage(File? imageFile) async {
+    final url = Uri.parse(api.cloudinaryUrl);
+    final request = http.MultipartRequest('POST', url);
+    request.fields['upload_preset'] = 'vh4uwkje';
+    request.files
+        .add(await http.MultipartFile.fromPath('file', imageFile!.path));
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
+      final jsonMap = jsonDecode(responseString);
+
+      return jsonMap['url'];
     }
   }
 }
