@@ -77,6 +77,9 @@ class _BTEstablishmentUpdateProfileState
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: 'Update Profile',
       child: Column(
         children: [

@@ -23,6 +23,9 @@ class _SelectUserTypeState extends State<SelectUserType> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: '',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

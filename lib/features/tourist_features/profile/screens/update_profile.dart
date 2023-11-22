@@ -61,6 +61,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: 'Update Profile',
       child: Column(children: [
         Stack(

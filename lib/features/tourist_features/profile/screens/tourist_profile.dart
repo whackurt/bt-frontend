@@ -46,6 +46,9 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: 'Profile',
       child: Column(children: [
         const CircleAvatar(

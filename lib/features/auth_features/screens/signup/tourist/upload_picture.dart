@@ -35,6 +35,9 @@ class _TouristUploadPictureState extends State<TouristUploadPicture> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: '',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -46,6 +46,9 @@ class _BTEstProfileState extends State<BTEstProfile> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: 'Profile',
       child: Column(
         children: [
