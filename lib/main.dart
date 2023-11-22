@@ -16,13 +16,46 @@ import 'package:bt_frontend/features/tourist_features/tourist_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final tokenPresent = await isTokenPresent();
+  final userType = await checkUser();
+
+  runApp(MyApp(tokenPresent: tokenPresent, userType: userType));
+}
+
+Future<bool> isTokenPresent() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token'); // Replace 'token' with your key
+
+  return token != null && token.isNotEmpty;
+}
+
+Future<String> checkUser() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  String user = '';
+  int? touristId = prefs.getInt('touristId');
+  int? establishmentId = prefs.getInt('establishmentId');
+
+  if (touristId != null) {
+    user = 'tourist';
+  }
+
+  if (establishmentId != null) {
+    user = 'establishment';
+  }
+
+  return user;
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool tokenPresent;
+  final String userType;
+
+  const MyApp({super.key, required this.tokenPresent, required this.userType});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +69,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'ProximaNova',
         ),
-        initialRoute: '/landing',
+        initialRoute: tokenPresent && userType == 'tourist'
+            ? '/tourist'
+            : tokenPresent && userType == 'establishment'
+                ? '/establishment'
+                : '/landing',
         // home: const TouristContainer(),
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
