@@ -68,6 +68,9 @@ class _EstablishmentVerifyDetailsState
     final estAuthProvider = context.watch<EstablishmentAuthProvider>();
 
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: '',
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

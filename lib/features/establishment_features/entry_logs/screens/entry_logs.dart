@@ -41,6 +41,9 @@ class _BTEntryLogsState extends State<BTEntryLogs> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: 'Entry Logs',
       child: Column(
         children: [

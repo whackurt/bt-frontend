@@ -66,6 +66,9 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: '',
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

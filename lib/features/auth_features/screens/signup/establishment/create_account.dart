@@ -67,6 +67,9 @@ class _EstablishmentCreateAccountState
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
+      onRefresh: () async {
+        // getTouristData();
+      },
       title: '',
       child: Column(
         children: [
