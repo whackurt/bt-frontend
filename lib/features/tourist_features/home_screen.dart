@@ -33,7 +33,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
     });
 
     await TouristService()
-        .getTouristById(id: pref.getInt('touristId').toString())
+        .getTouristHome(id: pref.getInt('touristId').toString())
         .then((res) {
       setState(() {
         userData = res['data']['data'];
@@ -106,7 +106,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
       title: 'Home',
       child: Center(
           child: Padding(
-        padding: const EdgeInsets.only(top: 50.0),
+        padding: const EdgeInsets.only(top: 40.0),
         child: loading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -119,6 +119,9 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     radius: 75,
                     backgroundImage: NetworkImage('${userData?['photo_url']}'),
                     backgroundColor: Colors.white,
+                  ),
+                  const SizedBox(
+                    height: 15.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
