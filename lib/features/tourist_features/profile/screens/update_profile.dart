@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:bt_frontend/features/tourist_features/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/widgets/custom_dropdown/dropdown_menu.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
@@ -9,7 +10,7 @@ import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class BTTouristUpdateProfile extends StatefulWidget {
   const BTTouristUpdateProfile({super.key});
@@ -33,21 +34,6 @@ Map<String, dynamic> updateData = {};
 
 class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
   AppText appText = AppText();
-  String name = 'Kurt Vincent Timajo';
-
-  Map details = {
-    'first_name': 'Lambert Jonard',
-    'last_name': 'Dela Cruz',
-    'sex': 'M',
-    'nationality': 'Filipino',
-    'birth_date': '1998-08-12',
-    'email': 'misteryosow@gmail.com',
-    'address': {
-      "country": "Philippines",
-      "province": "Misamis Oriental",
-      "city_municipality": "Cagayan de Oro City"
-    }
-  };
 
   Uint8List? image;
 
@@ -60,6 +46,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var tourist =
+        Provider.of<TouristProfileProvider>(context, listen: false).touristData;
+
     return BTContentWrapper(
       onRefresh: () async {
         // getTouristData();
@@ -70,19 +59,18 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
           children: [
             image != null
                 ? CircleAvatar(
-                    radius: 64,
+                    radius: 75,
                     backgroundImage: MemoryImage(image!),
                     backgroundColor: Colors.indigo,
                   )
-                : const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'),
+                : CircleAvatar(
+                    radius: 75,
+                    backgroundImage: NetworkImage('${tourist['photo_url']}'),
                     backgroundColor: Colors.white,
                   ),
             Positioned(
               bottom: -8,
-              left: 80,
+              left: 90,
               child: IconButton(
                   onPressed: selectImage,
                   icon: Icon(
@@ -96,6 +84,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
         const SizedBox(
           height: 20.0,
         ),
+        // Text(Provider.of<TouristProfileProvider>(context, listen: false)
+        //     .touristData
+        //     .toString()),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
@@ -104,30 +95,25 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               appText.heading(text: 'Basic Information'),
               BTTextFieldWithLabel(
                 label: 'First Name',
-                placeholder: '${details['first_name']}',
+                placeholder: '${tourist['first_name']}',
               ),
               BTTextFieldWithLabel(
                 label: 'Last Name',
-                placeholder: '${details['last_name']}',
+                placeholder: '${tourist['last_name']}',
               ),
               BTDropdownMenu(
-                hint: '${details['sex']}',
-                label: 'Sex',
+                hint: '${tourist['gender']}',
+                label: 'Gender',
                 dropdownValues: const ['Male', 'Female'],
                 onChange: () {},
               ),
-              BTDropdownMenu(
-                hint: '${details['nationality']}',
+              BTTextFieldWithLabel(
                 label: 'Nationality',
-                dropdownValues: const [
-                  'Filipino',
-                  'American',
-                  'Australian',
-                  'Chinese',
-                  'Japanese',
-                  'Korean',
-                ],
-                onChange: () {},
+                placeholder: '${tourist['nationality']}',
+              ),
+              BTTextFieldWithLabel(
+                label: 'Contact Number',
+                placeholder: '${tourist['contact_number']}',
               ),
             ],
           ),
@@ -139,8 +125,7 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               Row(
                 children: [
                   appText.heading(text: 'Date of Birth '),
-                  Text(DateFormat.yMMMd()
-                      .format(DateTime.parse(details['birth_date'])))
+                  Text('${tourist['date_of_birth']}')
                 ],
               ),
               Container(
@@ -173,38 +158,38 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               appText.heading(text: 'Permanent Address'),
               BTTextFieldWithLabel(
                 label: 'Country',
-                placeholder: '${details['address']['country']}',
+                placeholder: '${tourist['country']}',
               ),
               BTTextFieldWithLabel(
                 label: 'Province',
-                placeholder: '${details['address']['province']}',
+                placeholder: '${tourist['state_province']}',
               ),
               BTTextFieldWithLabel(
                 label: 'City / Municipality',
-                placeholder: '${details['address']['city_municipality']}',
+                placeholder: '${tourist['city_municipality']}',
               )
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0),
-          child: Column(
-            children: [
-              appText.heading(
-                text: 'Account Credentials',
-              ),
-              const BTTextFieldWithLabel(
-                label: 'New Email Address',
-                placeholder: 'Enter a valid Email Address',
-              ),
-              const BTPasswordField(
-                  label: 'New Password', placeholder: 'Enter New Password'),
-              const BTPasswordField(
-                  label: 'Confirm New Password',
-                  placeholder: 'Enter New Password'),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(vertical: 20.0),
+        //   child: Column(
+        //     children: [
+        //       appText.heading(
+        //         text: 'Account Credentials',
+        //       ),
+        //       const BTTextFieldWithLabel(
+        //         label: 'New Email Address',
+        //         placeholder: 'Enter a valid Email Address',
+        //       ),
+        //       const BTPasswordField(
+        //           label: 'New Password', placeholder: 'Enter New Password'),
+        //       const BTPasswordField(
+        //           label: 'Confirm New Password',
+        //           placeholder: 'Enter New Password'),
+        //     ],
+        //   ),
+        // ),
         BTFullWidthButton(
           onPressed: () {
             showDialog(
@@ -254,6 +239,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
           action: () {
             Navigator.pop(context);
           },
+        ),
+        const SizedBox(
+          height: 40.0,
         ),
       ]),
     );
