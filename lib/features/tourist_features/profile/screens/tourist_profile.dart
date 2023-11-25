@@ -1,7 +1,7 @@
 import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
+import 'package:bt_frontend/features/tourist_features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/features/tourist_features/profile/screens/update_profile.dart';
 import 'package:bt_frontend/features/tourist_features/providers/tourist_profile.provider.dart';
-import 'package:bt_frontend/features/tourist_features/tourist_service.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -33,8 +33,8 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
       loading = true;
     });
 
-    await TouristService()
-        .getTouristProfile(id: pref.getInt('touristId').toString())
+    await TouristProfileController()
+        .getTouristProfileData(id: pref.getInt('touristId').toString())
         .then((res) {
       setState(() {
         userProfile = res['data']['data'];

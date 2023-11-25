@@ -180,8 +180,6 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
               imgUrl = imageUrl;
             });
 
-            print(imageUrl);
-
             Tourist tourist = Tourist(
                 firstName: touristProvider.registeringTourist['first_name'],
                 lastName: touristProvider.registeringTourist['last_name'],
