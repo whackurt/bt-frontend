@@ -4,7 +4,6 @@ import 'package:bt_frontend/features/establishment_features/establishment_servic
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Logs {
@@ -50,13 +49,13 @@ class _BTEstHomeState extends State<BTEstHome> {
       setState(() {
         userData = res['data']['data']['establishment'];
 
-        for (int i = 2; i >= 0; i--) {
-          print(res['data']['data']['tourists'][i]);
-          recentLogs.add(Logs(
-              name: res['data']['data']['tourists'][i],
-              date: '${res['data']['data']['date'][i]}T00:00:00',
-              time: '2023-11-23T${res['data']['data']['time'][i]}'));
-        }
+        // for (int i = 2; i >= 0; i--) {
+        //   print(res['data']['data']['tourists'][i]);
+        //   recentLogs.add(Logs(
+        //       name: res['data']['data']['tourists'][i],
+        //       date: '${res['data']['data']['date'][i]}T00:00:00',
+        //       time: '2023-11-23T${res['data']['data']['time'][i]}'));
+        // }
 
         loading = false;
       });
@@ -171,51 +170,56 @@ class _BTEstHomeState extends State<BTEstHome> {
                                               fontSize: 20.0),
                                         )),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: recentLogs.map((log) {
-                                            return Column(
-                                              children: [
-                                                const SizedBox(
-                                                  height: 8.0,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      '${log.name}'
-                                                          .toUpperCase(),
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 18.0),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 6.0),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      'Time: ${DateFormat('h:mm a').format(DateTime.parse(log.time))}',
-                                                      style: dateTimeStyle,
-                                                    ),
-                                                    Text(
-                                                      'Date: ${DateFormat('yMMMd').format(DateTime.parse(log.date))}',
-                                                      style: dateTimeStyle,
-                                                    ),
-                                                  ],
-                                                ),
-                                                const Divider(
-                                                  thickness: 1.0,
-                                                )
-                                              ],
-                                            );
-                                          }).toList(),
-                                        ),
-                                      )
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 70.0),
+                                        child: Text('No logs available.'),
+                                      ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.all(8.0),
+                                      //   child: Column(
+                                      //     children: recentLogs.map((log) {
+                                      //       return Column(
+                                      //         children: [
+                                      //           const SizedBox(
+                                      //             height: 8.0,
+                                      //           ),
+                                      //           Row(
+                                      //             children: [
+                                      //               Text(
+                                      //                 '${log.name}'
+                                      //                     .toUpperCase(),
+                                      //                 style: const TextStyle(
+                                      //                     fontWeight:
+                                      //                         FontWeight.w600,
+                                      //                     fontSize: 18.0),
+                                      //               ),
+                                      //             ],
+                                      //           ),
+                                      //           const SizedBox(height: 6.0),
+                                      //           Row(
+                                      //             mainAxisAlignment:
+                                      //                 MainAxisAlignment
+                                      //                     .spaceBetween,
+                                      //             children: [
+                                      //               Text(
+                                      //                 'Time: ${DateFormat('h:mm a').format(DateTime.parse(log.time))}',
+                                      //                 style: dateTimeStyle,
+                                      //               ),
+                                      //               Text(
+                                      //                 'Date: ${DateFormat('yMMMd').format(DateTime.parse(log.date))}',
+                                      //                 style: dateTimeStyle,
+                                      //               ),
+                                      //             ],
+                                      //           ),
+                                      //           const Divider(
+                                      //             thickness: 1.0,
+                                      //           )
+                                      //         ],
+                                      //       );
+                                      //     }).toList(),
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                 ),
