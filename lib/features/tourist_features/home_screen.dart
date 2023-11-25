@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
-import 'package:bt_frontend/features/tourist_features/tourist_service.dart';
+import 'package:bt_frontend/features/tourist_features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -32,8 +32,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
       loading = true;
     });
 
-    await TouristService()
-        .getTouristHome(id: pref.getInt('touristId').toString())
+    await TouristProfileController()
+        .getTouristHomeData(id: pref.getInt('touristId').toString())
         .then((res) {
       setState(() {
         userData = res['data']['data'];
