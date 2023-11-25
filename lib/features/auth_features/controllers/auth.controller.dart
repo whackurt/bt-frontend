@@ -1,70 +1,36 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:bt_frontend/config/api.dart';
 import 'package:bt_frontend/features/auth_features/models/establishment.model.dart';
 import 'package:bt_frontend/features/auth_features/models/tourist.model.dart';
 import 'package:bt_frontend/features/auth_features/models/user.model.dart';
-import 'package:http/http.dart' as http;
+import 'package:bt_frontend/features/auth_features/services/auth.services.dart';
 
 class AuthController {
   Api api = Api();
+  AuthServices authServices = AuthServices();
 
   Future login(User user) async {
-    http.Response response = await http
-        .post(Uri.parse('${api.baseUrl}/auth/login'), body: user.toJson());
+    var res = await authServices.loginUser(user: user);
 
-    Map jsonRes = jsonDecode(response.body) as Map<dynamic, dynamic>;
-
-    if (response.statusCode == 200) {
-      return {"success": true, "data": jsonRes};
-    } else {
-      return {"success": false, "data": jsonRes};
-    }
+    return res;
   }
 
   Future registerTourist(Tourist tourist) async {
-    http.Response response = await http.post(
-        Uri.parse('${api.baseUrl}/auth/register'),
-        body: tourist.toJson());
+    var res = await authServices.registerTourist(tourist: tourist);
 
-    Map jsonRes = jsonDecode(response.body) as Map<dynamic, dynamic>;
-
-    if (response.statusCode == 201) {
-      return {"success": true, "data": jsonRes};
-    } else {
-      return {"success": false, "data": jsonRes};
-    }
+    return res;
   }
 
   Future registerEstablishment(Establishment establishment) async {
-    http.Response response = await http.post(
-        Uri.parse('${api.baseUrl}/auth/register'),
-        body: establishment.toJson());
+    var res =
+        await authServices.registerEstablishment(establishment: establishment);
 
-    Map jsonRes = jsonDecode(response.body) as Map<dynamic, dynamic>;
-
-    if (response.statusCode == 201) {
-      return {"success": true, "data": jsonRes};
-    } else {
-      return {"success": false, "data": jsonRes};
-    }
+    return res;
   }
 
   Future uploadImage(File? imageFile) async {
-    final url = Uri.parse(api.cloudinaryUrl);
-    final request = http.MultipartRequest('POST', url);
-    request.fields['upload_preset'] = 'vh4uwkje';
-    request.files
-        .add(await http.MultipartFile.fromPath('file', imageFile!.path));
+    var res = await authServices.uploadImage(imageFile: imageFile);
 
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.toBytes();
-      final responseString = String.fromCharCodes(responseData);
-      final jsonMap = jsonDecode(responseString);
-
-      return jsonMap['url'];
-    }
+    return res;
   }
 }

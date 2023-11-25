@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:bt_frontend/config/api.dart';
-import 'package:bt_frontend/features/tourist_features/profile/services/profile.service.dart';
+import 'package:bt_frontend/features/tourist_features/profile/services/profile.services.dart';
 
 class TouristProfileController {
   Api api = Api();

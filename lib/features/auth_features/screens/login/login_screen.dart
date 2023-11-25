@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       loading = true;
     });
 
-    await AuthController().login(user).then((res) {
+    await authController.login(user).then((res) {
       if (res['success']) {
         pref.setString('token', res['data']['token']);
         pref.setInt('userId', res['data']['id']['userId']);
@@ -51,8 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ? pref.setInt('touristId', res['data']['id']['touristId'])
             : pref.setInt(
                 'establishmentId', res['data']['id']['establishmentId']);
-
-        print(res);
 
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             CupertinoPageRoute(
@@ -82,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         title: '',
       ),
       body: SingleChildScrollView(
-        physics: PageScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
