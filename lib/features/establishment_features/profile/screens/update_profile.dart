@@ -1,13 +1,16 @@
-import 'dart:typed_data';
+import 'dart:io';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bt_frontend/features/auth_features/services/est_auth.services.dart';
+import 'package:bt_frontend/features/establishment_features/profile/controllers/establishment_profile.controller.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
-import 'package:bt_frontend/widgets/custom_dropdown/dropdown_menu.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/custom_text_field/text_field_with_label.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BTEstablishmentUpdateProfile extends StatefulWidget {
   const BTEstablishmentUpdateProfile({super.key});
@@ -29,79 +32,170 @@ pickImage(ImageSource source) async {
 class _BTEstablishmentUpdateProfileState
     extends State<BTEstablishmentUpdateProfile> {
   AppText appText = AppText();
+  EstablishmentProfileController estProfileController =
+      EstablishmentProfileController();
+  EstablishmentAuthServices establishmentAuthServices =
+      EstablishmentAuthServices();
 
-  Map details = {
-    'name': 'Jonard\'s grill',
-    'type': 'Restaurant',
-    'est_contact': '09123456789',
-    'est_email': 'misteryosow@gmail.com',
-    'est_address': {"brgy": "Baylao", "municipality": "Mambajao"},
-    "owner_details": {
-      'name': 'Joanrd Lambert Ghini',
-      'email': 'themoretheyknow@ustp.edu.ph',
-      'phone': '09956299588'
-    }
-  };
+  TextEditingController nameController = TextEditingController();
+  TextEditingController cityMunicipalityController = TextEditingController();
+  TextEditingController brgyController = TextEditingController();
+  TextEditingController address1Controller = TextEditingController();
+  TextEditingController oNameController = TextEditingController();
+  TextEditingController oEmailController = TextEditingController();
+  TextEditingController oPhoneController = TextEditingController();
 
-  final List<String> items = ['Option 1', 'Option 2', 'Option 3'];
-  String selectedValue = 'Option 1';
+  bool loading = false;
+  Map userProfile = {};
+  List estTypes = [];
 
-  void onChanged(String newValue) {
-    selectedValue = newValue;
+  File? _imageFile;
+  Map updateData = {};
+  String? estType;
+  bool estTypeError = false;
+  bool uploadingImage = false;
+
+  Future getEstablishmentProfileData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      loading = true;
+    });
+
+    await estProfileController
+        .getEstProfileData(id: pref.getInt('establishmentId').toString())
+        .then((res) {
+      setState(() {
+        userProfile = res['data']['data'];
+        loading = false;
+      });
+    });
   }
 
-  List<Map<String, String>> est_types = [
-    {
-      "id": "1",
-      "name": "Cafe",
-    },
-    {
-      "id": "2",
-      "name": "Pharmacy",
-    },
-    {
-      "id": "3",
-      "name": "Convenience Store",
-    }
-  ];
+  Future getEstablishmentTypes() async {
+    var res = await establishmentAuthServices.getEstTypes();
+    estTypes = res['data']['data'];
+  }
 
-  Uint8List? image;
+  Future saveUpdate() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
-  void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
-    setState(() {
-      image = img;
+    await estProfileController
+        .updateEstProfile(
+            id: pref.getInt('establishmentId').toString(),
+            updateData: updateData)
+        .then((res) {
+      if (res['success']) {
+        getEstablishmentProfileData();
+
+        nameController.clear();
+        cityMunicipalityController.clear();
+        brgyController.clear();
+        address1Controller.clear();
+        oNameController.clear();
+        oEmailController.clear();
+        oPhoneController.clear();
+
+        AnimatedSnackBar.rectangle(
+          'Success',
+          'Profile updated successfully.',
+          type: AnimatedSnackBarType.success,
+          brightness: Brightness.light,
+        ).show(
+          context,
+        );
+      }
     });
+  }
+
+  Future updateDataNotEmpty() async {
+    nameController.text.isNotEmpty
+        ? updateData['name'] = nameController.text.toString()
+        : null;
+
+    estType != null ? updateData['type_id'] = estType!.split(',').first : null;
+
+    cityMunicipalityController.text.isNotEmpty
+        ? updateData['city_municipality'] =
+            cityMunicipalityController.text.toString()
+        : null;
+
+    brgyController.text.isNotEmpty
+        ? updateData['barangay'] = brgyController.text.toString()
+        : null;
+
+    address1Controller.text.isNotEmpty
+        ? updateData['address_1'] = address1Controller.text.toString()
+        : null;
+
+    oNameController.text.isNotEmpty
+        ? updateData['owner_name'] = oNameController.text.toString()
+        : null;
+
+    oEmailController.text.isNotEmpty
+        ? updateData['owner_email'] = oEmailController.text.toString()
+        : null;
+
+    oPhoneController.text.isNotEmpty
+        ? updateData['owner_phone'] = oPhoneController.text.toString()
+        : null;
+
+    if (updateData.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) _imageFile = File(pickedFile.path);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getEstablishmentProfileData();
+    getEstablishmentTypes();
   }
 
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
       onRefresh: () async {
-        // getTouristData();
+        getEstablishmentProfileData();
       },
       title: 'Update Profile',
       child: Column(
         children: [
           Stack(
             children: [
-              image != null
-                  ? CircleAvatar(
-                      radius: 64,
-                      backgroundImage: MemoryImage(image!),
-                      backgroundColor: Colors.indigo,
+              _imageFile != null
+                  ? ClipOval(
+                      child: Image.file(
+                        _imageFile!,
+                        fit: BoxFit.cover,
+                        width: 150,
+                        height: 150,
+                      ),
                     )
-                  : const CircleAvatar(
-                      radius: 64,
+                  : CircleAvatar(
+                      radius: 75,
                       backgroundImage: NetworkImage(
-                          'https://cdn.icon-icons.com/icons2/2643/PNG/512/male_boy_person_people_avatar_icon_159358.png'),
+                          '${userProfile['photo_url'] ?? 'https://static-00.iconduck.com/assets.00/profile-major-icon-2048x2048-z1oddwyo.png'}'),
                       backgroundColor: Colors.white,
                     ),
               Positioned(
                 bottom: -8,
                 left: 80,
                 child: IconButton(
-                    onPressed: selectImage,
+                    onPressed: () {
+                      _pickImage(ImageSource.gallery);
+                    },
                     icon: Icon(
                       Icons.add_a_photo,
                       size: 30.0,
@@ -119,21 +213,68 @@ class _BTEstablishmentUpdateProfileState
               children: [
                 BTTextFieldWithLabel(
                   label: 'Establishment Name',
-                  placeholder: '${details['name']}',
+                  placeholder: '${userProfile['name']}',
+                  controller: nameController,
                 ),
-                BTDropdownMenu(
-                  hint: '${details['type']}',
-                  label: 'Establishment Type',
-                  dropdownValues: items,
-                  onChange: () {},
+                const Row(
+                  children: [Text('Establishment Type')],
                 ),
-                BTTextFieldWithLabel(
-                  label: 'Email Address',
-                  placeholder: '${details['est_email']}',
-                ),
-                BTTextFieldWithLabel(
-                  label: 'Contact Number',
-                  placeholder: '${details['est_contact']}',
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+                  child: Container(
+                    // height: 50.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.0),
+                        color: Colors.white,
+                        border: Border.all(
+                            color: estTypeError
+                                ? const Color.fromARGB(255, 219, 41, 38)
+                                : const Color.fromARGB(255, 43, 42, 42))),
+                    child: DropdownButtonFormField<String>(
+                      value: estType,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // underline: Container(),
+                      validator: (value) {
+                        if (value == null) {
+                          setState(() {
+                            estTypeError = true;
+                          });
+                          return;
+                        } else {
+                          return null;
+                        }
+                      },
+                      isExpanded: true,
+                      hint: Text('${estTypes.firstWhere(
+                        (type) => userProfile['type_id'] == type['id'],
+                        orElse: () => {'value': 'Item not found'},
+                      )['name']}'),
+                      onChanged: (newValue) {
+                        setState(() {
+                          estType = newValue;
+                          estTypeError = false;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 0.0),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      items: estTypes.map<DropdownMenuItem<String>>((type) {
+                        return DropdownMenuItem<String>(
+                          value:
+                              '${type['id'].toString()},${type['name'].toString()}',
+                          child: Text(type['name']),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      iconSize: 30.0,
+                      dropdownColor: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -144,12 +285,19 @@ class _BTEstablishmentUpdateProfileState
               children: [
                 appText.heading(text: 'Location'),
                 BTTextFieldWithLabel(
-                  label: 'Barangay',
-                  placeholder: '${details['est_address']['brgy']}',
+                  label: 'City/Municipality',
+                  placeholder: '${userProfile['city_municipality']}',
+                  controller: cityMunicipalityController,
                 ),
                 BTTextFieldWithLabel(
-                  label: 'Municipality',
-                  placeholder: '${details['est_address']['municipality']}',
+                  label: 'Barangay',
+                  placeholder: '${userProfile['barangay']}',
+                  controller: brgyController,
+                ),
+                BTTextFieldWithLabel(
+                  label: 'Address 1',
+                  placeholder: '${userProfile['address_1'] ?? ''}',
+                  controller: address1Controller,
                 ),
               ],
             ),
@@ -161,63 +309,71 @@ class _BTEstablishmentUpdateProfileState
                 appText.heading(text: 'Owner\'s Information'),
                 BTTextFieldWithLabel(
                   label: 'Name',
-                  placeholder: '${details['owner_details']['name']}',
+                  placeholder: '${userProfile['owner_name']}',
+                  controller: oNameController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Email Address',
-                  placeholder: '${details['owner_details']['email']}',
+                  placeholder: '${userProfile['owner_email']}',
+                  controller: oEmailController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Phone Number',
-                  placeholder: '${details['owner_details']['phone']}',
+                  placeholder: '${userProfile['owner_phone']}',
+                  controller: oPhoneController,
                 ),
               ],
             ),
           ),
           BTFullWidthButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: ((context) {
-                    return AlertDialog(
-                      title: const Text(
-                        'Confirm Update',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      content:
-                          const Text('Are you sure you want to save changes?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Close the alert dialog
-                          },
-                          child: const Text(
-                            'Cancel',
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Close the alert dialog
-                          },
-                          child: Text(
-                            'Save',
-                            style: TextStyle(color: Colors.green[700]),
-                          ),
-                        ),
-                      ],
-                    );
-                  }));
+            onPressed: () async {
+              if (_imageFile != null) {
+                setState(() {
+                  uploadingImage = true;
+                  loading = true;
+                });
+
+                var imgUrl = await estProfileController.updateEstPicture(
+                    imageFile: _imageFile);
+
+                setState(() {
+                  uploadingImage = false;
+                  loading = false;
+                });
+
+                updateData['photo_url'] = imgUrl;
+              }
+
+              var notEmpty = await updateDataNotEmpty();
+
+              if (notEmpty) {
+                setState(() {
+                  loading = true;
+                });
+
+                await saveUpdate();
+
+                updateData.clear();
+
+                setState(() {
+                  loading = false;
+                });
+              }
             },
             height: 50.0,
-            child: Text(
-              'Save Changes',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20.0),
-            ),
+            child: loading
+                ? const SpinKitRing(
+                    color: Colors.white,
+                    lineWidth: 3.0,
+                    size: 25.0,
+                  )
+                : Text(
+                    uploadingImage ? 'Uploading image...' : 'Save Changes',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.0),
+                  ),
           ),
           BTRedBtnWithBorder(
             height: 45.0,
@@ -226,6 +382,9 @@ class _BTEstablishmentUpdateProfileState
               Navigator.pop(context);
             },
           ),
+          const SizedBox(
+            height: 40.0,
+          )
         ],
       ),
     );
