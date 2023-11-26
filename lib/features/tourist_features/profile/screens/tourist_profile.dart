@@ -40,7 +40,8 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
         userProfile = res['data']['data'];
         userProfile['date_of_birth'] = DateFormat.yMMMMd()
             .format(DateTime.parse(res['data']['data']['date_of_birth']));
-        Provider.of<TouristProfileProvider>(context, listen: false)
+        context
+            .read<TouristProfileProvider>()
             .setTouristData(data: userProfile);
         loading = false;
       });
@@ -65,6 +66,9 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var touristProvider =
+        Provider.of<TouristProfileProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {
         getTouristProfileData();
@@ -79,7 +83,8 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
           : Column(children: [
               CircleAvatar(
                 radius: 75,
-                backgroundImage: NetworkImage('${userProfile['photo_url']}'),
+                backgroundImage:
+                    NetworkImage('${touristProvider.touristData['photo_url']}'),
                 backgroundColor: const Color.fromARGB(255, 138, 138, 138),
               ),
               const SizedBox(
@@ -91,26 +96,29 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                   children: [
                     BTReadonlyTextField(
                       label: 'First Name',
-                      text: '${userProfile['first_name']}',
+                      text: '${touristProvider.touristData['first_name']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Last Name',
-                      text: '${userProfile['last_name']}',
+                      text: '${touristProvider.touristData['last_name']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Gender',
-                      text: '${userProfile['gender']}',
+                      text: '${touristProvider.touristData['gender']}',
                     ),
                     BTReadonlyTextField(
                         label: 'Date of Birth',
-                        text: '${userProfile['date_of_birth']}'),
+                        // text: DateFormat.yMMMMd().format(DateTime.parse(
+                        //     '${touristProvider.touristData['date_of_birth']} 00:00:00.000'))),
+                        text:
+                            '${touristProvider.touristData['date_of_birth']}'),
                     BTReadonlyTextField(
                       label: 'Nationality',
-                      text: '${userProfile['nationality']}',
+                      text: '${touristProvider.touristData['nationality']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Contact Number',
-                      text: '${userProfile['contact_number']}',
+                      text: '${touristProvider.touristData['contact_number']}',
                     ),
                   ],
                 ),
@@ -122,23 +130,24 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                     appText.heading(text: 'Permanent Address'),
                     BTReadonlyTextField(
                       label: 'Country',
-                      text: '${userProfile['country']}',
+                      text: '${touristProvider.touristData['country']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Province',
-                      text: '${userProfile['state_province']}',
+                      text: '${touristProvider.touristData['state_province']}',
                     ),
                     BTReadonlyTextField(
                       label: 'City/Municipality',
-                      text: '${userProfile['city_municipality']}',
+                      text:
+                          '${touristProvider.touristData['city_municipality']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Address 1',
-                      text: '${userProfile['address_1']}',
+                      text: '${touristProvider.touristData['address_1']}',
                     ),
                     BTReadonlyTextField(
                       label: 'Address 2',
-                      text: '${userProfile['address_2'] ?? ''}',
+                      text: '${touristProvider.touristData['address_2'] ?? ''}',
                     ),
                   ],
                 ),

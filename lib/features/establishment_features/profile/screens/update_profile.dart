@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:bt_frontend/features/auth_features/services/est_auth.services.dart';
 import 'package:bt_frontend/features/establishment_features/profile/controllers/establishment_profile.controller.dart';
+import 'package:bt_frontend/features/establishment_features/providers/est_profile.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -10,6 +11,7 @@ import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BTEstablishmentUpdateProfile extends StatefulWidget {
@@ -69,6 +71,7 @@ class _BTEstablishmentUpdateProfileState
         userProfile = res['data']['data'];
         loading = false;
       });
+      context.read<EstablishmentProfileProvider>().setProfileData(userProfile);
     });
   }
 
@@ -165,6 +168,9 @@ class _BTEstablishmentUpdateProfileState
 
   @override
   Widget build(BuildContext context) {
+    var estProvider =
+        Provider.of<EstablishmentProfileProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {
         getEstablishmentProfileData();
@@ -186,7 +192,7 @@ class _BTEstablishmentUpdateProfileState
                   : CircleAvatar(
                       radius: 75,
                       backgroundImage: NetworkImage(
-                          '${userProfile['photo_url'] ?? 'https://static-00.iconduck.com/assets.00/profile-major-icon-2048x2048-z1oddwyo.png'}'),
+                          '${estProvider.profileData['photo_url'] ?? 'https://static-00.iconduck.com/assets.00/profile-major-icon-2048x2048-z1oddwyo.png'}'),
                       backgroundColor: Colors.white,
                     ),
               Positioned(
@@ -213,7 +219,7 @@ class _BTEstablishmentUpdateProfileState
               children: [
                 BTTextFieldWithLabel(
                   label: 'Establishment Name',
-                  placeholder: '${userProfile['name']}',
+                  placeholder: '${estProvider.profileData['name']}',
                   controller: nameController,
                 ),
                 const Row(
@@ -247,7 +253,8 @@ class _BTEstablishmentUpdateProfileState
                       },
                       isExpanded: true,
                       hint: Text('${estTypes.firstWhere(
-                        (type) => userProfile['type_id'] == type['id'],
+                        (type) =>
+                            estProvider.profileData['type_id'] == type['id'],
                         orElse: () => {'value': 'Item not found'},
                       )['name']}'),
                       onChanged: (newValue) {
@@ -286,17 +293,18 @@ class _BTEstablishmentUpdateProfileState
                 appText.heading(text: 'Location'),
                 BTTextFieldWithLabel(
                   label: 'City/Municipality',
-                  placeholder: '${userProfile['city_municipality']}',
+                  placeholder:
+                      '${estProvider.profileData['city_municipality']}',
                   controller: cityMunicipalityController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Barangay',
-                  placeholder: '${userProfile['barangay']}',
+                  placeholder: '${estProvider.profileData['barangay']}',
                   controller: brgyController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Address 1',
-                  placeholder: '${userProfile['address_1'] ?? ''}',
+                  placeholder: '${estProvider.profileData['address_1'] ?? ''}',
                   controller: address1Controller,
                 ),
               ],
@@ -309,17 +317,17 @@ class _BTEstablishmentUpdateProfileState
                 appText.heading(text: 'Owner\'s Information'),
                 BTTextFieldWithLabel(
                   label: 'Name',
-                  placeholder: '${userProfile['owner_name']}',
+                  placeholder: '${estProvider.profileData['owner_name']}',
                   controller: oNameController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Email Address',
-                  placeholder: '${userProfile['owner_email']}',
+                  placeholder: '${estProvider.profileData['owner_email']}',
                   controller: oEmailController,
                 ),
                 BTTextFieldWithLabel(
                   label: 'Phone Number',
-                  placeholder: '${userProfile['owner_phone']}',
+                  placeholder: '${estProvider.profileData['owner_phone']}',
                   controller: oPhoneController,
                 ),
               ],

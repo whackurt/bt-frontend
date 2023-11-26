@@ -2,6 +2,7 @@ import 'package:bt_frontend/features/auth_features/screens/login/login_screen.da
 import 'package:bt_frontend/features/auth_features/services/est_auth.services.dart';
 import 'package:bt_frontend/features/establishment_features/profile/controllers/establishment_profile.controller.dart';
 import 'package:bt_frontend/features/establishment_features/profile/screens/update_profile.dart';
+import 'package:bt_frontend/features/establishment_features/providers/est_profile.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -9,6 +10,7 @@ import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BTEstProfile extends StatefulWidget {
@@ -53,13 +55,14 @@ class _BTEstProfileState extends State<BTEstProfile> {
         userProfile = res['data']['data'];
         loading = false;
       });
+
+      context.read<EstablishmentProfileProvider>().setProfileData(userProfile);
     });
   }
 
   Future getEstablishmentTypes() async {
     var res = await establishmentAuthServices.getEstTypes();
     estTypes = res['data']['data'];
-    print(estTypes);
   }
 
   @override
@@ -71,6 +74,9 @@ class _BTEstProfileState extends State<BTEstProfile> {
 
   @override
   Widget build(BuildContext context) {
+    var estProvider =
+        Provider.of<EstablishmentProfileProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {
         getEstablishmentProfileData();
@@ -87,7 +93,8 @@ class _BTEstProfileState extends State<BTEstProfile> {
               children: [
                 CircleAvatar(
                   radius: 75,
-                  backgroundImage: NetworkImage('${userProfile['photo_url']}'),
+                  backgroundImage:
+                      NetworkImage('${estProvider.profileData['photo_url']}'),
                   backgroundColor: const Color.fromARGB(255, 138, 138, 138),
                 ),
                 const SizedBox(
@@ -99,18 +106,19 @@ class _BTEstProfileState extends State<BTEstProfile> {
                     children: [
                       BTReadonlyTextField(
                         label: 'Establishment Name',
-                        text: '${userProfile['name']}',
+                        text: '${estProvider.profileData['name']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Establishment Type',
                         text: '${estTypes?.firstWhere(
-                          (eType) => eType['id'] == userProfile['type_id'],
+                          (eType) =>
+                              eType['id'] == estProvider.profileData['type_id'],
                           orElse: () => {'value': 'Item not found'},
                         )['name']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Contact Number',
-                        text: '${userProfile['contact_number']}',
+                        text: '${estProvider.profileData['contact_number']}',
                       ),
                     ],
                   ),
@@ -122,15 +130,15 @@ class _BTEstProfileState extends State<BTEstProfile> {
                       appText.heading(text: 'Location'),
                       BTReadonlyTextField(
                         label: 'City/Municipality',
-                        text: '${userProfile['city_municipality']}',
+                        text: '${estProvider.profileData['city_municipality']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Barangay',
-                        text: '${userProfile['barangay']}',
+                        text: '${estProvider.profileData['barangay']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Address 1',
-                        text: '${userProfile['address_1'] ?? ''}',
+                        text: '${estProvider.profileData['address_1'] ?? ''}',
                       ),
                     ],
                   ),
@@ -142,15 +150,15 @@ class _BTEstProfileState extends State<BTEstProfile> {
                       appText.heading(text: 'Owner\'s Information'),
                       BTReadonlyTextField(
                         label: 'Name',
-                        text: '${userProfile['owner_name']}',
+                        text: '${estProvider.profileData['owner_name']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Email Address',
-                        text: '${userProfile['owner_email']}',
+                        text: '${estProvider.profileData['owner_email']}',
                       ),
                       BTReadonlyTextField(
                         label: 'Phone Number',
-                        text: '${userProfile['owner_phone']}',
+                        text: '${estProvider.profileData['owner_phone']}',
                       ),
                     ],
                   ),

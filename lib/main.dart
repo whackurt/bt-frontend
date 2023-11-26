@@ -12,6 +12,7 @@ import 'package:bt_frontend/features/auth_features/screens/signup/tourist/create
 import 'package:bt_frontend/features/auth_features/screens/signup/tourist/upload_picture.dart';
 import 'package:bt_frontend/features/auth_features/screens/signup/tourist/verify_details.dart';
 import 'package:bt_frontend/features/establishment_features/establishment_container.dart';
+import 'package:bt_frontend/features/establishment_features/providers/est_profile.provider.dart';
 import 'package:bt_frontend/features/tourist_features/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/features/tourist_features/tourist_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TouristProfileProvider()),
         ChangeNotifierProvider(
             create: (context) => EstablishmentAuthProvider()),
+        ChangeNotifierProvider(
+            create: (context) => EstablishmentProfileProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(
