@@ -80,7 +80,7 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
               CircleAvatar(
                 radius: 75,
                 backgroundImage: NetworkImage('${userProfile['photo_url']}'),
-                backgroundColor: Colors.white,
+                backgroundColor: const Color.fromARGB(255, 138, 138, 138),
               ),
               const SizedBox(
                 height: 10.0,
