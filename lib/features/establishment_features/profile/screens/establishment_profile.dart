@@ -56,7 +56,9 @@ class _BTEstProfileState extends State<BTEstProfile> {
         loading = false;
       });
 
-      context.read<EstablishmentProfileProvider>().setProfileData(userProfile);
+      context
+          .read<EstablishmentProfileProvider>()
+          .setProfileData(data: userProfile);
     });
   }
 

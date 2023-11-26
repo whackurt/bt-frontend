@@ -71,7 +71,9 @@ class _BTEstablishmentUpdateProfileState
         userProfile = res['data']['data'];
         loading = false;
       });
-      context.read<EstablishmentProfileProvider>().setProfileData(userProfile);
+      context
+          .read<EstablishmentProfileProvider>()
+          .setProfileData(data: userProfile);
     });
   }
 
