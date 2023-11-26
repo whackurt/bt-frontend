@@ -3,9 +3,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
 import 'package:bt_frontend/features/tourist_features/profile/controllers/tourist_profile.controller.dart';
+import 'package:bt_frontend/features/tourist_features/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,15 +19,17 @@ class BTTouristHome extends StatefulWidget {
 
 class _BTTouristHomeState extends State<BTTouristHome> {
   AppColors appColors = AppColors();
-  Map? userData = {};
+  TouristProfileController touristProfileController =
+      TouristProfileController();
 
+  Map userData = {};
   bool loading = false;
 
   final GlobalKey _qrkey = GlobalKey();
   bool dirExists = false;
   dynamic externalDir = '/storage/emulated/0/Download/Qr_code';
 
-  Future getTouristData() async {
+  Future getTouristHomeData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     setState(() {
@@ -39,13 +43,15 @@ class _BTTouristHomeState extends State<BTTouristHome> {
         userData = res['data']['data'];
         loading = false;
       });
+
+      context.read<TouristProfileProvider>().setTouristHomeData(data: userData);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getTouristData();
+    getTouristHomeData();
   }
 
   Future<void> _captureAndSavePng() async {
@@ -69,10 +75,10 @@ class _BTTouristHomeState extends State<BTTouristHome> {
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
       //Check for duplicate file name to avoid Override
-      String fileName = '${userData?['qr_code']}';
+      String fileName = '${userData['qr_code']}';
       int i = 1;
       while (await File('$externalDir/$fileName.png').exists()) {
-        fileName = '${userData?['qr_code']}_$i';
+        fileName = '${userData['qr_code']}_$i';
         i++;
       }
 
@@ -99,9 +105,12 @@ class _BTTouristHomeState extends State<BTTouristHome> {
 
   @override
   Widget build(BuildContext context) {
+    var touristProvider =
+        Provider.of<TouristProfileProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {
-        getTouristData();
+        getTouristHomeData();
       },
       title: 'Home',
       child: Center(
@@ -117,7 +126,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                 children: [
                   CircleAvatar(
                     radius: 75,
-                    backgroundImage: NetworkImage('${userData?['photo_url']}'),
+                    backgroundImage: NetworkImage(
+                        '${touristProvider.touristHomeData['photo_url']}'),
                     backgroundColor: Colors.white,
                   ),
                   const SizedBox(
@@ -128,7 +138,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     child: Column(
                       children: [
                         Text(
-                          '${userData?['full_name']}'.toUpperCase(),
+                          '${touristProvider.touristHomeData['full_name']}'
+                              .toUpperCase(),
                           style: const TextStyle(
                               color: Color.fromARGB(255, 29, 29, 29),
                               fontWeight: FontWeight.bold,
@@ -138,7 +149,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                           height: 8.0,
                         ),
                         Text(
-                          '${userData?['address_1']}, ${userData?['city_municipality']}, ${userData?['state_province']}',
+                          '${touristProvider.touristHomeData['address_1']}, ${touristProvider.touristHomeData['city_municipality']}, ${touristProvider.touristHomeData['state_province']}',
                           style: const TextStyle(
                               color: Color.fromARGB(255, 65, 65, 65),
                               fontSize: 16.0),
@@ -147,7 +158,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                           height: 8.0,
                         ),
                         Text(
-                          '${userData?['country']}'.toUpperCase(),
+                          '${touristProvider.touristHomeData['country']}'
+                              .toUpperCase(),
                           style: const TextStyle(
                               color: Color.fromARGB(255, 102, 102, 102),
                               fontSize: 15.0),
@@ -191,7 +203,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                                 decoration: appColors.btnLinearGradient(),
                                 child: Center(
                                     child: Text(
-                                  '${userData?['qr_code']}'.toUpperCase(),
+                                  '${touristProvider.touristHomeData['qr_code']}'
+                                      .toUpperCase(),
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
@@ -202,7 +215,9 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                                 height: 10.0,
                               ),
                               QrImageView(
-                                data: userData?['qr_code'] ?? '',
+                                data: touristProvider
+                                        .touristHomeData['qr_code'] ??
+                                    '',
                                 version: QrVersions.auto,
                                 size: 180,
                                 errorStateBuilder: (ctx, err) {

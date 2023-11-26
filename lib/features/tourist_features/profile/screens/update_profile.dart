@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:bt_frontend/features/tourist_features/profile/controllers/tourist_profile.controller.dart';
+import 'package:bt_frontend/features/tourist_features/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -10,6 +11,7 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BTTouristUpdateProfile extends StatefulWidget {
@@ -118,6 +120,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
         setState(() {
           touristData = res['data']['data'];
         });
+        context
+            .read<TouristProfileProvider>()
+            .setTouristData(data: touristData);
       }
     });
   }
@@ -164,6 +169,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
   Widget build(BuildContext context) {
     gender = touristData['gender'];
 
+    var touristProvider =
+        Provider.of<TouristProfileProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {
         getTouristData();
@@ -184,7 +192,7 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                 : CircleAvatar(
                     radius: 75,
                     backgroundImage: NetworkImage(
-                        '${touristData['photo_url'] ?? 'https://static-00.iconduck.com/assets.00/profile-major-icon-2048x2048-z1oddwyo.png'}'),
+                        '${touristProvider.touristData['photo_url'] ?? 'https://static-00.iconduck.com/assets.00/profile-major-icon-2048x2048-z1oddwyo.png'}'),
                     backgroundColor: Colors.white,
                   ),
             Positioned(
@@ -213,14 +221,14 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               appText.heading(text: 'Basic Information'),
               BTTextFieldWithLabel(
                 label: 'First Name',
-                placeholder: '${touristData['first_name']}',
+                placeholder: '${touristProvider.touristData['first_name']}',
                 controller: firstController,
               ),
               // Text(
               //     '${firstController.text != touristData['first_name']}'),
               BTTextFieldWithLabel(
                 label: 'Last Name',
-                placeholder: '${touristData['last_name']}',
+                placeholder: '${touristProvider.touristData['last_name']}',
                 controller: lastController,
               ),
               const Row(
@@ -243,7 +251,7 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                               ? const Color.fromARGB(255, 219, 41, 38)
                               : const Color.fromARGB(255, 43, 42, 42))),
                   child: DropdownButtonFormField<String>(
-                    value: gender,
+                    value: touristProvider.touristData['gender'],
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     // underline: Container(),
                     validator: (value) {
@@ -289,12 +297,12 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
 
               BTTextFieldWithLabel(
                 label: 'Nationality',
-                placeholder: '${touristData['nationality']}',
+                placeholder: '${touristProvider.touristData['nationality']}',
                 controller: nationalityController,
               ),
               BTTextFieldWithLabel(
                 label: 'Contact Number',
-                placeholder: '${touristData['contact_number']}',
+                placeholder: '${touristProvider.touristData['contact_number']}',
                 controller: contactController,
               ),
             ],
@@ -314,7 +322,8 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                   borderRadius: BorderRadius.circular(3.0)),
               child: DateTimeField(
                 initialDate: DateTime.tryParse(
-                    '${touristData['date_of_birth']} 00:00:00.000'.toString()),
+                    '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
+                        .toString()),
                 lastDate: DateTime.now(),
                 decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -328,7 +337,7 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                 },
                 selectedDate: birthDate ??
                     DateTime.tryParse(
-                        '${touristData['date_of_birth']} 00:00:00.000'
+                        '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
                             .toString()),
               ),
             ),
@@ -341,27 +350,29 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               appText.heading(text: 'Permanent Address'),
               BTTextFieldWithLabel(
                 label: 'Country',
-                placeholder: '${touristData['country']}',
+                placeholder: '${touristProvider.touristData['country']}',
                 controller: countryController,
               ),
               BTTextFieldWithLabel(
                 label: 'Province',
-                placeholder: '${touristData['state_province']}',
+                placeholder: '${touristProvider.touristData['state_province']}',
                 controller: provinceController,
               ),
               BTTextFieldWithLabel(
                 label: 'City / Municipality',
-                placeholder: '${touristData['city_municipality']}',
+                placeholder:
+                    '${touristProvider.touristData['city_municipality']}',
                 controller: citymunicipalityController,
               ),
               BTTextFieldWithLabel(
                 label: 'Address 1',
-                placeholder: '${touristData['address_1']}',
+                placeholder: '${touristProvider.touristData['address_1']}',
                 controller: address1Controller,
               ),
               BTTextFieldWithLabel(
                 label: 'Address 2',
-                placeholder: '${touristData['address_2'] ?? ''}',
+                placeholder:
+                    '${touristProvider.touristData['address_2'] ?? ''}',
                 controller: address2Controller,
               ),
             ],
