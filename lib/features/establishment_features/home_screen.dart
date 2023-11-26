@@ -1,9 +1,11 @@
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
 import 'package:bt_frontend/features/establishment_features/entry_logs/screens/entry_logs.dart';
+import 'package:bt_frontend/features/establishment_features/providers/est_profile.provider.dart';
 import 'package:bt_frontend/features/establishment_features/services/profile.services.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +26,7 @@ class BTEstHome extends StatefulWidget {
 class _BTEstHomeState extends State<BTEstHome> {
   AppColors appColors = AppColors();
 
-  Map? userData = {};
+  Map userData = {};
   bool loading = false;
 
   List recentLogs = [];
@@ -57,6 +59,10 @@ class _BTEstHomeState extends State<BTEstHome> {
           }
         }
 
+        context
+            .read<EstablishmentProfileProvider>()
+            .setHomeData(data: userData);
+
         loading = false;
       });
     });
@@ -70,6 +76,9 @@ class _BTEstHomeState extends State<BTEstHome> {
 
   @override
   Widget build(BuildContext context) {
+    var estProvider =
+        Provider.of<EstablishmentProfileProvider>(context, listen: true);
+
     return Scaffold(
         appBar: appBar(title: 'Home'),
         body: loading
@@ -95,8 +104,8 @@ class _BTEstHomeState extends State<BTEstHome> {
                           children: [
                             CircleAvatar(
                               radius: 75,
-                              backgroundImage:
-                                  NetworkImage('${userData!['photo_url']}'),
+                              backgroundImage: NetworkImage(
+                                  '${estProvider.estHomeData['photo_url']}'),
                               backgroundColor: Colors.white,
                             ),
                             Padding(
@@ -105,7 +114,8 @@ class _BTEstHomeState extends State<BTEstHome> {
                               child: Column(
                                 children: [
                                   Text(
-                                    '${userData!['name']}'.toUpperCase(),
+                                    '${estProvider.estHomeData['name']}'
+                                        .toUpperCase(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20.0),
@@ -114,7 +124,7 @@ class _BTEstHomeState extends State<BTEstHome> {
                                     height: 8.0,
                                   ),
                                   Text(
-                                    '${userData!['address_1'] ?? ''} ${userData!['barangay']}, ${userData!['city_municipality']}',
+                                    '${estProvider.estHomeData['address_1'] ?? ''}, ${estProvider.estHomeData['barangay']}, ${estProvider.estHomeData['city_municipality']}',
                                     style: const TextStyle(
                                         color: Color.fromARGB(255, 65, 65, 65),
                                         fontSize: 16.0),
