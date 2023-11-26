@@ -1,4 +1,6 @@
 import 'package:bt_frontend/features/auth_features/screens/login/login_screen.dart';
+import 'package:bt_frontend/features/auth_features/services/est_auth.services.dart';
+import 'package:bt_frontend/features/establishment_features/profile/controllers/establishment_profile.controller.dart';
 import 'package:bt_frontend/features/establishment_features/profile/screens/update_profile.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
@@ -18,20 +20,14 @@ class BTEstProfile extends StatefulWidget {
 
 class _BTEstProfileState extends State<BTEstProfile> {
   AppText appText = AppText();
-  String name = 'Jonard\'s Grill';
+  EstablishmentProfileController estProfileController =
+      EstablishmentProfileController();
+  EstablishmentAuthServices establishmentAuthServices =
+      EstablishmentAuthServices();
 
-  Map details = {
-    'name': 'Jonard\'s grill',
-    'type': 'Restaurant',
-    'est_contact': '09123456789',
-    'est_email': 'misteryosow@gmail.com',
-    'est_address': {"brgy": "Baylao", "municipality": "Mambajao"},
-    "owner_details": {
-      'name': 'Joanrd Lambert Ghini',
-      'email': 'themoretheyknow@ustp.edu.ph',
-      'phone': '09956299588'
-    }
-  };
+  bool loading = false;
+  Map userProfile = {};
+  List? estTypes = [];
 
   void logout(context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -43,140 +39,180 @@ class _BTEstProfileState extends State<BTEstProfile> {
         (route) => false);
   }
 
+  Future getEstablishmentProfileData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      loading = true;
+    });
+
+    await estProfileController
+        .getEstProfileData(id: pref.getInt('establishmentId').toString())
+        .then((res) {
+      setState(() {
+        userProfile = res['data']['data'];
+        loading = false;
+      });
+    });
+  }
+
+  Future getEstablishmentTypes() async {
+    var res = await establishmentAuthServices.getEstTypes();
+    estTypes = res['data']['data'];
+    print(estTypes);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getEstablishmentTypes();
+    getEstablishmentProfileData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
       onRefresh: () async {
-        // getTouristData();
+        getEstablishmentProfileData();
+        getEstablishmentTypes();
       },
       title: 'Profile',
-      child: Column(
-        children: [
-          const CircleAvatar(
-            radius: 64,
-            backgroundImage: NetworkImage(
-                'https://cdn.icon-icons.com/icons2/1860/PNG/512/apartment_118092.png'),
-            backgroundColor: Colors.white,
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Column(
+      child: loading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: Colors.blue,
+              ),
+            )
+          : Column(
               children: [
-                BTReadonlyTextField(
-                  label: 'Establishment Name',
-                  text: '${details['name']}',
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: NetworkImage('${userProfile['photo_url']}'),
+                  backgroundColor: const Color.fromARGB(255, 138, 138, 138),
                 ),
-                BTReadonlyTextField(
-                  label: 'Establishment Type',
-                  text: '${details['type']}',
+                const SizedBox(
+                  height: 20.0,
                 ),
-                BTReadonlyTextField(
-                  label: 'Email Address',
-                  text: '${details['est_email']}',
-                ),
-                BTReadonlyTextField(
-                  label: 'Contact Number',
-                  text: '${details['est_contact']}',
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Column(
-              children: [
-                appText.heading(text: 'Location'),
-                BTReadonlyTextField(
-                  label: 'Barangay',
-                  text: '${details['est_address']['brgy']}',
-                ),
-                BTReadonlyTextField(
-                  label: 'Municipality',
-                  text: '${details['est_address']['municipality']}',
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Column(
-              children: [
-                appText.heading(text: 'Owner\'s Information'),
-                BTReadonlyTextField(
-                  label: 'Name',
-                  text: '${details['owner_details']['name']}',
-                ),
-                BTReadonlyTextField(
-                  label: 'Email Address',
-                  text: '${details['owner_details']['email']}',
-                ),
-                BTReadonlyTextField(
-                  label: 'Phone Number',
-                  text: '${details['owner_details']['phone']}',
-                ),
-              ],
-            ),
-          ),
-          BTFullWidthButton(
-            onPressed: () {
-              Navigator.push(context, CupertinoPageRoute(
-                builder: (context) {
-                  return const BTEstablishmentUpdateProfile();
-                },
-              ));
-            },
-            height: 50.0,
-            child: const Text(
-              'Update Profile',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20.0),
-            ),
-          ),
-          BTRedBtnWithBorder(
-            height: 45.0,
-            labelText: 'LOG OUT',
-            action: () {
-              showDialog(
-                  context: context,
-                  builder: ((context) {
-                    return AlertDialog(
-                      title: const Text(
-                        'Log out',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: [
+                      BTReadonlyTextField(
+                        label: 'Establishment Name',
+                        text: '${userProfile['name']}',
                       ),
-                      content: const Text('Are you sure you want to log out?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Close the alert dialog
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            logout(context);
-                          },
-                          child: const Text(
-                            'Log out',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    );
-                  }));
-            },
-          ),
-          const SizedBox(
-            height: 40.0,
-          )
-        ],
-      ),
+                      BTReadonlyTextField(
+                        label: 'Establishment Type',
+                        text: '${estTypes?.firstWhere(
+                          (eType) => eType['id'] == userProfile['type_id'],
+                          orElse: () => {'value': 'Item not found'},
+                        )['name']}',
+                      ),
+                      BTReadonlyTextField(
+                        label: 'Contact Number',
+                        text: '${userProfile['contact_number']}',
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: [
+                      appText.heading(text: 'Location'),
+                      BTReadonlyTextField(
+                        label: 'City/Municipality',
+                        text: '${userProfile['city_municipality']}',
+                      ),
+                      BTReadonlyTextField(
+                        label: 'Barangay',
+                        text: '${userProfile['barangay']}',
+                      ),
+                      BTReadonlyTextField(
+                        label: 'Address 1',
+                        text: '${userProfile['address_1'] ?? ''}',
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Column(
+                    children: [
+                      appText.heading(text: 'Owner\'s Information'),
+                      BTReadonlyTextField(
+                        label: 'Name',
+                        text: '${userProfile['owner_name']}',
+                      ),
+                      BTReadonlyTextField(
+                        label: 'Email Address',
+                        text: '${userProfile['owner_email']}',
+                      ),
+                      BTReadonlyTextField(
+                        label: 'Phone Number',
+                        text: '${userProfile['owner_phone']}',
+                      ),
+                    ],
+                  ),
+                ),
+                BTFullWidthButton(
+                  onPressed: () {
+                    Navigator.push(context, CupertinoPageRoute(
+                      builder: (context) {
+                        return const BTEstablishmentUpdateProfile();
+                      },
+                    ));
+                  },
+                  height: 50.0,
+                  child: const Text(
+                    'Update Profile',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.0),
+                  ),
+                ),
+                BTRedBtnWithBorder(
+                  height: 45.0,
+                  labelText: 'LOG OUT',
+                  action: () {
+                    showDialog(
+                        context: context,
+                        builder: ((context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Log out',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            content:
+                                const Text('Are you sure you want to log out?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the alert dialog
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  logout(context);
+                                },
+                                child: const Text(
+                                  'Log out',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          );
+                        }));
+                  },
+                ),
+                const SizedBox(
+                  height: 40.0,
+                )
+              ],
+            ),
     );
   }
 }

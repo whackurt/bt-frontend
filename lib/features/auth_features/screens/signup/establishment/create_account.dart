@@ -19,8 +19,6 @@ class EstablishmentCreateAccount extends StatefulWidget {
       _EstablishmentCreateAccountState();
 }
 
-String? estType;
-
 class _EstablishmentCreateAccountState
     extends State<EstablishmentCreateAccount> {
   TextEditingController nameController = TextEditingController();
@@ -44,6 +42,7 @@ class _EstablishmentCreateAccountState
 
   List estTypes = [];
   bool estTypeError = false;
+  String? estType;
 
   @override
   void initState() {
