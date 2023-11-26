@@ -1,10 +1,11 @@
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
 import 'package:bt_frontend/features/establishment_features/entry_logs/screens/entry_logs.dart';
-import 'package:bt_frontend/features/establishment_features/establishment_service.dart';
+import 'package:bt_frontend/features/establishment_features/services/profile.services.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Logs {
   String name;
@@ -22,17 +23,13 @@ class BTEstHome extends StatefulWidget {
 
 class _BTEstHomeState extends State<BTEstHome> {
   AppColors appColors = AppColors();
-  bool viewLogs = false;
 
   Map? userData = {};
   bool loading = false;
 
-  Map<String, dynamic> estProfile = {
-    'name': "Jonard's Grill",
-    'address': 'Bonbon, Camiguin',
-  };
-
   List recentLogs = [];
+
+  List tourists = [];
 
   TextStyle dateTimeStyle = TextStyle(color: Colors.grey[700]);
 
@@ -43,19 +40,22 @@ class _BTEstHomeState extends State<BTEstHome> {
       loading = true;
     });
 
-    await EstablishmentService()
-        .getEstablishmentById(id: pref.getInt('establishmentId').toString())
+    await EstablishmentProfileServices()
+        .getEstablishmentHomeData(id: pref.getInt('establishmentId').toString())
         .then((res) {
       setState(() {
         userData = res['data']['data']['establishment'];
 
-        // for (int i = 2; i >= 0; i--) {
-        //   print(res['data']['data']['tourists'][i]);
-        //   recentLogs.add(Logs(
-        //       name: res['data']['data']['tourists'][i],
-        //       date: '${res['data']['data']['date'][i]}T00:00:00',
-        //       time: '2023-11-23T${res['data']['data']['time'][i]}'));
-        // }
+        tourists = res['data']['data']['tourists'];
+
+        if (tourists.isNotEmpty) {
+          for (int i = 2; i >= 0; i--) {
+            recentLogs.add(Logs(
+                name: tourists[i],
+                date: '${res['data']['data']['date'][i]}T00:00:00',
+                time: '2023-11-23T${res['data']['data']['time'][i]}'));
+          }
+        }
 
         loading = false;
       });
@@ -170,56 +170,62 @@ class _BTEstHomeState extends State<BTEstHome> {
                                               fontSize: 20.0),
                                         )),
                                       ),
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 70.0),
-                                        child: Text('No logs available.'),
-                                      ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(8.0),
-                                      //   child: Column(
-                                      //     children: recentLogs.map((log) {
-                                      //       return Column(
-                                      //         children: [
-                                      //           const SizedBox(
-                                      //             height: 8.0,
-                                      //           ),
-                                      //           Row(
-                                      //             children: [
-                                      //               Text(
-                                      //                 '${log.name}'
-                                      //                     .toUpperCase(),
-                                      //                 style: const TextStyle(
-                                      //                     fontWeight:
-                                      //                         FontWeight.w600,
-                                      //                     fontSize: 18.0),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //           const SizedBox(height: 6.0),
-                                      //           Row(
-                                      //             mainAxisAlignment:
-                                      //                 MainAxisAlignment
-                                      //                     .spaceBetween,
-                                      //             children: [
-                                      //               Text(
-                                      //                 'Time: ${DateFormat('h:mm a').format(DateTime.parse(log.time))}',
-                                      //                 style: dateTimeStyle,
-                                      //               ),
-                                      //               Text(
-                                      //                 'Date: ${DateFormat('yMMMd').format(DateTime.parse(log.date))}',
-                                      //                 style: dateTimeStyle,
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //           const Divider(
-                                      //             thickness: 1.0,
-                                      //           )
-                                      //         ],
-                                      //       );
-                                      //     }).toList(),
-                                      //   ),
-                                      // )
+                                      recentLogs.isNotEmpty
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: recentLogs.map((log) {
+                                                  return Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 8.0,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            '${log.name}'
+                                                                .toUpperCase(),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 18.0),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 6.0),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                            'Time: ${DateFormat('h:mm a').format(DateTime.parse(log.time))}',
+                                                            style:
+                                                                dateTimeStyle,
+                                                          ),
+                                                          Text(
+                                                            'Date: ${DateFormat('yMMMd').format(DateTime.parse(log.date))}',
+                                                            style:
+                                                                dateTimeStyle,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const Divider(
+                                                        thickness: 1.0,
+                                                      )
+                                                    ],
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            )
+                                          : const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 70.0),
+                                              child: Text('No logs available.'),
+                                            )
                                     ],
                                   ),
                                 ),
