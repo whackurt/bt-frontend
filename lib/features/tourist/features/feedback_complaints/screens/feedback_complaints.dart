@@ -1,6 +1,7 @@
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/widgets/resolved_complaint_card.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/write_feedback.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/widgets/pending_complaint_card.dart';
-import 'package:bt_frontend/features/tourist/feedback_complaints/screens/widgets/resolved_complaint_card.dart';
+// import 'package:bt_frontend/features/tourist/feedback_complaints/screens/widgets/resolved_complaint_card.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -64,7 +65,7 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                   },
                 ));
               },
-              child: Text(
+              child: const Text(
                 'Write a Feedback',
                 style: TextStyle(
                     color: Colors.white,

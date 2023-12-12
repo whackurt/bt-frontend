@@ -25,14 +25,20 @@ class _BTPasswordFieldState extends State<BTPasswordField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text('${widget.label}'),
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              '${widget.label}',
+              style: TextStyle(fontSize: 11.0),
+            ),
+          ),
+          const SizedBox(
+            height: 5.0,
           ),
           TextFormField(
             controller: widget.controller,
@@ -40,7 +46,9 @@ class _BTPasswordFieldState extends State<BTPasswordField> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: widget.validator,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide.none),
               hintText: '${widget.placeholder}',
               filled: true,
               fillColor: Colors.white,

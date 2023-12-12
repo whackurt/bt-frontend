@@ -4,7 +4,7 @@ import 'package:bt_frontend/features/auth/providers/establishment_auth.provider.
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/custom_text_field/password_field.dart';
-import 'package:bt_frontend/widgets/custom_text_field/text_field.dart';
+import 'package:bt_frontend/widgets/custom_text_field/phone_field.dart';
 import 'package:bt_frontend/widgets/custom_text_field/text_field_with_label.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:bt_frontend/features/auth/controllers/est_type.controller.dart';
@@ -89,76 +89,90 @@ class _EstablishmentCreateAccountState
                       apptext.heading(
                         text: 'Basic Information',
                       ),
-                      BTTextField(
-                        placeholder: 'Establishment Name',
+                      BTTextFieldWithLabel(
+                        label: 'Establishment Name',
                         controller: nameController,
                         validator: (value) => value!.isEmpty
                             ? 'Establishment Name is required.'
                             : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Contact Number',
+                      BTPhoneField(
+                        label: 'Contact Number',
                         controller: contactController,
                         validator: (value) => value!.isEmpty
                             ? 'Contact Number is required.'
                             : null,
                       ),
-                      // Text('$estType'),
+                      const Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              'Type of Establishment',
+                              style: TextStyle(fontSize: 11.0),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                         child: Container(
-                          // height: 50.0,
+                          height: 55.0,
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: estTypeError
-                                      ? const Color.fromARGB(255, 219, 41, 38)
-                                      : const Color.fromARGB(255, 43, 42, 42))),
-                          child: DropdownButtonFormField<String>(
-                            value: estType,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            // underline: Container(),
-                            validator: (value) {
-                              if (value == null) {
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Colors.white,
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              style: TextStyle(
+                                  fontSize: 15.0, color: Colors.grey[600]),
+                              value: estType,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              // underline: Container(),
+                              validator: (value) {
+                                if (value == null) {
+                                  setState(() {
+                                    estTypeError = true;
+                                  });
+                                  return;
+                                } else {
+                                  return null;
+                                }
+                              },
+                              isExpanded: true,
+                              hint: const Text('Type of Establishment'),
+                              onChanged: (newValue) {
                                 setState(() {
-                                  estTypeError = true;
+                                  estType = newValue;
+                                  estTypeError = false;
                                 });
-                                return;
-                              } else {
-                                return null;
-                              }
-                            },
-                            isExpanded: true,
-                            hint: const Text('Type of Establishment'),
-                            onChanged: (newValue) {
-                              setState(() {
-                                estType = newValue;
-                                estTypeError = false;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0.0, vertical: 0.0),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 0.0, vertical: 0.0),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
                               ),
+                              items: context
+                                  .watch<EstablishmentAuthProvider>()
+                                  .establishmentTypes
+                                  .map<DropdownMenuItem<String>>((type) {
+                                return DropdownMenuItem<String>(
+                                  value:
+                                      '${type['id'].toString()},${type['name'].toString()}',
+                                  child: Text(type['name']),
+                                );
+                              }).toList(),
+                              icon: const Icon(Icons.keyboard_arrow_down),
+                              iconSize: 30.0,
+                              dropdownColor: Colors.white,
                             ),
-                            items: context
-                                .watch<EstablishmentAuthProvider>()
-                                .establishmentTypes
-                                .map<DropdownMenuItem<String>>((type) {
-                              return DropdownMenuItem<String>(
-                                value:
-                                    '${type['id'].toString()},${type['name'].toString()}',
-                                child: Text(type['name']),
-                              );
-                            }).toList(),
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            iconSize: 30.0,
-                            dropdownColor: Colors.white,
                           ),
                         ),
                       ),
@@ -187,21 +201,21 @@ class _EstablishmentCreateAccountState
                   child: Column(
                     children: [
                       apptext.heading(text: 'Location'),
-                      BTTextField(
-                        placeholder: 'City / Municipality',
+                      BTTextFieldWithLabel(
+                        label: 'City / Municipality',
                         controller: cityMunicipalityController,
                         validator: (value) => value!.isEmpty
                             ? 'City/Municipality is required.'
                             : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Barangay',
+                      BTTextFieldWithLabel(
+                        label: 'Barangay',
                         controller: brgyController,
                         validator: (value) =>
                             value!.isEmpty ? 'Barangay is required.' : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Address 1 (optional: Street, Zone, etc.)',
+                      BTTextFieldWithLabel(
+                        label: 'Address 1 (optional: Street, Zone, etc.)',
                         controller: address1Controller,
                       ),
                     ],
@@ -223,15 +237,15 @@ class _EstablishmentCreateAccountState
                       SizedBox(
                         height: 8.0,
                       ),
-                      BTTextField(
-                        placeholder: 'Owner\'s Name',
+                      BTTextFieldWithLabel(
+                        label: 'Owner\'s Name',
                         controller: oNameController,
                         validator: (value) => value!.isEmpty
                             ? 'Owner\'s Name is required.'
                             : null,
                       ),
-                      BTTextField(
-                          placeholder: 'Owner\'s Email Address',
+                      BTTextFieldWithLabel(
+                          label: 'Owner\'s Email Address',
                           controller: oEmailController,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -244,8 +258,8 @@ class _EstablishmentCreateAccountState
                             }
                             return null;
                           }),
-                      BTTextField(
-                        placeholder: 'Owner\'s Contact Number',
+                      BTPhoneField(
+                        label: 'Owner\'s Contact Number',
                         controller: oContactController,
                         validator: (value) => value!.isEmpty
                             ? 'Owner\'s Contact Number is required.'
@@ -261,7 +275,6 @@ class _EstablishmentCreateAccountState
                       apptext.heading(text: 'Account Details'),
                       BTTextFieldWithLabel(
                           label: 'Email Address',
-                          placeholder: 'john@example.com',
                           controller: emailController,
                           validator: (value) {
                             if (value!.isEmpty) {

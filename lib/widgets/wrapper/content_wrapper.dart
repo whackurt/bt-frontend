@@ -16,7 +16,7 @@ class _BTContentWrapperState extends State<BTContentWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 247, 245, 245),
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: appBar(title: widget.title),
       body: RefreshIndicator(
         onRefresh: widget.onRefresh,

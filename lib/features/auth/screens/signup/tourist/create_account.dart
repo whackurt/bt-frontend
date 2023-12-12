@@ -2,7 +2,7 @@ import 'package:bt_frontend/features/auth/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/custom_text_field/password_field.dart';
-import 'package:bt_frontend/widgets/custom_text_field/text_field.dart';
+import 'package:bt_frontend/widgets/custom_text_field/phone_field.dart';
 import 'package:bt_frontend/widgets/custom_text_field/text_field_with_label.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
@@ -66,98 +66,47 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                       apptext.heading(
                         text: 'Basic Information',
                       ),
-                      BTTextField(
-                        placeholder: 'First Name',
+                      // TextFormField(
+                      //   controller: firstController,
+                      //   decoration: const InputDecoration(
+                      //       labelText: 'First Name',
+                      //       border: OutlineInputBorder(),
+                      //       fillColor: Colors.white),
+                      // ),
+
+                      BTTextFieldWithLabel(
+                        label: 'First Name',
+                        placeholder: 'Enter First Name',
                         controller: firstController,
                         validator: (value) =>
                             value!.isEmpty ? 'First Name is required.' : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Last Name',
+                      BTTextFieldWithLabel(
+                        label: 'Last Name',
+                        placeholder: 'Enter Last Name',
                         controller: lastController,
                         validator: (value) =>
                             value!.isEmpty ? 'Last Name is required.' : null,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Container(
-                          // height: 50.0,
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: genderError
-                                      ? const Color.fromARGB(255, 219, 41, 38)
-                                      : const Color.fromARGB(255, 43, 42, 42))),
-                          child: DropdownButtonFormField<String>(
-                            value: gender,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            // underline: Container(),
-                            validator: (value) {
-                              if (value == null) {
-                                setState(() {
-                                  genderError = true;
-                                });
-                                return null;
-                              } else {
-                                return null;
-                              }
-                            },
-                            isExpanded: true,
-                            hint: const Text('Gender'),
-                            onChanged: (newValue) {
-                              setState(() {
-                                gender = newValue;
-                                genderError = false;
-                              });
-                            },
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 0.0, vertical: 0.0),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                            items: [
-                              'Male',
-                              'Female',
-                            ].map<DropdownMenuItem<String>>((String gender) {
-                              return DropdownMenuItem<String>(
-                                value: gender,
-                                child: Text(gender),
-                              );
-                            }).toList(),
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            iconSize: 30.0,
-                            dropdownColor: Colors.white,
-                          ),
-                        ),
-                      ),
-                      genderError
-                          ? Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      11.0, 0.0, 0.0, 5.0),
-                                  child: Text(
-                                    genderError ? 'Gender is required.' : '',
-                                    style: TextStyle(
-                                        color: Colors.red[600], fontSize: 12.0),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : const SizedBox(),
-                      BTTextField(
-                        placeholder: 'Nationality',
+                      // const Row(
+                      //   children: [
+                      //     Text(
+                      //       'Gender',
+                      //       style: TextStyle(fontWeight: FontWeight.w600),
+                      //     ),
+                      //   ],
+                      // ),
+
+                      BTTextFieldWithLabel(
+                        label: 'Nationality',
+                        placeholder: 'Enter your nationality',
                         controller: nationalityController,
                         validator: (value) =>
                             value!.isEmpty ? 'Nationality is required.' : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Contact Number',
+                      BTPhoneField(
+                        label: 'Contact Number',
+                        placeholder: 'Enter your contact number',
                         controller: contactController,
                         validator: (value) => value!.isEmpty
                             ? 'Contact number is required.'
@@ -166,90 +115,186 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                     ],
                   ),
                 ),
+                const Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'Gender',
+                        style: TextStyle(fontSize: 11.0),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Column(
-                    children: [
-                      apptext.heading(text: 'Date of Birth'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: birthDateError
-                                      ? const Color.fromARGB(255, 219, 41, 38)
-                                      : const Color.fromARGB(255, 43, 42, 42))),
-                          child: DateTimeField(
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                filled: true,
-                                fillColor: Colors.white),
-                            mode: DateTimeFieldPickerMode.date,
-                            lastDate: DateTime.now(),
-                            onDateSelected: (DateTime value) {
-                              setState(() {
-                                birthDate = value;
-                                birthDateError = false;
-                              });
-                            },
-                            selectedDate: birthDate,
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Container(
+                    height: 55.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                      child: DropdownButtonFormField<String>(
+                        style:
+                            TextStyle(fontSize: 15.0, color: Colors.grey[600]),
+                        value: gender,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value == null) {
+                            setState(() {
+                              genderError = true;
+                            });
+                            return null;
+                          } else {
+                            return null;
+                          }
+                        },
+                        isExpanded: true,
+                        hint: const Text('Gender'),
+                        onChanged: (newValue) {
+                          setState(() {
+                            gender = newValue;
+                            genderError = false;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 0.0),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
                           ),
                         ),
+                        items: [
+                          'Male',
+                          'Female',
+                        ].map<DropdownMenuItem<String>>((String gender) {
+                          return DropdownMenuItem<String>(
+                            value: gender,
+                            child: Text(gender),
+                          );
+                        }).toList(),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        iconSize: 30.0,
+                        dropdownColor: Colors.white,
                       ),
-                      Row(
+                    ),
+                  ),
+                ),
+                genderError
+                    ? Row(
                         children: [
                           Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(11.0, 0.0, 0.0, 5.0),
                             child: Text(
-                              birthDateError
-                                  ? 'Date of Birth is required.'
-                                  : '',
+                              genderError ? 'Gender is required.' : '',
                               style: TextStyle(
                                   color: Colors.red[600], fontSize: 12.0),
                             ),
                           ),
                         ],
+                      )
+                    : const SizedBox(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                const Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'Date of Birth',
+                        style: TextStyle(fontSize: 11.0),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Container(
+                    height: 55.0,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.white,
+                    ),
+                    child: Center(
+                      child: DateTimeField(
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.transparent),
+                        mode: DateTimeFieldPickerMode.date,
+                        lastDate: DateTime.now(),
+                        onDateSelected: (DateTime value) {
+                          setState(() {
+                            birthDate = value;
+                            birthDateError = false;
+                          });
+                        },
+                        selectedDate: birthDate,
+                      ),
+                    ),
                   ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(11.0, 0.0, 0.0, 5.0),
+                      child: Text(
+                        birthDateError ? 'Date of Birth is required.' : '',
+                        style:
+                            TextStyle(color: Colors.red[600], fontSize: 12.0),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Column(
                     children: [
                       apptext.heading(text: 'Permanent Address'),
-                      BTTextField(
-                        placeholder: 'Country',
+                      BTTextFieldWithLabel(
+                        label: 'Country',
+                        placeholder: 'Enter country',
                         controller: countryController,
                         validator: (value) =>
                             value!.isEmpty ? 'Country is required.' : null,
                       ),
-                      BTTextField(
-                        placeholder: 'State/Province',
+                      BTTextFieldWithLabel(
+                        label: 'State/Province',
+                        placeholder: 'Enter state/province',
                         controller: provinceController,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Province is required.' : null,
+                        validator: (value) => value!.isEmpty
+                            ? 'State/Province is required.'
+                            : null,
                       ),
-                      BTTextField(
-                        placeholder: 'City / Municipality',
+                      BTTextFieldWithLabel(
+                        label: 'City / Municipality',
+                        placeholder: 'Enter city or municipality',
                         controller: citymunicipalityController,
                         validator: (value) => value!.isEmpty
                             ? 'City/Municipality is required.'
                             : null,
                       ),
-                      BTTextField(
-                        placeholder:
-                            'Address 1 (Brgy., Village, District, etc.)',
+                      BTTextFieldWithLabel(
+                        label: 'Address 1 (Brgy., Village, District, etc.)',
+                        placeholder: 'Enter address 1',
                         controller: address1Controller,
                         validator: (value) =>
                             value!.isEmpty ? 'Address 1 is required.' : null,
                       ),
-                      BTTextField(
-                        placeholder: 'Address 2 (optional: Street, Zone, etc.)',
+                      BTTextFieldWithLabel(
+                        label: 'Address 2 (optional: Street, Zone, etc.)',
+                        placeholder: 'Enter address 2',
                         controller: address2Controller,
                       ),
                     ],

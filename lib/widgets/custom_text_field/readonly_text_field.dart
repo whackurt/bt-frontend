@@ -14,25 +14,36 @@ class _BTReadonlyTextFieldState extends State<BTReadonlyTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            '${widget.label}',
-            style: TextStyle(fontSize: 12.0, color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 8.0), // Spacer
-          Text(
-            '${widget.text}',
-            style: const TextStyle(
-              fontSize: 18.0,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              '${widget.label}',
+              style: const TextStyle(fontSize: 11.0),
             ),
           ),
-          const SizedBox(height: 8.0), // Spacer
-          Container(
-            height: 1.0,
-            color: Colors.grey[600], // Underline color
+          const SizedBox(
+            height: 5.0,
+          ),
+          TextFormField(
+            enabled: false,
+            decoration: InputDecoration(
+              labelText: widget.text,
+              labelStyle: TextStyle(color: Colors.grey[800]),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: const Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
           ),
         ],
       ),

@@ -47,7 +47,7 @@ class _EstablishmentUploadPictureState
           appText.titleWithInstruction(
               context: context,
               title: 'Upload Picture',
-              instruction: 'Attach a clear photo of your face.'),
+              instruction: 'Attach a photo of the establishment.'),
           SizedBox(
             height: MediaQuery.of(context).size.height * .20,
           ),
@@ -58,21 +58,21 @@ class _EstablishmentUploadPictureState
                       child: Image.file(
                         _imageFile!,
                         fit: BoxFit.cover,
-                        width: 200,
-                        height: 200,
+                        width: 170,
+                        height: 170,
                       ),
                     )
                   : ClipOval(
                       child: Image.network(
-                        'https://cdn-icons-png.flaticon.com/512/6915/6915987.png',
+                        'https://cdn.icon-icons.com/icons2/3065/PNG/512/profile_user_account_icon_190938.png',
                         fit: BoxFit.cover,
-                        width: 200,
-                        height: 200,
+                        width: 170,
+                        height: 170,
                       ),
                     ),
               Positioned(
-                bottom: -8,
-                left: 125,
+                bottom: -6,
+                left: 105,
                 child: IconButton(
                     onPressed: () {
                       _pickImage(ImageSource.gallery);
@@ -80,7 +80,7 @@ class _EstablishmentUploadPictureState
                     icon: Icon(
                       Icons.add_a_photo,
                       size: 33.0,
-                      color: Colors.grey[800],
+                      color: Color.fromARGB(255, 156, 157, 163),
                     )),
               ),
             ],
@@ -95,12 +95,17 @@ class _EstablishmentUploadPictureState
                 )
               : const SizedBox(),
           SizedBox(
-            height: MediaQuery.of(context).size.height * .20,
+            height: MediaQuery.of(context).size.height * .25,
           ),
           Column(
             children: [
               Text(
-                  'By clicking "Verify", you hereby authorize Bantay Turista-Camiguin PPO to collect and process the above information.'),
+                'By clicking "Verify", you hereby authorize Bantay Turista-Camiguin PPO to collect and process the above information.',
+                style: TextStyle(fontSize: 12.0),
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
               BTFullWidthButton(
                 onPressed: () {
                   setState(() {

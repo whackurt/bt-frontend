@@ -22,8 +22,14 @@ class _BTFullWidthButtonState extends State<BTFullWidthButton> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: Container(
-        height: 40.0,
-        decoration: appColor.btnLinearGradient(),
+        height: 45.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0), // Rounded corners
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: const [Colors.blue, Colors.indigo]),
+        ),
         child: SizedBox(
           height: widget.height,
           width: double.infinity,

@@ -37,7 +37,7 @@ class _BTScanQRState extends State<BTScanQR> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 247, 245, 245),
+      backgroundColor: Colors.white,
       appBar: appBar(title: 'Scan QR Code'),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -97,17 +97,20 @@ class _BTScanQRState extends State<BTScanQR> {
                 ),
               ),
               const SizedBox(
-                height: 100.0,
+                height: 40.0,
               ),
               BTFullWidthButton(
                 onPressed: () => scanQR(),
-                child: Text(
+                child: const Text(
                   'Scan QR Code',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 20.0),
                 ),
+              ),
+              const SizedBox(
+                height: 60.0,
               ),
             ],
           ),

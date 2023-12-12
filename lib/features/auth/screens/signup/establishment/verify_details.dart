@@ -84,9 +84,9 @@ class _EstablishmentVerifyDetailsState
           child: ClipOval(
             child: Image.file(
               context.watch<EstablishmentAuthProvider>().picture!,
-              fit: BoxFit.cover, // Adjust the BoxFit as needed
-              width: 200, // Set the width and height as needed
-              height: 200,
+              fit: BoxFit.cover,
+              width: 170,
+              height: 170,
             ),
           ),
         ),

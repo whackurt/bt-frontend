@@ -83,12 +83,11 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
             child: Image.file(
               context.watch<TouristAuthProvider>().picture!,
               fit: BoxFit.cover, // Adjust the BoxFit as needed
-              width: 200, // Set the width and height as needed
-              height: 200,
+              width: 170, // Set the width and height as needed
+              height: 170,
             ),
           ),
         ),
-        // Text('$imgUrl'),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Column(

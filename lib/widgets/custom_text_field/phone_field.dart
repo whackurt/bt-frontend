@@ -2,21 +2,21 @@
 
 import 'package:flutter/material.dart';
 
-class BTTextFieldWithLabel extends StatefulWidget {
+class BTPhoneField extends StatefulWidget {
   final String? label;
   final String? placeholder;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
 
-  const BTTextFieldWithLabel(
+  const BTPhoneField(
       {Key? key, this.label, this.placeholder, this.controller, this.validator})
       : super(key: key);
 
   @override
-  _BTTextFieldWithLabelState createState() => _BTTextFieldWithLabelState();
+  _BTPhoneFieldState createState() => _BTPhoneFieldState();
 }
 
-class _BTTextFieldWithLabelState extends State<BTTextFieldWithLabel> {
+class _BTPhoneFieldState extends State<BTPhoneField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,6 +36,7 @@ class _BTTextFieldWithLabelState extends State<BTTextFieldWithLabel> {
             height: 5.0,
           ),
           TextFormField(
+              keyboardType: TextInputType.phone,
               controller: widget.controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(

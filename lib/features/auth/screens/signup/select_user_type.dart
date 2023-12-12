@@ -48,102 +48,87 @@ class _SelectUserTypeState extends State<SelectUserType> {
                     : SizedBox(),
               ),
               // user type buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 4.0,
-                          color: selectedUser == 'Tourist'
-                              ? Colors.indigo
-                              : Color.fromARGB(255, 97, 97, 97)),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedUser = 'Tourist';
-                          userNotSelected = false;
-                        });
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.person_2_outlined,
-                              size: 100.0,
-                              color: selectedUser == 'Tourist'
-                                  ? Colors.indigo
-                                  : Color.fromARGB(255, 97, 97, 97),
-                            ),
-                            Text(
-                              'Tourist',
-                              style: TextStyle(
-                                  color: selectedUser == 'Tourist'
-                                      ? Colors.indigo
-                                      : Color.fromARGB(255, 97, 97, 97),
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      )),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedUser = 'Tourist';
+                    userNotSelected = false;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor:
+                      Colors.white, // Set the background color to white
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.person_2_outlined,
+                      size: 100.0,
+                      color: selectedUser == 'Tourist'
+                          ? Colors.indigo
+                          : Color.fromARGB(255, 97, 97, 97),
+                    ),
+                    Text(
+                      'Tourist',
+                      style: TextStyle(
+                        color: selectedUser == 'Tourist'
+                            ? Colors.indigo
+                            : Color.fromARGB(255, 97, 97, 97),
+                        fontSize: 15.0,
+                      ),
+                    )
+                  ],
                 ),
               ),
-
-              // user type buttons
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 4.0,
-                          color: selectedUser == 'Establishment'
-                              ? Colors.indigo
-                              : Color.fromARGB(255, 97, 97, 97)),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedUser = 'Establishment';
-                          userNotSelected = false;
-                        });
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.domain,
-                              size: 100.0,
-                              color: selectedUser == 'Establishment'
-                                  ? Colors.indigo
-                                  : Color.fromARGB(255, 97, 97, 97),
-                            ),
-                            Text(
-                              'Establishment',
-                              style: TextStyle(
-                                  color: selectedUser == 'Establishment'
-                                      ? Colors.indigo
-                                      : Color.fromARGB(255, 97, 97, 97),
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      )),
+              const SizedBox(
+                height: 40.0,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    selectedUser = 'Establishment';
+                    userNotSelected = false;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  backgroundColor:
+                      Colors.white, // Set the background color to white
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.domain,
+                      size: 100.0,
+                      color: selectedUser == 'Establishment'
+                          ? Colors.indigo
+                          : Color.fromARGB(255, 97, 97, 97),
+                    ),
+                    Text(
+                      'Establishment',
+                      style: TextStyle(
+                        color: selectedUser == 'Establishment'
+                            ? Colors.indigo
+                            : Color.fromARGB(255, 97, 97, 97),
+                        fontSize: 15.0,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * .15,
+            height: MediaQuery.of(context).size.height * .20,
           ),
           BTFullWidthButton(
             onPressed: () {

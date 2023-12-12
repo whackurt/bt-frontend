@@ -52,13 +52,16 @@ class AppText {
   Widget heading({String? text}) {
     return Row(
       children: [
-        Text(
-          '$text',
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20.0,
-            color: appColor.titleColor(),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            '$text',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20.0,
+              color: appColor.titleColor(),
+            ),
           ),
         ),
       ],

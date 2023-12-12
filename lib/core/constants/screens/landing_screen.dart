@@ -17,17 +17,10 @@ class Landing extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100.0,
-                      height: 100.0,
-                      decoration: BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                    )
-                  ],
-                ),
+                Image(
+                    width: 150.0,
+                    height: 150.0,
+                    image: AssetImage('assets/images/app-icon.png')),
                 Column(
                   children: [
                     Padding(
@@ -42,7 +35,7 @@ class Landing extends StatelessWidget {
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(20.0),
                               )),
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.white),

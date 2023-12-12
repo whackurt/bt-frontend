@@ -81,6 +81,7 @@ class _BTEstHomeState extends State<BTEstHome> {
 
     return Scaffold(
         appBar: appBar(title: 'Home'),
+        backgroundColor: Colors.white,
         body: loading
             ? const Center(
                 child: CircularProgressIndicator(),
