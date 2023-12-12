@@ -4,6 +4,7 @@ import 'package:bt_frontend/features/tourist/features/profile/screens/tourist_pr
 import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/va_desk_main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TouristContainer extends StatefulWidget {
   const TouristContainer({super.key});
@@ -25,28 +26,30 @@ class _TouristContainerState extends State<TouristContainer> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Home',
-                activeIcon: Icon(Icons.home),
-                icon: Icon(Icons.home_outlined),
+                icon: FaIcon(
+                  FontAwesomeIcons.house,
+                  size: 23.0,
+                ),
               ),
               BottomNavigationBarItem(
                 label: 'Assistance',
-                activeIcon: Icon(Icons.map),
-                icon: Icon(
-                  Icons.map_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.mapLocation,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Feedback',
-                activeIcon: Icon(Icons.comment),
-                icon: Icon(
-                  Icons.comment_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.reply,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Profile',
-                activeIcon: Icon(Icons.person_2),
-                icon: Icon(
-                  Icons.person_2_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.userLarge,
+                  size: 23.0,
                 ),
               ),
             ]),
