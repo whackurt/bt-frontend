@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/providers/tourist_auth.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
@@ -66,14 +67,6 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                       apptext.heading(
                         text: 'Basic Information',
                       ),
-                      // TextFormField(
-                      //   controller: firstController,
-                      //   decoration: const InputDecoration(
-                      //       labelText: 'First Name',
-                      //       border: OutlineInputBorder(),
-                      //       fillColor: Colors.white),
-                      // ),
-
                       BTTextFieldWithLabel(
                         label: 'First Name',
                         placeholder: 'Enter First Name',
@@ -88,15 +81,6 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                         validator: (value) =>
                             value!.isEmpty ? 'Last Name is required.' : null,
                       ),
-                      // const Row(
-                      //   children: [
-                      //     Text(
-                      //       'Gender',
-                      //       style: TextStyle(fontWeight: FontWeight.w600),
-                      //     ),
-                      //   ],
-                      // ),
-
                       BTTextFieldWithLabel(
                         label: 'Nationality',
                         placeholder: 'Enter your nationality',
@@ -121,7 +105,7 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                       padding: EdgeInsets.only(left: 8.0),
                       child: Text(
                         'Gender',
-                        style: TextStyle(fontSize: 11.0),
+                        style: TextStyle(fontSize: 11.0, color: Colors.indigo),
                       ),
                     ),
                   ],
@@ -135,8 +119,9 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                     height: 55.0,
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.circular(PropValues().borderRadius),
+                      color: PropValues().secondary,
                     ),
                     child: Center(
                       child: DropdownButtonFormField<String>(
@@ -209,7 +194,7 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                       padding: EdgeInsets.only(left: 8.0),
                       child: Text(
                         'Date of Birth',
-                        style: TextStyle(fontSize: 11.0),
+                        style: TextStyle(fontSize: 11.0, color: Colors.indigo),
                       ),
                     ),
                   ],
@@ -223,8 +208,9 @@ class _TouristCreateAccountState extends State<TouristCreateAccount> {
                     height: 55.0,
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.circular(PropValues().borderRadius),
+                      color: PropValues().secondary,
                     ),
                     child: Center(
                       child: DateTimeField(

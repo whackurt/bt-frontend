@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field, prefer_const_constructors
 
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTFullWidthButton extends StatefulWidget {
@@ -24,7 +25,8 @@ class _BTFullWidthButtonState extends State<BTFullWidthButton> {
       child: Container(
         height: 45.0,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0), // Rounded corners
+          borderRadius: BorderRadius.circular(
+              PropValues().borderRadius), // Rounded corners
           gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,

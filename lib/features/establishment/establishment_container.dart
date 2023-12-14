@@ -3,6 +3,7 @@ import 'package:bt_frontend/features/establishment/features/profile/screens/esta
 import 'package:bt_frontend/features/establishment/features/scan_qr/screens/scan_qr_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EstablishmentContainer extends StatefulWidget {
   const EstablishmentContainer({super.key});
@@ -24,23 +25,23 @@ class _EstablishmentContainerState extends State<EstablishmentContainer> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Home',
-                activeIcon: Icon(Icons.home),
-                icon: Icon(
-                  Icons.home_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.house,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Scan',
-                activeIcon: Icon(Icons.qr_code_scanner),
-                icon: Icon(
-                  Icons.qr_code_scanner_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.qrcode,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Profile',
-                activeIcon: Icon(Icons.manage_accounts),
-                icon: Icon(
-                  Icons.manage_accounts_outlined,
+                icon: FaIcon(
+                  FontAwesomeIcons.userLarge,
+                  size: 23.0,
                 ),
               ),
             ]),

@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTUserTypeButton extends StatefulWidget {
   final Function()? onPressed;
   final IconData? icon;
   final String? label;
+  final IconData? iconData;
 
-  const BTUserTypeButton({super.key, this.onPressed, this.icon, this.label});
+  const BTUserTypeButton(
+      {super.key, this.onPressed, this.icon, this.label, this.iconData});
 
   @override
   State<BTUserTypeButton> createState() => _BTUserTypeButtonState();
@@ -16,34 +19,36 @@ class BTUserTypeButton extends StatefulWidget {
 class _BTUserTypeButtonState extends State<BTUserTypeButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(
-              width: 4.0, color: const Color.fromARGB(255, 97, 97, 97)),
-          borderRadius: BorderRadius.circular(5.0)),
-      child: ElevatedButton(
-          onPressed: widget.onPressed,
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white)),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Icon(
-                  widget.icon,
-                  size: 100.0,
-                  color: Colors.grey[700],
-                ),
-                Text(
-                  '${widget.label}',
-                  style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
+    return ElevatedButton(
+      onPressed: widget.onPressed,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PropValues().borderRadius),
+        ),
+        backgroundColor: Color.fromARGB(
+            255, 247, 247, 247), // Set the background color to white
+      ),
+      child: Column(
+        children: [
+          Icon(
+            widget.iconData,
+            size: 100.0,
+            // color: selectedUser == 'Tourist'
+            //     ? Colors.indigo
+            //     : Color.fromARGB(255, 97, 97, 97),
+          ),
+          Text(
+            'Tourist',
+            style: TextStyle(
+              // color: selectedUser == 'Tourist'
+              //     ? Colors.indigo
+              //     : Color.fromARGB(255, 97, 97, 97),
+              fontSize: 15.0,
             ),
-          )),
+          )
+        ],
+      ),
     );
   }
 }

@@ -4,7 +4,7 @@ class AppColors {
   final int textShade = 800;
 
   Color? titleColor() {
-    return Colors.grey[textShade];
+    return Colors.indigo;
   }
 
   BoxDecoration btnLinearGradient() {

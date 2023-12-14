@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/controllers/auth.controller.dart';
 import 'package:bt_frontend/features/auth/providers/establishment_auth.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
@@ -109,7 +110,8 @@ class _EstablishmentCreateAccountState
                             padding: EdgeInsets.only(left: 8.0),
                             child: Text(
                               'Type of Establishment',
-                              style: TextStyle(fontSize: 11.0),
+                              style: TextStyle(
+                                  fontSize: 11.0, color: Colors.indigo),
                             ),
                           ),
                         ],
@@ -123,8 +125,9 @@ class _EstablishmentCreateAccountState
                           height: 55.0,
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(
+                                PropValues().borderRadius),
+                            color: Color.fromARGB(255, 247, 247, 247),
                           ),
                           child: Center(
                             child: DropdownButtonFormField<String>(

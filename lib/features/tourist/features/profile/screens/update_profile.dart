@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
@@ -216,7 +217,6 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               appText.heading(text: 'Basic Information'),
               BTTextFieldWithLabel(
@@ -224,8 +224,6 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                 placeholder: '${touristProvider.touristData['first_name']}',
                 controller: firstController,
               ),
-              // Text(
-              //     '${firstController.text != touristData['first_name']}'),
               BTTextFieldWithLabel(
                 label: 'Last Name',
                 placeholder: '${touristProvider.touristData['last_name']}',
@@ -233,68 +231,75 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               ),
               const Row(
                 children: [
-                  Text(
-                    'Gender',
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      'Gender',
+                      style: TextStyle(fontSize: 11.0),
+                    ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 5.0,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: Container(
-                  // height: 50.0,
+                  height: 50.0,
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.0),
-                      color: Colors.white,
-                      border: Border.all(
-                          color: genderError
-                              ? const Color.fromARGB(255, 219, 41, 38)
-                              : const Color.fromARGB(255, 43, 42, 42))),
-                  child: DropdownButtonFormField<String>(
-                    value: touristProvider.touristData['gender'],
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    // underline: Container(),
-                    validator: (value) {
-                      if (value == null) {
+                    borderRadius:
+                        BorderRadius.circular(PropValues().borderRadius),
+                    color: PropValues().secondary,
+                  ),
+                  child: Center(
+                    child: DropdownButtonFormField<String>(
+                      style: TextStyle(fontSize: 15.0, color: Colors.grey[600]),
+                      value: touristProvider.touristData['gender'],
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      // underline: Container(),
+                      validator: (value) {
+                        if (value == null) {
+                          setState(() {
+                            genderError = true;
+                          });
+                          return null;
+                        } else {
+                          return null;
+                        }
+                      },
+                      isExpanded: true,
+                      hint: const Text('Gender'),
+                      onChanged: (newValue) {
                         setState(() {
-                          genderError = true;
+                          newGender = newValue ?? '';
+                          genderError = false;
                         });
-                        return null;
-                      } else {
-                        return null;
-                      }
-                    },
-                    isExpanded: true,
-                    hint: const Text('Gender'),
-                    onChanged: (newValue) {
-                      setState(() {
-                        newGender = newValue ?? '';
-                        genderError = false;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
+                      },
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 0.0),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
                       ),
+                      items: [
+                        'Male',
+                        'Female',
+                      ].map<DropdownMenuItem<String>>((String gender) {
+                        return DropdownMenuItem<String>(
+                          value: gender,
+                          child: Text(gender),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      iconSize: 30.0,
+                      dropdownColor: Colors.white,
                     ),
-                    items: [
-                      'Male',
-                      'Female',
-                    ].map<DropdownMenuItem<String>>((String gender) {
-                      return DropdownMenuItem<String>(
-                        value: gender,
-                        child: Text(gender),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    iconSize: 30.0,
-                    dropdownColor: Colors.white,
                   ),
                 ),
               ),
-
               BTTextFieldWithLabel(
                 label: 'Nationality',
                 placeholder: '${touristProvider.touristData['nationality']}',
@@ -308,40 +313,48 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
             ],
           ),
         ),
-        Column(
+        const Row(
           children: [
-            Row(
-              children: [
-                appText.heading(text: 'Date of Birth '),
-              ],
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: const Color.fromARGB(255, 134, 134, 134)),
-                  borderRadius: BorderRadius.circular(3.0)),
-              child: DateTimeField(
-                initialDate: DateTime.tryParse(
-                    '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
-                        .toString()),
-                lastDate: DateTime.now(),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: Colors.white),
-                mode: DateTimeFieldPickerMode.date,
-                onDateSelected: (DateTime value) {
-                  setState(() {
-                    birthDate = value;
-                  });
-                },
-                selectedDate: birthDate ??
-                    DateTime.tryParse(
-                        '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
-                            .toString()),
+            Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Date of Birth',
+                style: TextStyle(fontSize: 11.0, color: Colors.indigo),
               ),
             ),
           ],
+        ),
+        const SizedBox(
+          height: 5.0,
+        ),
+        Container(
+          height: 55.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(PropValues().borderRadius),
+            color: PropValues().secondary,
+          ),
+          child: Center(
+            child: DateTimeField(
+              initialDate: DateTime.tryParse(
+                  '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
+                      .toString()),
+              lastDate: DateTime.now(),
+              decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.transparent),
+              mode: DateTimeFieldPickerMode.date,
+              onDateSelected: (DateTime value) {
+                setState(() {
+                  birthDate = value;
+                });
+              },
+              selectedDate: birthDate ??
+                  DateTime.tryParse(
+                      '${touristProvider.touristData['date_of_birth']} 00:00:00.000'
+                          .toString()),
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0),

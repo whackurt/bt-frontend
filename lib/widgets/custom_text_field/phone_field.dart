@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, dead_code, no_leading_underscores_for_local_identifiers, library_private_types_in_public_api
 
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTPhoneField extends StatefulWidget {
@@ -29,7 +30,7 @@ class _BTPhoneFieldState extends State<BTPhoneField> {
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
               '${widget.label}',
-              style: TextStyle(fontSize: 11.0),
+              style: TextStyle(fontSize: 11.0, color: Colors.indigo),
             ),
           ),
           const SizedBox(
@@ -40,11 +41,12 @@ class _BTPhoneFieldState extends State<BTPhoneField> {
               controller: widget.controller,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius:
+                        BorderRadius.circular(PropValues().borderRadius),
                     borderSide: BorderSide.none),
                 // labelText: widget.label,
                 filled: true,
-                fillColor: Color.fromARGB(255, 255, 255, 255),
+                fillColor: PropValues().secondary,
               ),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: widget.validator),

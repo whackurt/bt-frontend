@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
@@ -59,10 +60,11 @@ class _SelectUserTypeState extends State<SelectUserType> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 25.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius:
+                        BorderRadius.circular(PropValues().borderRadius),
                   ),
-                  backgroundColor:
-                      Colors.white, // Set the background color to white
+                  backgroundColor: Color.fromARGB(
+                      255, 247, 247, 247), // Set the background color to white
                 ),
                 child: Column(
                   children: [
@@ -99,10 +101,11 @@ class _SelectUserTypeState extends State<SelectUserType> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 25.0, vertical: 15.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius:
+                        BorderRadius.circular(PropValues().borderRadius),
                   ),
-                  backgroundColor:
-                      Colors.white, // Set the background color to white
+                  backgroundColor: Color.fromARGB(
+                      255, 247, 247, 247), // Set the background color to white
                 ),
                 child: Column(
                   children: [
