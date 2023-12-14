@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class _BTContentWrapperState extends State<BTContentWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: PropValues().main,
       appBar: appBar(title: widget.title),
       body: RefreshIndicator(
         onRefresh: widget.onRefresh,

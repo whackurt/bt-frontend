@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTReadonlyTextField extends StatefulWidget {
@@ -23,7 +24,7 @@ class _BTReadonlyTextFieldState extends State<BTReadonlyTextField> {
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
               '${widget.label}',
-              style: const TextStyle(fontSize: 11.0),
+              style: const TextStyle(fontSize: 11.0, color: Colors.indigo),
             ),
           ),
           const SizedBox(
@@ -35,11 +36,11 @@ class _BTReadonlyTextFieldState extends State<BTReadonlyTextField> {
               labelText: widget.text,
               labelStyle: TextStyle(color: Colors.grey[800]),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(PropValues().borderRadius),
                 borderSide: BorderSide.none,
               ),
               filled: true,
-              fillColor: const Color.fromARGB(255, 255, 255, 255),
+              fillColor: PropValues().secondary,
             ),
           ),
           const SizedBox(

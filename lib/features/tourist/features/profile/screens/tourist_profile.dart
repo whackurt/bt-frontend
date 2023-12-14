@@ -108,8 +108,6 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                     ),
                     BTReadonlyTextField(
                         label: 'Date of Birth',
-                        // text: DateFormat.yMMMMd().format(DateTime.parse(
-                        //     '${touristProvider.touristData['date_of_birth']} 00:00:00.000'))),
                         text:
                             '${touristProvider.touristData['date_of_birth']}'),
                     BTReadonlyTextField(

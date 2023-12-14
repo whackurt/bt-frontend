@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTRedBtnWithBorder extends StatefulWidget {
@@ -16,10 +17,10 @@ class _BTRedBtnWithBorderState extends State<BTRedBtnWithBorder> {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        height: 35.0,
+        height: 45.0,
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(PropValues().borderRadius),
             border: Border.all(
                 color: const Color.fromARGB(255, 197, 19, 16)) // Border radius
             ),

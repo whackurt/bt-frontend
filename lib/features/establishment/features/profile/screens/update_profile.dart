@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/services/est_auth.services.dart';
 import 'package:bt_frontend/features/establishment/features/profile/controllers/establishment_profile.controller.dart';
 import 'package:bt_frontend/features/establishment/providers/est_profile.provider.dart';
@@ -225,63 +226,71 @@ class _BTEstablishmentUpdateProfileState
                   controller: nameController,
                 ),
                 const Row(
-                  children: [Text('Establishment Type')],
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'Type of Establishment',
+                        style: TextStyle(fontSize: 11.0, color: Colors.indigo),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
                   child: Container(
-                    // height: 50.0,
+                    height: 55.0,
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                        color: Colors.white,
-                        border: Border.all(
-                            color: estTypeError
-                                ? const Color.fromARGB(255, 219, 41, 38)
-                                : const Color.fromARGB(255, 43, 42, 42))),
-                    child: DropdownButtonFormField<String>(
-                      value: estType,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      // underline: Container(),
-                      validator: (value) {
-                        if (value == null) {
+                      borderRadius:
+                          BorderRadius.circular(PropValues().borderRadius),
+                      color: Color.fromARGB(255, 247, 247, 247),
+                    ),
+                    child: Center(
+                      child: DropdownButtonFormField<String>(
+                        value: estType,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        // underline: Container(),
+                        validator: (value) {
+                          if (value == null) {
+                            setState(() {
+                              estTypeError = true;
+                            });
+                            return;
+                          } else {
+                            return null;
+                          }
+                        },
+                        isExpanded: true,
+                        hint: Text('${estTypes.firstWhere(
+                          (type) =>
+                              estProvider.profileData['type_id'] == type['id'],
+                          orElse: () => {'value': 'Item not found'},
+                        )['name']}'),
+                        onChanged: (newValue) {
                           setState(() {
-                            estTypeError = true;
+                            estType = newValue;
+                            estTypeError = false;
                           });
-                          return;
-                        } else {
-                          return null;
-                        }
-                      },
-                      isExpanded: true,
-                      hint: Text('${estTypes.firstWhere(
-                        (type) =>
-                            estProvider.profileData['type_id'] == type['id'],
-                        orElse: () => {'value': 'Item not found'},
-                      )['name']}'),
-                      onChanged: (newValue) {
-                        setState(() {
-                          estType = newValue;
-                          estTypeError = false;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 0.0, vertical: 0.0),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 0.0),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
                         ),
+                        items: estTypes.map<DropdownMenuItem<String>>((type) {
+                          return DropdownMenuItem<String>(
+                            value:
+                                '${type['id'].toString()},${type['name'].toString()}',
+                            child: Text(type['name']),
+                          );
+                        }).toList(),
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        iconSize: 30.0,
+                        dropdownColor: Colors.white,
                       ),
-                      items: estTypes.map<DropdownMenuItem<String>>((type) {
-                        return DropdownMenuItem<String>(
-                          value:
-                              '${type['id'].toString()},${type['name'].toString()}',
-                          child: Text(type['name']),
-                        );
-                      }).toList(),
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      iconSize: 30.0,
-                      dropdownColor: Colors.white,
                     ),
                   ),
                 ),

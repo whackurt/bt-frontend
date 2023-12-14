@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
@@ -124,11 +125,22 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 75,
-                    backgroundImage: NetworkImage(
-                        '${touristProvider.touristHomeData['photo_url']}'),
-                    backgroundColor: Colors.white,
+                  Container(
+                    width: 180,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 5,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 75,
+                      backgroundImage: NetworkImage(
+                          '${touristProvider.touristHomeData['photo_url']}'),
+                      backgroundColor: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 15.0,
@@ -138,12 +150,11 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     child: Column(
                       children: [
                         Text(
-                          '${touristProvider.touristHomeData['full_name']}'
-                              .toUpperCase(),
+                          '${touristProvider.touristHomeData['full_name']}',
                           style: const TextStyle(
                               color: Color.fromARGB(255, 29, 29, 29),
                               fontWeight: FontWeight.bold,
-                              fontSize: 20.0),
+                              fontSize: 24.0),
                         ),
                         const SizedBox(
                           height: 8.0,
@@ -161,8 +172,9 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                           '${touristProvider.touristHomeData['country']}'
                               .toUpperCase(),
                           style: const TextStyle(
-                              color: Color.fromARGB(255, 102, 102, 102),
-                              fontSize: 15.0),
+                              color: Colors.indigo,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -181,8 +193,8 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                             height: 250.0,
                             decoration: BoxDecoration(
                               color: Colors.white, // Set the background color
-                              borderRadius:
-                                  BorderRadius.circular(10.0), // Set the radius
+                              borderRadius: BorderRadius.circular(
+                                  PropValues().borderRadius), // Set the radius
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey
@@ -236,15 +248,15 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     ),
                   ),
                   const SizedBox(
-                    height: 25.0,
+                    height: 20.0,
                   ),
                   Container(
                     width: 220.0,
                     height: 40.0,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                          BorderRadius.circular(10.0), // Border radius
+                      borderRadius: BorderRadius.circular(
+                          PropValues().borderRadius), // Border radius
                       border: Border.all(
                         color: const Color.fromARGB(
                             255, 134, 134, 134), // Border color

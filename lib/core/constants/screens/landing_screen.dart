@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/widgets/wrapper/init_wrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,8 @@ class Landing extends StatelessWidget {
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                                borderRadius: BorderRadius.circular(
+                                    PropValues().borderRadius),
                               )),
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.white),
