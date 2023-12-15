@@ -72,6 +72,7 @@ class _BTEmergencyHotlineState extends State<BTEmergencyHotline> {
               ],
             ),
           ),
+          const Divider()
         ],
       ),
     );
