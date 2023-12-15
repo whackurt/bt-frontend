@@ -116,7 +116,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
       title: 'Home',
       child: Center(
           child: Padding(
-        padding: const EdgeInsets.only(top: 40.0),
+        padding: const EdgeInsets.only(top: 20.0),
         child: loading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -131,7 +131,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.indigo,
+                        color: Colors.blue,
                         width: 5,
                       ),
                     ),
