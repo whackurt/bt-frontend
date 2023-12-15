@@ -23,7 +23,7 @@ class _BTFullWidthButtonState extends State<BTFullWidthButton> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0),
       child: Container(
-        height: 45.0,
+        height: 40.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
               PropValues().borderRadius), // Rounded corners
