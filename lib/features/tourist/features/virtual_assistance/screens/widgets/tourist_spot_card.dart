@@ -83,13 +83,16 @@ class _BTTouristSpotCardState extends State<BTTouristSpotCard> {
                   ],
                 ),
               ),
-              const Positioned(
+              Positioned(
                   top: 145,
                   left: 320,
-                  child: FaIcon(
-                    FontAwesomeIcons.arrowRight,
-                    size: 25,
-                    color: Colors.white,
+                  child: InkWell(
+                    onTap: () {},
+                    child: const FaIcon(
+                      FontAwesomeIcons.locationArrow,
+                      size: 25,
+                      color: Colors.white,
+                    ),
                   ))
             ],
           ),
