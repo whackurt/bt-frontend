@@ -11,6 +11,7 @@ import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -433,16 +434,29 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
                   lineWidth: 3.0,
                   size: 25.0,
                 )
-              : Text(
-                  uploadingImage ? 'Uploading image...' : 'Save Changes',
-                  style: const TextStyle(
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.floppyDisk,
+                      size: 20.0,
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Text(
+                      uploadingImage ? 'Uploading image...' : 'Save Changes',
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 16.0),
+                    ),
+                  ],
                 ),
         ),
         BTRedBtnWithBorder(
           height: 45.0,
+          icon: FontAwesomeIcons.circleXmark,
           labelText: 'Cancel',
           action: () {
             Navigator.pop(context);
