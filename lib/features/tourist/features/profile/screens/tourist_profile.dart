@@ -82,6 +82,22 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                 child: Column(
                   children: [
                     const SizedBox(height: 30.0),
+                    Row(
+                      children: [
+                        AppText().purpleBoldHeader(text: 'Your Profile'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        AppText().subHeader(
+                          context: context,
+                          text: 'Personal Details',
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      height: 30.0,
+                    ),
                     Container(
                       child: loading
                           ? const Center(

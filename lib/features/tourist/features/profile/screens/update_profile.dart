@@ -180,6 +180,33 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
       },
       title: 'Update Profile',
       child: Column(children: [
+        Row(
+          children: [
+            FaIcon(
+              FontAwesomeIcons.penToSquare,
+              size: 38.0,
+              color: Colors.red[400],
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText().purpleBoldHeader(text: 'Update Your Profile'),
+                  AppText().subHeader(
+                    context: context,
+                    text: 'Personalize Your Information',
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
         Stack(
           children: [
             _imageFile != null
@@ -461,9 +488,6 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
           action: () {
             Navigator.pop(context);
           },
-        ),
-        const SizedBox(
-          height: 40.0,
         ),
       ]),
     );
