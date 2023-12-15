@@ -11,7 +11,7 @@ class AppText {
       '$text',
       style: TextStyle(
         fontWeight: FontWeight.w800,
-        fontSize: 30.0,
+        fontSize: 25.0,
         color: appColor.titleColor(),
       ),
       maxLines: 5,
@@ -112,15 +112,18 @@ class AppText {
     );
   }
 
-  Widget subHeader({String? text}) {
-    return Row(
-      children: [
-        Text(
-          '$text',
-          maxLines: 2,
-          style: TextStyle(fontSize: 15.0, color: Colors.grey[700]),
-        ),
-      ],
+  Widget subHeader({String? text, required var context}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .85,
+      child: Row(
+        children: [
+          Text(
+            '$text',
+            maxLines: 5,
+            style: TextStyle(fontSize: 15.0, color: Colors.grey[700]),
+          ),
+        ],
+      ),
     );
   }
 }

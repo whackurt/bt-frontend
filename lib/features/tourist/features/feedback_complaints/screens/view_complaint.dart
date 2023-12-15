@@ -1,5 +1,7 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/widgets/complaint_text.dart';
 import 'package:bt_frontend/widgets/appbar.dart';
+import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
 import 'package:flutter/material.dart';
 
 class BTViewComplaint extends StatefulWidget {
@@ -19,22 +21,23 @@ class _BTViewComplaintState extends State<BTViewComplaint> {
           title: complaintData['resolved'] == 0
               ? 'Pending Complaint'
               : 'Resolved Complaint'),
+      backgroundColor: PropValues().main,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 40.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            BTComplaintText(
-              value: complaintData['title'],
-              fieldTitle: 'Complaint Title',
+            BTReadonlyTextField(
+              label: 'Complaint Title',
+              text: complaintData['title'],
             ),
-            BTComplaintText(
-              fieldTitle: 'Status',
-              value: complaintData['resolved'] == 0 ? 'Pending' : 'Resolved',
+            BTReadonlyTextField(
+              label: 'Status',
+              text: complaintData['resolved'] == 0 ? 'Pending' : 'Resolved',
             ),
-            BTComplaintText(
-              fieldTitle: 'Involved Establishment',
-              value: complaintData['involved_establishment'],
+            BTReadonlyTextField(
+              label: 'Involved Establishment',
+              text: complaintData['involved_establishment'],
             ),
             BTComplaintText(
               fieldTitle: 'Complaint Description',

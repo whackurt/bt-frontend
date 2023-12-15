@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTDropdownBtn extends StatefulWidget {
@@ -21,9 +22,9 @@ class _BTDropdownBtnState extends State<BTDropdownBtn> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4.0),
-            color: Colors.white,
-            border: Border.all(color: Color.fromARGB(255, 97, 97, 97))),
+          borderRadius: BorderRadius.circular(PropValues().borderRadius),
+          color: PropValues().secondary,
+        ),
         child: DropdownButton<String>(
           value: selectedValue,
           underline: Container(),

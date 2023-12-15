@@ -86,6 +86,7 @@ class _BTVADeskMainState extends State<BTVADeskMain> {
                 Row(
                   children: [
                     AppText().subHeader(
+                      context: context,
                       text: 'Explore, Plan, and Stay Secure',
                     ),
                   ],

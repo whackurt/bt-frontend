@@ -1,6 +1,8 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/view_complaint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BTResolvedComplaintCard extends StatefulWidget {
   final Map? complaint;
@@ -16,24 +18,23 @@ class _BTResolvedComplaintCardState extends State<BTResolvedComplaintCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.grey),
+        color: PropValues().secondary,
+        borderRadius: BorderRadius.circular(PropValues().borderRadius),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
+        padding: const EdgeInsets.fromLTRB(12.0, 5.0, 8.0, 5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.check_circle_outline,
-                  size: 30.0,
-                  color: Colors.grey[800],
+                FaIcon(
+                  FontAwesomeIcons.circleCheck,
+                  size: 20.0,
+                  color: Colors.green[500],
                 ),
                 const SizedBox(
-                  width: 16.0,
+                  width: 12.0,
                 ),
                 SizedBox(
                   width: (MediaQuery.of(context).size.width) * .60,

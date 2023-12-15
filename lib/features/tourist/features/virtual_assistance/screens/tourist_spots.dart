@@ -80,16 +80,20 @@ class _BTTouristSpotsState extends State<BTTouristSpots> {
                   size: 38.0,
                   color: Colors.red[400],
                 ),
-                Column(
-                  children: [
-                    AppText().purpleBoldHeader(text: 'Explore Camiguin!'),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 17.0),
-                      child: AppText().subHeader(
+                const SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText().purpleBoldHeader(text: 'Explore Camiguin!'),
+                      AppText().subHeader(
+                        context: context,
                         text: 'Discover Captivating Destinations',
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),

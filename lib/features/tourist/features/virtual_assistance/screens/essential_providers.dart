@@ -72,14 +72,17 @@ class _BTEssentialProvidersState extends State<BTEssentialProviders> {
               const SizedBox(
                 width: 10.0,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText().purpleBoldHeader(text: 'Vital Services'),
-                  AppText().subHeader(
-                    text: 'Connecting You with Essential Providers',
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText().purpleBoldHeader(text: 'Vital Services'),
+                    AppText().subHeader(
+                      context: context,
+                      text: 'Connecting You with Essential Providers',
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -93,9 +96,12 @@ class _BTEssentialProvidersState extends State<BTEssentialProviders> {
             padding: const EdgeInsets.only(bottom: 40.0),
             child: Column(
               children: essentialProviders
-                  .map((esp) => BTEssentialProviderCard(
-                        name: esp['name'],
-                        location: esp['location'],
+                  .map((esp) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: BTEssentialProviderCard(
+                          name: esp['name'],
+                          location: esp['location'],
+                        ),
                       ))
                   .toList(),
             ),

@@ -21,6 +21,7 @@ class _TouristContainerState extends State<TouristContainer> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
+            backgroundColor: PropValues().main,
             border: Border(top: BorderSide(color: PropValues().secondary)),
             activeColor: Colors.indigo,
             items: const <BottomNavigationBarItem>[
