@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/feedback_complaints.dart';
 import 'package:bt_frontend/features/tourist/home_screen.dart';
 import 'package:bt_frontend/features/tourist/features/profile/screens/tourist_profile.dart';
@@ -20,36 +21,35 @@ class _TouristContainerState extends State<TouristContainer> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
-            border: const Border(
-                top: BorderSide(color: Color.fromARGB(255, 196, 196, 196))),
+            border: Border(top: BorderSide(color: PropValues().secondary)),
             activeColor: Colors.indigo,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Home',
                 icon: FaIcon(
                   FontAwesomeIcons.house,
-                  size: 23.0,
+                  size: 20.0,
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Assistance',
+                label: 'Tourist Hub',
                 icon: FaIcon(
                   FontAwesomeIcons.mapLocation,
-                  size: 23.0,
+                  size: 20.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Feedback',
                 icon: FaIcon(
                   FontAwesomeIcons.reply,
-                  size: 23.0,
+                  size: 20.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Profile',
                 icon: FaIcon(
                   FontAwesomeIcons.userLarge,
-                  size: 23.0,
+                  size: 20.0,
                 ),
               ),
             ]),

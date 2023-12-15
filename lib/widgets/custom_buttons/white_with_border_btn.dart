@@ -1,3 +1,4 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:flutter/material.dart';
 
 class BTWhiteBtnWithBorder extends StatefulWidget {
@@ -18,7 +19,7 @@ class _BTWhiteBtnWithBorderState extends State<BTWhiteBtnWithBorder> {
       width: double.infinity,
       height: widget.height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: PropValues().secondary,
         borderRadius: BorderRadius.circular(10.0), // Border radius
         border: Border.all(
           color: const Color.fromARGB(255, 134, 134, 134), // Border color
@@ -33,9 +34,7 @@ class _BTWhiteBtnWithBorderState extends State<BTWhiteBtnWithBorder> {
           child: Text(
             '${widget.labelText}',
             style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 18.0,
-                color: Color.fromARGB(255, 68, 68, 68)),
+                fontSize: 15.0, color: Color.fromARGB(255, 43, 43, 43)),
           )),
     );
   }

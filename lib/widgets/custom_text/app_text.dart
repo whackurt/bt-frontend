@@ -53,14 +53,33 @@ class AppText {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Text(
+            '$text',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18.0,
+              color: appColor.titleColor(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget darkHeading({String? text}) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Text(
             '$text',
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 20.0,
-              color: appColor.titleColor(),
+              color: Colors.grey[800],
             ),
           ),
         ),
@@ -74,6 +93,32 @@ class AppText {
         Text(
           '$text',
           style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25.0),
+        ),
+      ],
+    );
+  }
+
+  Widget purpleBoldHeader({String? text}) {
+    return Row(
+      children: [
+        Text(
+          '$text',
+          style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 25.0,
+              color: AppColors().titleColor()),
+        ),
+      ],
+    );
+  }
+
+  Widget subHeader({String? text}) {
+    return Row(
+      children: [
+        Text(
+          '$text',
+          maxLines: 2,
+          style: TextStyle(fontSize: 15.0, color: Colors.grey[700]),
         ),
       ],
     );
