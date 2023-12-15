@@ -80,26 +80,38 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: appBar(
         title: '',
       ),
+      backgroundColor: PropValues().main,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Center(
+                child: Image(
+                    width: 150.0,
+                    height: 150.0,
+                    image: AssetImage('assets/images/app-icon.png')),
+              ),
               Center(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30.0),
-                      child: appText.title(text: 'Login'),
+                    Text(
+                      'Login',
+                      style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 5.0,
                     ),
                     Center(
                       child: userNotSelected
                           ? Text(
                               'Please select user type.',
                               style: TextStyle(
-                                  fontSize: 15.0, color: Colors.red[600]),
+                                  fontSize: 15.0, color: Colors.red[400]),
                             )
                           : SizedBox(),
                     ),
@@ -107,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 45.0),
+                padding: EdgeInsets.symmetric(vertical: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
