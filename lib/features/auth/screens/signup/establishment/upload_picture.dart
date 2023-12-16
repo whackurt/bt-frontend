@@ -126,10 +126,7 @@ class _EstablishmentUploadPictureState
                 height: 50.0,
                 child: Text(
                   'Verify',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               )
             ],

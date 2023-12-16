@@ -351,10 +351,7 @@ class _EstablishmentCreateAccountState
             height: 50.0,
             child: Text(
               'Proceed',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20.0),
+              style: TextStyle(color: Colors.white, fontSize: 18.0),
             ),
           )
         ],

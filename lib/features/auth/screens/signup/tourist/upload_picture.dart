@@ -128,10 +128,7 @@ class _TouristUploadPictureState extends State<TouristUploadPicture> {
                 height: 50.0,
                 child: const Text(
                   'Verify',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               )
             ],
