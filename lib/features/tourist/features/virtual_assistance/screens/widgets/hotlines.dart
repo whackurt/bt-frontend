@@ -36,7 +36,7 @@ class _BTEmergencyHotlineState extends State<BTEmergencyHotline> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 250.0,
+                  width: MediaQuery.of(context).size.width * .55,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
