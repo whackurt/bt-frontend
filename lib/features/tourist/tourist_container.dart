@@ -2,7 +2,7 @@ import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/feedback_complaints.dart';
 import 'package:bt_frontend/features/tourist/home_screen.dart';
 import 'package:bt_frontend/features/tourist/features/profile/screens/tourist_profile.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/va_desk_main.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/tourist_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -66,7 +66,7 @@ class _TouristContainerState extends State<TouristContainer> {
             case 1:
               return CupertinoTabView(
                 builder: (context) {
-                  return const CupertinoPageScaffold(child: BTVADeskMain());
+                  return const CupertinoPageScaffold(child: BTTouristHub());
                 },
               );
 

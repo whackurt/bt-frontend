@@ -1,9 +1,9 @@
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/essential_providers.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/tourist_spots.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/widgets/essential_provider_card.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/widgets/hotlines.dart';
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/widgets/tourist_spot_card.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/essential_providers.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/tourist_spots.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/essential_provider_card.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/hotlines.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/tourist_spot_card.dart';
 import 'package:bt_frontend/widgets/custom_buttons/white_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,14 +11,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BTVADeskMain extends StatefulWidget {
-  const BTVADeskMain({super.key});
+class BTTouristHub extends StatefulWidget {
+  const BTTouristHub({super.key});
 
   @override
-  State<BTVADeskMain> createState() => _BTVADeskMainState();
+  State<BTTouristHub> createState() => _BTTouristHubState();
 }
 
-class _BTVADeskMainState extends State<BTVADeskMain> {
+class _BTTouristHubState extends State<BTTouristHub> {
   AppText appText = AppText();
 
   List<Widget> touristSpots = [

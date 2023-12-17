@@ -1,4 +1,4 @@
-import 'package:bt_frontend/features/tourist/features/virtual_assistance/screens/widgets/tourist_spot_card.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/tourist_spot_card.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/material.dart';
