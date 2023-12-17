@@ -1,14 +1,11 @@
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BTEssentialProviderCard extends StatefulWidget {
-  final String? name;
-  final String? location;
-  // final String? name;
+  final Map<String, dynamic>? provider;
 
-  const BTEssentialProviderCard({super.key, this.name, this.location});
+  const BTEssentialProviderCard({super.key, this.provider});
 
   @override
   State<BTEssentialProviderCard> createState() =>
@@ -22,7 +19,7 @@ class _BTEssentialProviderCardState extends State<BTEssentialProviderCard> {
       height: 80,
       child: Card(
           color: PropValues().secondary,
-          elevation: 1, // Adjust elevation as needed
+          elevation: 0, // Adjust elevation as needed
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(15.0)),
           ),
@@ -30,8 +27,8 @@ class _BTEssentialProviderCardState extends State<BTEssentialProviderCard> {
             padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
-                FaIcon(
-                  FontAwesomeIcons.building,
+                Icon(
+                  FluentIcons.building_retail_20_regular,
                   size: 30.0,
                   color: Colors.red[400],
                 ),
@@ -43,7 +40,7 @@ class _BTEssentialProviderCardState extends State<BTEssentialProviderCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${widget.name}',
+                      '${widget.provider!['name']}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -51,7 +48,7 @@ class _BTEssentialProviderCardState extends State<BTEssentialProviderCard> {
                       ),
                     ),
                     Text(
-                      '${widget.location}',
+                      '${widget.provider!['address']}',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[800],

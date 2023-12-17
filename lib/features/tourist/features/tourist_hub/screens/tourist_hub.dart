@@ -4,12 +4,16 @@ import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/touris
 import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/essential_provider_card.dart';
 import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/hotlines.dart';
 import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/tourist_spot_card.dart';
+import 'package:bt_frontend/features/tourist/features/tourist_hub/tourist_hub.controller.dart';
+import 'package:bt_frontend/features/tourist/providers/tourist_hub.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/white_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class BTTouristHub extends StatefulWidget {
   const BTTouristHub({super.key});
@@ -20,51 +24,57 @@ class BTTouristHub extends StatefulWidget {
 
 class _BTTouristHubState extends State<BTTouristHub> {
   AppText appText = AppText();
+  TouristHubController touristhubController = TouristHubController();
 
-  List<Widget> touristSpots = [
-    const BTTouristSpotCard(
-      touristSpotName: 'White Island',
-      imgUrl:
-          'https://www.jonnymelon.com/wp-content/uploads/2019/10/white-island-camiguin-12.jpg',
-      location: 'Yumbing, Mambajao',
-      description:
-          'The island can be accessed from Barangay Agoho or Brgy. Yumbing in Mambajao about 4 to 6 kilometres (2.5 to 3.7 mi) west of the poblacion or town center. ',
-    ),
-    const BTTouristSpotCard(
-      touristSpotName: 'Mantigue Island',
-      imgUrl:
-          'https://www.balaisabaibai.com/wp-content/uploads/2022/10/Mantigue-7-1000-630.jpg',
-      location: 'San Roque, Mahinog',
-      description:
-          'The island can be accessed from Barangay Agoho or Brgy. Yumbing in Mambajao about 4 to 6 kilometres (2.5 to 3.7 mi) west of the poblacion or town center. ',
-    ),
-    const BTTouristSpotCard(
-      touristSpotName: 'Sto. Nino Cold Spring',
-      imgUrl:
-          'https://i0.wp.com/shellwanders.com/wp-content/uploads/2018/11/STO-NI%C3%B1O-COLD-SPRING.jpg?fit=860%2C570&ssl=1',
-      location: 'Sto. Nino, Catarman',
-      description:
-          'The island can be accessed from Barangay Agoho or Brgy. Yumbing in Mambajao about 4 to 6 kilometres (2.5 to 3.7 mi) west of the poblacion or town center. ',
-    ),
-  ];
+  Future getTouristSpots() async {
+    await touristhubController.getTouristSpots().then((res) {
+      context
+          .read<TouristHubProvider>()
+          .setTouristSpots(data: res['data']['tourist_spots']);
+    });
+  }
 
-  List<Widget> essentialProviders = [
-    const BTEssentialProviderCard(
-      name: "Landbank ATM",
-      location: "Placido Reyes St., Mambajao",
-    ),
-    const BTEssentialProviderCard(
-      name: "11/7 Convenience Store",
-      location: "Yumbing, Mambajao",
-    ),
-    const BTEssentialProviderCard(
-      name: "Mercury Drugs",
-      location: "Poblacion, Mambajao",
-    ),
-  ];
+  Future getEssentialProviders() async {
+    await touristhubController.getEssentialServiceProviders().then((res) {
+      // print(res['data']['providers']);
+      context
+          .read<TouristHubProvider>()
+          .setEssentialServiceProviders(data: res['data']['providers']);
+    });
+  }
+
+  Future getHotlines() async {
+    await touristhubController.getEmergencyHotlineNumbers().then((res) {
+      context
+          .read<TouristHubProvider>()
+          .setHotlines(data: res['data']['hotlines']);
+    });
+  }
+
+  Future getSchedules() async {
+    await touristhubController.getSchedules().then((res) {
+      // print(res);
+      context
+          .read<TouristHubProvider>()
+          .setSchedules(data: res['data']['schedules']);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTouristSpots();
+    getEssentialProviders();
+    getHotlines();
+    getSchedules();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var touristHubProvider =
+        Provider.of<TouristHubProvider>(context, listen: true);
+    print(touristHubProvider.schedules);
+
     return Scaffold(
       // appBar: appBar(title: 'Tourist Hub'),
       backgroundColor: PropValues().main,
@@ -143,7 +153,11 @@ class _BTTouristHubState extends State<BTTouristHub> {
                         ],
                       ),
                       CarouselSlider(
-                          items: touristSpots,
+                          items: touristHubProvider.touristSpots
+                              .map((spot) => BTTouristSpotCard(
+                                    touristSpot: spot,
+                                  ))
+                              .toList(),
                           options: CarouselOptions(
                             height: 188,
                             viewportFraction: 1,
@@ -208,7 +222,11 @@ class _BTTouristHubState extends State<BTTouristHub> {
                         ],
                       ),
                       CarouselSlider(
-                          items: essentialProviders,
+                          items: touristHubProvider.essentialServiceProviders
+                              .map((prov) => BTEssentialProviderCard(
+                                    provider: prov,
+                                  ))
+                              .toList(),
                           options: CarouselOptions(
                             height: 80,
                             viewportFraction: 1,
@@ -231,16 +249,28 @@ class _BTTouristHubState extends State<BTTouristHub> {
                       height: 10.0,
                     ),
                     BTWhiteBtnWithBorder(
+                      url: touristHubProvider.schedules.isNotEmpty
+                          ? touristHubProvider.schedules
+                              .where((sched) => sched['type'] == "Flight")
+                              .toList()[0]['scheduleUrl']
+                          : '',
                       height: 45.0,
-                      labelText: 'Flight Schedules',
+                      labelText: 'Flight Schedule',
+                      iconData: FluentIcons.airplane_take_off_20_regular,
                       action: () {},
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
                     BTWhiteBtnWithBorder(
+                      url: touristHubProvider.schedules.isNotEmpty
+                          ? touristHubProvider.schedules
+                              .where((sched) => sched['type'] == "Ferry")
+                              .toList()[0]['scheduleUrl']
+                          : '',
                       height: 45.0,
-                      labelText: 'Barge Schedules',
+                      labelText: 'Ferry Schedule',
+                      iconData: FluentIcons.vehicle_ship_16_regular,
                       action: () {},
                     ),
                   ],
@@ -251,38 +281,17 @@ class _BTTouristHubState extends State<BTTouristHub> {
                 Column(
                   children: [
                     appText.darkHeading(text: 'Emergency Hotline Numbers'),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    const BTEmergencyHotline(
-                      agency: 'DRRM Operation Center',
-                      imgUrl: 'assets/images/hotlines/drrm.png',
-                      location: 'Mambajao, Camiguin',
-                      contactno: '0912 345 6789',
-                    ),
-                    const BTEmergencyHotline(
-                      agency: 'Camiguin PPO',
-                      imgUrl: 'assets/images/hotlines/camppo.png',
-                      location: 'Balbagon, Mambajao',
-                      contactno: '0936 897 3287',
-                    ),
-                    const BTEmergencyHotline(
-                      agency: 'BFP',
-                      imgUrl: 'assets/images/hotlines/bfp.png',
-                      location: 'Balbagon, Mambajao',
-                      contactno: '0905 783 1265',
-                    ),
-                    const BTEmergencyHotline(
-                      agency: 'Phil. Coast Guard',
-                      imgUrl: 'assets/images/hotlines/coastguard.png',
-                      location: 'Benoni, Mahinog',
-                      contactno: '0912 345 6789',
-                    ),
-                    const BTEmergencyHotline(
-                      agency: 'Phil. Port Authority',
-                      imgUrl: 'assets/images/hotlines/ppa.png',
-                      location: 'Balbagon, Mambajao',
-                      contactno: '0912 345 6789',
+                    Column(
+                      children: touristHubProvider.hotlines
+                          .map(
+                            (hotline) => BTEmergencyHotline(
+                              agency: '${hotline['agencyName']}',
+                              imgUrl: '${hotline['agencyLogo']}',
+                              location: '${hotline['address']}',
+                              contactno: '${hotline['hotlineNumber']}',
+                            ),
+                          )
+                          .toList(),
                     ),
                   ],
                 ),
