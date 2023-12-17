@@ -1,8 +1,10 @@
 import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/widgets/essential_provider_card.dart';
+import 'package:bt_frontend/features/tourist/providers/tourist_hub.provider.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class BTEssentialProviders extends StatefulWidget {
   const BTEssentialProviders({super.key});
@@ -12,51 +14,11 @@ class BTEssentialProviders extends StatefulWidget {
 }
 
 class _BTEssentialProvidersState extends State<BTEssentialProviders> {
-  List<Map<String, String>> essentialProviders = [
-    {
-      "name": "Mambajao Police Station",
-      "location": "Poblacion, Mambajao",
-    },
-    {
-      "name": "Mambajao Fire Station",
-      "location": "Poblacion, Mambajao",
-    },
-    {
-      "name": "Mambajao Municipal Hall",
-      "location": "Poblacion, Mambajao",
-    },
-    {
-      "name": "Cebuana Lhuillier",
-      "location": "Yumbing, Mambajao",
-    },
-    {
-      "name": "Western Union",
-      "location": "Poblacion, Mambajao",
-    },
-    {
-      "name": "San Francisco Hospital",
-      "location": "San Francisco, Camiguin",
-    },
-    {
-      "name": "Petron Gas Station",
-      "location": "Yumbing, Mambajao",
-    },
-    {
-      "name": "CDO Foodsphere",
-      "location": "Pandu, Mambajao",
-    },
-    {
-      "name": "LBC Express",
-      "location": "Poblacion, Mambajao",
-    },
-    {
-      "name": "PNB Bank",
-      "location": "Poblacion, Mambajao",
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    var touristHubProvider =
+        Provider.of<TouristHubProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {},
       title: 'Essential Providers',
@@ -64,8 +26,8 @@ class _BTEssentialProvidersState extends State<BTEssentialProviders> {
         children: [
           Row(
             children: [
-              FaIcon(
-                FontAwesomeIcons.solidBookmark,
+              Icon(
+                FluentIcons.bookmark_28_filled,
                 size: 37.0,
                 color: Colors.red[400],
               ),
@@ -95,12 +57,11 @@ class _BTEssentialProvidersState extends State<BTEssentialProviders> {
           Container(
             padding: const EdgeInsets.only(bottom: 40.0),
             child: Column(
-              children: essentialProviders
+              children: touristHubProvider.essentialServiceProviders
                   .map((esp) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: BTEssentialProviderCard(
-                          name: esp['name'],
-                          location: esp['location'],
+                          provider: esp,
                         ),
                       ))
                   .toList(),

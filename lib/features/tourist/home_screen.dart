@@ -280,7 +280,11 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                                           color: Color.fromARGB(
                                               255, 134, 134, 134)),
                                     )),
-                              )
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .30,
+                              ),
                             ],
                           ),
                   )),

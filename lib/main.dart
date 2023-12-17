@@ -13,6 +13,7 @@ import 'package:bt_frontend/features/auth/screens/signup/tourist/upload_picture.
 import 'package:bt_frontend/features/auth/screens/signup/tourist/verify_details.dart';
 import 'package:bt_frontend/features/establishment/establishment_container.dart';
 import 'package:bt_frontend/features/establishment/providers/est_profile.provider.dart';
+import 'package:bt_frontend/features/tourist/providers/tourist_hub.provider.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_profile.provider.dart';
 import 'package:bt_frontend/features/tourist/tourist_container.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => TouristAuthProvider()),
         ChangeNotifierProvider(create: (context) => TouristProfileProvider()),
+        ChangeNotifierProvider(create: (context) => TouristHubProvider()),
         ChangeNotifierProvider(
             create: (context) => EstablishmentAuthProvider()),
         ChangeNotifierProvider(

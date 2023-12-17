@@ -26,7 +26,16 @@ class _BTEmergencyHotlineState extends State<BTEmergencyHotline> {
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-              width: 45.0, child: Image(image: AssetImage('${widget.imgUrl}'))),
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle, // Set shape to rectangle
+              image: DecorationImage(
+                image: NetworkImage('${widget.imgUrl}'),
+                fit: BoxFit.fitHeight, // Adjust the fit as needed
+              ),
+            ),
+          ),
           const SizedBox(
             width: 10.0,
           ),
@@ -55,7 +64,8 @@ class _BTEmergencyHotlineState extends State<BTEmergencyHotline> {
                   ),
                   child: InkWell(
                     onTap: () async {
-                      final Uri url = Uri(scheme: 'tel', path: '+639058151732');
+                      final Uri url =
+                          Uri(scheme: 'tel', path: '${widget.contactno}');
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url);
                       } else {

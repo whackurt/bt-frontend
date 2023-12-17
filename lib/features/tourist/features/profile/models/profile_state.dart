@@ -1,1 +1,0 @@
-bool editMode = false;
