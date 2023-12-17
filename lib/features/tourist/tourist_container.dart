@@ -5,7 +5,7 @@ import 'package:bt_frontend/features/tourist/features/profile/screens/tourist_pr
 import 'package:bt_frontend/features/tourist/features/tourist_hub/screens/tourist_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 class TouristContainer extends StatefulWidget {
   const TouristContainer({super.key});
@@ -27,30 +27,46 @@ class _TouristContainerState extends State<TouristContainer> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Home',
-                icon: FaIcon(
-                  FontAwesomeIcons.house,
-                  size: 20.0,
+                activeIcon: Icon(
+                  FluentIcons.home_12_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.home_12_regular,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Tourist Hub',
-                icon: FaIcon(
-                  FontAwesomeIcons.mapLocation,
-                  size: 20.0,
+                activeIcon: Icon(
+                  FluentIcons.map_16_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.map_16_regular,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Feedback',
-                icon: FaIcon(
-                  FontAwesomeIcons.reply,
-                  size: 20.0,
+                activeIcon: Icon(
+                  FluentIcons.chat_12_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.chat_12_regular,
+                  size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Profile',
-                icon: FaIcon(
-                  FontAwesomeIcons.userLarge,
-                  size: 20.0,
+                activeIcon: Icon(
+                  FluentIcons.person_12_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.person_12_regular,
+                  size: 23.0,
                 ),
               ),
             ]),

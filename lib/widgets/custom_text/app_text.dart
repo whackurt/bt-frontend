@@ -52,15 +52,19 @@ class AppText {
   Widget heading({String? text}) {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Text(
-            '$text',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 18.0,
-              color: appColor.titleColor(),
+        Expanded(
+          // Added Expanded to allow the text to take available width
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              '$text',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18.0,
+                color: appColor.titleColor(),
+              ),
+              maxLines: null, // Set maxLines to null for multiline text
             ),
           ),
         ),
@@ -105,7 +109,7 @@ class AppText {
           '$text',
           style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 25.0,
+              fontSize: 30.0,
               color: AppColors().titleColor()),
         ),
       ],
