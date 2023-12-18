@@ -16,4 +16,8 @@ class Api {
       "http://192.168.254.105:8000/api/v1/hotline";
 
   String schedulesUrl = "http://192.168.254.105:8000/api/v1/schedule";
+
+  String complaintsUrl = "http://192.168.254.105:8000/api/v1/complaint";
+  
+  String feedbacksUrl = "http://192.168.254.105:8000/api/v1/feedback";
 }

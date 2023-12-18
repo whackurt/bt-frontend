@@ -109,7 +109,7 @@ class AppText {
           '$text',
           style: TextStyle(
               fontWeight: FontWeight.w800,
-              fontSize: 30.0,
+              fontSize: 25.0,
               color: AppColors().titleColor()),
         ),
       ],

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class BTReadonlyTextField extends StatefulWidget {
   final String? label;
   final String? text;
+  final Color? textColor;
 
-  const BTReadonlyTextField({super.key, this.label, this.text});
+  const BTReadonlyTextField({super.key, this.label, this.text, this.textColor});
 
   @override
   State<BTReadonlyTextField> createState() => _BTReadonlyTextFieldState();
@@ -34,7 +35,8 @@ class _BTReadonlyTextFieldState extends State<BTReadonlyTextField> {
             enabled: false,
             decoration: InputDecoration(
               labelText: widget.text,
-              labelStyle: TextStyle(color: Colors.grey[800]),
+              labelStyle:
+                  TextStyle(color: widget.textColor ?? Colors.grey[800]),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(PropValues().borderRadius),
                 borderSide: BorderSide.none,

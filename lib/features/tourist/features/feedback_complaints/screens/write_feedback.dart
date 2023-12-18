@@ -1,11 +1,18 @@
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
-import 'package:bt_frontend/widgets/custom_buttons/dropdown_btn.dart';
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/controllers/complaint.controller.dart';
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/controllers/feedback.controller.dart';
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/models/complaint.model.dart';
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/models/feedback.model.dart';
+import 'package:bt_frontend/features/tourist/providers/complaint.provider.dart';
 import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BTWriteFeedback extends StatefulWidget {
   const BTWriteFeedback({super.key});
@@ -17,14 +24,16 @@ class BTWriteFeedback extends StatefulWidget {
 List<String> feedbackType = ["Feedback", "Complaint"];
 
 class _BTWriteFeedbackState extends State<BTWriteFeedback> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController rateController = TextEditingController();
+  final TextEditingController complaintDescriptionController =
+      TextEditingController();
   final TextEditingController commentsController = TextEditingController();
+
+  FeedbackController feedbackController = FeedbackController();
+  ComplaintController complaintController = ComplaintController();
 
   DateTime? incidentDate;
   String selectedFeedbackType = feedbackType[0];
+  final _complaintKey = GlobalKey<FormState>();
 
   List<String> rate = ["1", "2", "3", "4", "5"];
   String? selectedEstablishment = "";
@@ -37,8 +46,98 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
     "Others"
   ];
 
+  String? selectedRating;
+  String? involvedEstablishment;
+  bool loading = false;
+  bool emptyRating = false;
+  bool emptyEstablishment = false;
+  bool incompleteComplaint = false;
+  bool success = false;
+
+  Future submitFeedback() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      loading = true;
+      success = false;
+    });
+    await feedbackController
+        .createFeedback(
+      feedback: FeedbackModel(
+          rating: int.parse(selectedRating ?? "0"),
+          touristId: pref.getInt('touristId'),
+          commentSuggestion: commentsController.text.toString()),
+    )
+        .then((res) {
+      if (res['success']) {
+        setState(() {
+          success = true;
+          selectedRating = null;
+        });
+        commentsController.clear();
+      }
+
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          success = false;
+        });
+      });
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
+  Future submitComplaint() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      loading = true;
+      success = false;
+    });
+
+    await complaintController
+        .createComplaint(
+            complaint: Complaint(
+      response: '',
+      resolved: 0,
+      incidentDate: incidentDate,
+      touristId: pref.getInt('touristId'),
+      involvedEstablishmentId: int.parse(involvedEstablishment ?? "0"),
+      description: complaintDescriptionController.text.toString(),
+    ))
+        .then((res) {
+      print(res);
+      if (res['success']) {
+        setState(() {
+          success = true;
+        });
+      }
+
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          success = false;
+        });
+      });
+
+      setState(() {
+        loading = false;
+      });
+    });
+
+    await complaintController
+        .getComplaints(id: pref.getInt('touristId').toString())
+        .then((res) {
+      context
+          .read<ComplaintProvider>()
+          .setComplaints(data: res['data']['complaints']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var complaintProvider =
+        Provider.of<ComplaintProvider>(context, listen: true);
+
     return BTContentWrapper(
       onRefresh: () async {},
       title: 'Feedback',
@@ -91,6 +190,7 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                   onChanged: (value) {
                     setState(() {
                       selectedFeedbackType = value.toString();
+                      incompleteComplaint = false;
                     });
                   },
                 ),
@@ -134,10 +234,50 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                           ),
                         ],
                       ),
-                      BTDropdownBtn(
-                        hint: 'Rate your overall experience',
-                        dropdownValues: rate,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                PropValues().borderRadius),
+                            color: PropValues().secondary,
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedRating,
+                            underline: Container(),
+                            isExpanded: true,
+                            hint: const Text('Rate your overall experience'),
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedRating = newValue;
+                                emptyRating = false;
+                              });
+                            },
+                            items: rate
+                                .map<DropdownMenuItem<String>>((String rating) {
+                              return DropdownMenuItem<String>(
+                                value: rating,
+                                child: Text(rating),
+                              );
+                            }).toList(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            iconSize: 30.0,
+                            dropdownColor: Colors.white,
+                          ),
+                        ),
                       ),
+                      emptyRating
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Rating is required.',
+                                  style: TextStyle(
+                                      color: Colors.red[400], fontSize: 12.0),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
                       const SizedBox(
                         height: 15.0,
                       ),
@@ -180,9 +320,38 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                           ),
                         ],
                       ),
-                      BTDropdownBtn(
-                        hint: 'Choose the Involved Establishment',
-                        dropdownValues: establishments,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                PropValues().borderRadius),
+                            color: PropValues().secondary,
+                          ),
+                          child: DropdownButton<String>(
+                            value: involvedEstablishment,
+                            underline: Container(),
+                            isExpanded: true,
+                            hint: const Text('Choose establishment'),
+                            onChanged: (newValue) {
+                              setState(() {
+                                involvedEstablishment = newValue;
+                                emptyEstablishment = false;
+                              });
+                            },
+                            items: complaintProvider.establishments
+                                .map<DropdownMenuItem<String>>((est) {
+                              return DropdownMenuItem<String>(
+                                value: '${est['id']}',
+                                child: Text('${est['name']}'),
+                              );
+                            }).toList(),
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            iconSize: 30.0,
+                            dropdownColor: Colors.white,
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 10.0,
@@ -205,20 +374,22 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                           borderRadius:
                               BorderRadius.circular(PropValues().borderRadius),
                         ),
-                        child: DateTimeField(
-                          lastDate: DateTime.now(),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            filled: true,
-                            fillColor: Colors.transparent,
+                        child: Center(
+                          child: DateTimeField(
+                            lastDate: DateTime.now(),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.transparent,
+                            ),
+                            mode: DateTimeFieldPickerMode.date,
+                            onDateSelected: (DateTime value) {
+                              setState(() {
+                                incidentDate = value;
+                              });
+                            },
+                            selectedDate: incidentDate,
                           ),
-                          mode: DateTimeFieldPickerMode.date,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              incidentDate = value;
-                            });
-                          },
-                          selectedDate: incidentDate,
                         ),
                       ),
                       const SizedBox(
@@ -235,63 +406,87 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
                           ),
                         ],
                       ),
-                      TextFormField(
-                        controller: commentsController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  PropValues().borderRadius),
-                              borderSide: BorderSide.none),
-                          hintText:
-                              'Desribe your complaints and your comments.',
-                          filled: true,
-                          fillColor: PropValues().secondary,
+                      Form(
+                        key: _complaintKey,
+                        child: TextFormField(
+                          controller: complaintDescriptionController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    PropValues().borderRadius),
+                                borderSide: BorderSide.none),
+                            hintText:
+                                'Desribe your complaints and your comments.',
+                            filled: true,
+                            fillColor: PropValues().secondary,
+                          ),
+                          validator: (value) => (value!.isEmpty)
+                              ? 'Description is required.'
+                              : null,
+                          maxLines: 5,
                         ),
-                        maxLines: 5,
                       ),
                     ],
                   )),
         const SizedBox(
           height: 25.0,
         ),
+        success
+            ? Text(
+                'Submitted.',
+                style: TextStyle(color: Colors.green[500]),
+              )
+            : const SizedBox(),
+        incompleteComplaint
+            ? Text(
+                'All fields are required.',
+                style: TextStyle(color: Colors.red[400]),
+              )
+            : const SizedBox(),
         BTFullWidthButton(
           height: 45.0,
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: ((context) {
-                  return AlertDialog(
-                    title: const Text(
-                      'Submit Feedback',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    content:
-                        const Text('Are you sure you want to submit feedback?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the alert dialog
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the alert dialog
-                        },
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.green[700]),
-                        ),
-                      ),
-                    ],
-                  );
-                }));
+            setState(() {
+              emptyRating = false;
+              emptyEstablishment = true;
+              incompleteComplaint = false;
+              success = false;
+            });
+
+            if (selectedFeedbackType == feedbackType[0]) {
+              if (selectedRating == null) {
+                setState(() {
+                  emptyRating = true;
+                });
+                return;
+              }
+              submitFeedback();
+            }
+
+            if (selectedFeedbackType == feedbackType[1]) {
+              if (involvedEstablishment == null ||
+                  incidentDate == null ||
+                  !_complaintKey.currentState!.validate()) {
+                setState(() {
+                  incompleteComplaint = true;
+                });
+                return;
+              }
+
+              submitComplaint();
+            }
           },
-          child: Text(
-            'Submit',
-            style: TextStyle(
-                color: Colors.white, fontSize: PropValues().btnTextSize),
-          ),
+          child: loading
+              ? const SpinKitRing(
+                  color: Colors.white,
+                  lineWidth: 3.0,
+                  size: 25.0,
+                )
+              : Text(
+                  'Submit',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: PropValues().btnTextSize),
+                ),
         ),
         const SizedBox(
           height: 30.0,
