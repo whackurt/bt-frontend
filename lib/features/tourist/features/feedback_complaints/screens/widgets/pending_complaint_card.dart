@@ -1,8 +1,8 @@
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/screens/view_complaint.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BTPendingComplaintCard extends StatefulWidget {
   final Map? complaint;
@@ -27,8 +27,8 @@ class _BTPendingComplaintCardState extends State<BTPendingComplaintCard> {
           children: [
             Row(
               children: [
-                FaIcon(
-                  FontAwesomeIcons.hourglassHalf,
+                Icon(
+                  FluentIcons.arrow_clockwise_16_regular,
                   size: 20.0,
                   color: Colors.red[400],
                 ),
@@ -38,7 +38,7 @@ class _BTPendingComplaintCardState extends State<BTPendingComplaintCard> {
                 SizedBox(
                   width: (MediaQuery.of(context).size.width) * .60,
                   child: Text(
-                    '${widget.complaint!['title']}',
+                    '${widget.complaint!['description']}',
                     style: const TextStyle(fontSize: 15.0),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

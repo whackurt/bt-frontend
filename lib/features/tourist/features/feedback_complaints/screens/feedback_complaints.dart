@@ -7,6 +7,10 @@ import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bt_frontend/features/tourist/providers/complaint.provider.dart';
+import 'package:bt_frontend/features/tourist/features/feedback_complaints/controllers/complaint.controller.dart';
 
 class BTFeedbackComplaints extends StatefulWidget {
   const BTFeedbackComplaints({super.key});
@@ -16,35 +20,40 @@ class BTFeedbackComplaints extends StatefulWidget {
 }
 
 class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
-  List<Map<String, dynamic>> complaintsData = [
-    {
-      "id": "5bf142459b72e12b2b1b2cd",
-      "resolved": 0,
-      "involved_establishment": "Ardent Hot Spring",
-      "title": "The CR at Ardent Hot Spring is do dirty.",
-      "description":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      "id": "5bf142459b72e12b2b1b278",
-      "resolved": 0,
-      "involved_establishment": "DL Bonita Merchandise",
-      "title": "Angry Cashier at DL Bonita Catarman",
-      "description":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    },
-    {
-      "id": "5bf142459b72e12b2b1b2cd",
-      "resolved": 1,
-      "involved_establishment": "GV Hotel Camiguin",
-      "title": "GV Hotel staff got inlove with me",
-      "description":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    }
-  ];
+  ComplaintController complaintController = ComplaintController();
+
+  Future getComplaints() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    await complaintController
+        .getComplaints(id: pref.getInt('touristId').toString())
+        .then((res) {
+      context
+          .read<ComplaintProvider>()
+          .setComplaints(data: res['data']['complaints']);
+    });
+  }
+
+  Future getAllEstablishments() async {
+    await complaintController.getAllEstablishments().then((res) {
+      context
+          .read<ComplaintProvider>()
+          .setEstablishments(data: res['data']['establishments']);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getComplaints();
+    getAllEstablishments();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var complaintProvider =
+        Provider.of<ComplaintProvider>(context, listen: true);
+
     return Scaffold(
       backgroundColor: PropValues().main,
       body: SafeArea(
@@ -95,7 +104,9 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                 thickness: 1.0,
               ),
               Column(
-                children: complaintsData.map((complaint) {
+                children: complaintProvider.complaints
+                    .where((complaint) => complaint['resolved'] == 0)
+                    .map((complaint) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3.0),
                     child: complaint['resolved'] == 0
@@ -114,7 +125,9 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                 thickness: 1.0,
               ),
               Column(
-                children: complaintsData.map((complaint) {
+                children: complaintProvider.complaints
+                    .where((complaint) => complaint['resolved'] == 1)
+                    .map((complaint) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3.0),
                     child: complaint['resolved'] == 1
