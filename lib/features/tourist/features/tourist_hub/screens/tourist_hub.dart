@@ -73,7 +73,6 @@ class _BTTouristHubState extends State<BTTouristHub> {
   Widget build(BuildContext context) {
     var touristHubProvider =
         Provider.of<TouristHubProvider>(context, listen: true);
-    print(touristHubProvider.schedules);
 
     return Scaffold(
       // appBar: appBar(title: 'Tourist Hub'),
