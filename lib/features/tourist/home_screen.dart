@@ -108,219 +108,207 @@ class _BTTouristHomeState extends State<BTTouristHome> {
     var touristProvider =
         Provider.of<TouristProfileProvider>(context, listen: true);
 
-    return Container(
-      decoration: appColors.linearGradient(),
-      child: Scaffold(
-        // onRefresh: () async {
-        //   getTouristHomeData();
-        // },
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Stack(alignment: Alignment.center, children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * .50,
-                  decoration: appColors.linearGradient(),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * .50,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 180.0),
-              child: Container(
+    return Scaffold(
+      // onRefresh: () async {
+      //   getTouristHomeData();
+      // },
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Stack(alignment: Alignment.center, children: [
+          Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * .15,
+                width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(50.0),
+                    bottomRight: Radius.circular(50.0),
                   ),
-                  color: Colors.white,
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.blue, Colors.indigo]),
                 ),
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: loading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundImage: NetworkImage(
+                            '${touristProvider.touristHomeData['photo_url']}'),
+                        backgroundColor: const Color.fromARGB(255, 131, 73, 73),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hi, ${touristProvider.touristHomeData['full_name']}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const Text(
+                            'Welcome to Bantay Turista!',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 232, 232, 232),
+                                fontSize: 16.0),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                // height: MediaQuery.of(context).size.height * .85,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        const Image(
+                          width: 120.0,
+                          height: 120.0,
+                          image: AssetImage('assets/images/app-icon.png'),
+                        ),
+                        Text('Your Travel Companion: Bantay Turista',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 15.0)),
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        Text('Navigate, Engage, and Explore!',
+                            style: TextStyle(
+                                color: Colors.indigo[600],
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.0)),
+                      ],
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    RepaintBoundary(
+                      key: _qrkey,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
                           children: [
-                            const SizedBox(
-                              height: 90.0,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 30.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '${touristProvider.touristHomeData['full_name']}',
-                                    style: const TextStyle(
-                                        color: Color.fromARGB(255, 29, 29, 29),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 24.0),
-                                  ),
-                                  const SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text(
-                                    '${touristProvider.touristHomeData['address_1']}, ${touristProvider.touristHomeData['city_municipality']}, ${touristProvider.touristHomeData['state_province']}',
-                                    style: const TextStyle(
-                                        color: Color.fromARGB(255, 97, 97, 97),
-                                        fontSize: 16.0),
-                                  ),
-                                  const SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text(
-                                    '${touristProvider.touristHomeData['country']}'
-                                        .toUpperCase(),
-                                    style: const TextStyle(
-                                        color: Colors.indigo,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w600),
+                            Container(
+                              width: 220.0,
+                              height: 250.0,
+                              decoration: BoxDecoration(
+                                color: Colors.white, // Set the background color
+                                borderRadius: BorderRadius.circular(PropValues()
+                                    .borderRadius), // Set the radius
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey
+                                        .withOpacity(0.5), // Shadow color
+                                    spreadRadius: 2, // Spread radius
+                                    blurRadius: 5, // Blur radius
+                                    offset: const Offset(
+                                        0, 3), // Offset (horizontal, vertical)
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            RepaintBoundary(
-                              key: _qrkey,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: 220.0,
-                                      height: 250.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors
-                                            .white, // Set the background color
-                                        borderRadius: BorderRadius.circular(
-                                            PropValues()
-                                                .borderRadius), // Set the radius
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(
-                                                0.5), // Shadow color
-                                            spreadRadius: 2, // Spread radius
-                                            blurRadius: 5, // Blur radius
-                                            offset: const Offset(0,
-                                                3), // Offset (horizontal, vertical)
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: 220.0,
-                                          height: 50.0,
-                                          decoration:
-                                              appColors.btnLinearGradient(),
-                                          child: Center(
-                                              child: Text(
-                                            '${touristProvider.touristHomeData['qr_code']}'
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 23.0),
-                                          )),
-                                        ),
-                                        const SizedBox(
-                                          height: 10.0,
-                                        ),
-                                        QrImageView(
-                                          data: touristProvider
-                                                  .touristHomeData['qr_code'] ??
-                                              '',
-                                          version: QrVersions.auto,
-                                          size: 180,
-                                          errorStateBuilder: (ctx, err) {
-                                            return const Center(
-                                              child: Text(
-                                                'Something went wrong!!!',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            );
-                                          },
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            Container(
-                              width: 220.0,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(
-                                    PropValues().borderRadius), // Border radius
-                                border: Border.all(
-                                  color: const Color.fromARGB(
-                                      255, 134, 134, 134), // Border color
-                                  width: 2.0, // Border width
-                                ),
-                              ),
-                              child: TextButton(
-                                  onPressed: _captureAndSavePng,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                  child: const Text(
-                                    'Save QR Code',
-                                    style: TextStyle(
+                            Column(
+                              children: [
+                                Container(
+                                  width: 220.0,
+                                  height: 50.0,
+                                  decoration: appColors.btnLinearGradient(),
+                                  child: Center(
+                                      child: Text(
+                                    '${touristProvider.touristHomeData['qr_code']}'
+                                        .toUpperCase(),
+                                    style: const TextStyle(
+                                        color: Colors.white,
                                         fontWeight: FontWeight.w700,
-                                        color:
-                                            Color.fromARGB(255, 134, 134, 134)),
+                                        fontSize: 23.0),
                                   )),
-                            ),
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                QrImageView(
+                                  data: touristProvider
+                                          .touristHomeData['qr_code'] ??
+                                      '',
+                                  version: QrVersions.auto,
+                                  size: 180,
+                                  errorStateBuilder: (ctx, err) {
+                                    return const Center(
+                                      child: Text(
+                                        'Something went wrong!!!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            )
                           ],
                         ),
-                )),
-              ),
-            ),
-            Positioned(
-              top: 95,
-              child: Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 3.0,
-                      offset: const Offset(0, 3),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    const Divider(),
+                    // Text(
+                    //   'My Address',
+                    //   style: TextStyle(color: Colors.grey[900], fontSize: 14.0),
+                    // ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: const Color.fromARGB(255, 245, 245, 245),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 8.0),
+                      // width: MediaQuery.of(context).size.width * .55,
+                      child: Column(
+                        children: [
+                          Text(
+                            '${touristProvider.touristHomeData['address_1']}, ${touristProvider.touristHomeData['city_municipality']}, ${touristProvider.touristHomeData['state_province']}',
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 97, 97, 97),
+                                fontSize: 16.0),
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                            '${touristProvider.touristHomeData['country']}'
+                                .toUpperCase(),
+                            style: const TextStyle(
+                                color: Colors.indigo,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundImage: NetworkImage(
-                      '${touristProvider.touristHomeData['photo_url']}'),
-                  backgroundColor: Colors.white,
-                ),
               ),
-            ),
-          ]),
-        ),
+            ],
+          )
+        ]),
       ),
     );
   }
