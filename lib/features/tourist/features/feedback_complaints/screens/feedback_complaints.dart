@@ -119,6 +119,14 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                     );
                   }).toList(),
                 ),
+                complaintProvider.complaints
+                        .where((complaint) => complaint['resolved'] == 0)
+                        .isEmpty
+                    ? Text(
+                        'No pending complaints',
+                        style: TextStyle(color: Colors.grey[700]),
+                      )
+                    : const SizedBox(),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -140,6 +148,14 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                     );
                   }).toList(),
                 ),
+                complaintProvider.complaints
+                        .where((complaint) => complaint['resolved'] == 1)
+                        .isEmpty
+                    ? Text(
+                        'No resolved complaints',
+                        style: TextStyle(color: Colors.grey[700]),
+                      )
+                    : const SizedBox()
               ],
             ),
           ),
