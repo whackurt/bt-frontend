@@ -84,14 +84,14 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                     const SizedBox(height: 30.0),
                     Row(
                       children: [
-                        AppText().purpleBoldHeader(text: 'Your Profile'),
+                        AppText().purpleBoldHeader(text: 'Profile'),
                       ],
                     ),
                     Row(
                       children: [
                         AppText().subHeader(
                           context: context,
-                          text: 'Personal Details',
+                          text: 'Your Personal Information',
                         ),
                       ],
                     ),
