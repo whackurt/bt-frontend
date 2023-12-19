@@ -433,7 +433,7 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
         ),
         success
             ? Text(
-                'Submitted.',
+                'Feedback/Complaint submitted successfully.',
                 style: TextStyle(color: Colors.green[500]),
               )
             : const SizedBox(),
