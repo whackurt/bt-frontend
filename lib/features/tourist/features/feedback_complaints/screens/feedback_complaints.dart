@@ -57,88 +57,91 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
     return Scaffold(
       backgroundColor: PropValues().main,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 40.0),
-          child: Column(
-            children: [
-              AppText().titleWithInstruction(
-                  context: context,
-                  title: 'Your  feedback matters',
-                  instruction:
-                      'As part of our ongoing efforts to enhance the tourist experience, we invite you to share your feedback or any issues you may have encountered.'),
-              BTFullWidthButton(
-                height: 45.0,
-                onPressed: () {
-                  Navigator.push(context, CupertinoPageRoute(
-                    builder: (context) {
-                      return const BTWriteFeedback();
-                    },
-                  ));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.penToSquare,
-                      color: Colors.white,
-                      size: 20.0,
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(
-                      'Write a Feedback',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: PropValues().btnTextSize),
-                    ),
-                  ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 40.0),
+            child: Column(
+              children: [
+                AppText().titleWithInstruction(
+                    context: context,
+                    title: 'Your  feedback matters',
+                    instruction:
+                        'As part of our ongoing efforts to enhance the tourist experience, we invite you to share your feedback or any issues you may have encountered.'),
+                BTFullWidthButton(
+                  height: 45.0,
+                  onPressed: () {
+                    Navigator.push(context, CupertinoPageRoute(
+                      builder: (context) {
+                        return const BTWriteFeedback();
+                      },
+                    ));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const FaIcon(
+                        FontAwesomeIcons.penToSquare,
+                        color: Colors.white,
+                        size: 20.0,
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        'Write a Feedback',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: PropValues().btnTextSize),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppText().darkHeading(text: "Pending Complaints"),
-              const Divider(
-                thickness: 1.0,
-              ),
-              Column(
-                children: complaintProvider.complaints
-                    .where((complaint) => complaint['resolved'] == 0)
-                    .map((complaint) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3.0),
-                    child: complaint['resolved'] == 0
-                        ? BTPendingComplaintCard(
-                            complaint: complaint,
-                          )
-                        : null,
-                  );
-                }).toList(),
-              ),
-              const SizedBox(
-                height: 20.0,
-              ),
-              AppText().darkHeading(text: "Resolved Complaints"),
-              const Divider(
-                thickness: 1.0,
-              ),
-              Column(
-                children: complaintProvider.complaints
-                    .where((complaint) => complaint['resolved'] == 1)
-                    .map((complaint) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3.0),
-                    child: complaint['resolved'] == 1
-                        ? BTResolvedComplaintCard(
-                            complaint: complaint,
-                          )
-                        : null,
-                  );
-                }).toList(),
-              ),
-            ],
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppText().darkHeading(text: "Pending Complaints"),
+                const Divider(
+                  thickness: 1.0,
+                ),
+                Column(
+                  children: complaintProvider.complaints
+                      .where((complaint) => complaint['resolved'] == 0)
+                      .map((complaint) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
+                      child: complaint['resolved'] == 0
+                          ? BTPendingComplaintCard(
+                              complaint: complaint,
+                            )
+                          : null,
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppText().darkHeading(text: "Resolved Complaints"),
+                const Divider(
+                  thickness: 1.0,
+                ),
+                Column(
+                  children: complaintProvider.complaints
+                      .where((complaint) => complaint['resolved'] == 1)
+                      .map((complaint) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
+                      child: complaint['resolved'] == 1
+                          ? BTResolvedComplaintCard(
+                              complaint: complaint,
+                            )
+                          : null,
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
