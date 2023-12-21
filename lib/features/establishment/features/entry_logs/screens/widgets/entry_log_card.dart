@@ -48,13 +48,6 @@ class _BTEntryLogCardState extends State<BTEntryLogCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // CircleAvatar(
-            //   radius: 30,
-            //   backgroundImage: NetworkImage(
-            //     '${widget.entryLog!['tourist']['photo_url']}',
-            //   ),
-            //   backgroundColor: Colors.white,
-            // ),
             FaIcon(
               FontAwesomeIcons.userCheck,
               size: 25.0,
