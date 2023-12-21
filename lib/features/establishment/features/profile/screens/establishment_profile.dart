@@ -7,11 +7,12 @@ import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_buttons/red_with_border_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/custom_text_field/readonly_text_field.dart';
-import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 
 class BTEstProfile extends StatefulWidget {
   const BTEstProfile({super.key});
@@ -79,150 +80,194 @@ class _BTEstProfileState extends State<BTEstProfile> {
     var estProvider =
         Provider.of<EstablishmentProfileProvider>(context, listen: true);
 
-    return BTContentWrapper(
-      onRefresh: () async {
-        getEstablishmentProfileData();
-        getEstablishmentTypes();
-      },
-      title: 'Profile',
-      child: loading
-          ? const Center(
-              child: CircularProgressIndicator(
-                color: Colors.blue,
-              ),
-            )
-          : Column(
-              children: [
-                CircleAvatar(
-                  radius: 75,
-                  backgroundImage:
-                      NetworkImage('${estProvider.profileData['photo_url']}'),
-                  backgroundColor: const Color.fromARGB(255, 138, 138, 138),
+    return Scaffold(
+      backgroundColor: PropValues().main,
+      body: SafeArea(
+        child: loading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
                 ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+              )
+            : SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Column(
                     children: [
-                      BTReadonlyTextField(
-                        label: 'Establishment Name',
-                        text: '${estProvider.profileData['name']}',
+                      const SizedBox(height: 30.0),
+                      Row(
+                        children: [
+                          AppText().purpleBoldHeader(text: 'Profile'),
+                        ],
                       ),
-                      BTReadonlyTextField(
-                        label: 'Establishment Type',
-                        text: '${estTypes?.firstWhere(
-                          (eType) =>
-                              eType['id'] == estProvider.profileData['type_id'],
-                          orElse: () => {'value': 'Item not found'},
-                        )['name']}',
+                      Row(
+                        children: [
+                          AppText().subHeader(
+                            context: context,
+                            text: 'Your Establishment Information',
+                          ),
+                        ],
                       ),
-                      BTReadonlyTextField(
-                        label: 'Contact Number',
-                        text: '${estProvider.profileData['contact_number']}',
+                      const Divider(
+                        height: 30.0,
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Column(
-                    children: [
-                      appText.heading(text: 'Location'),
-                      BTReadonlyTextField(
-                        label: 'City/Municipality',
-                        text: '${estProvider.profileData['city_municipality']}',
+                      CircleAvatar(
+                        radius: 75,
+                        backgroundImage: NetworkImage(
+                            '${estProvider.profileData['photo_url']}'),
+                        backgroundColor:
+                            const Color.fromARGB(255, 138, 138, 138),
                       ),
-                      BTReadonlyTextField(
-                        label: 'Barangay',
-                        text: '${estProvider.profileData['barangay']}',
+                      const SizedBox(
+                        height: 20.0,
                       ),
-                      BTReadonlyTextField(
-                        label: 'Address 1',
-                        text: '${estProvider.profileData['address_1'] ?? ''}',
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Column(
-                    children: [
-                      appText.heading(text: 'Owner\'s Information'),
-                      BTReadonlyTextField(
-                        label: 'Name',
-                        text: '${estProvider.profileData['owner_name']}',
-                      ),
-                      BTReadonlyTextField(
-                        label: 'Email Address',
-                        text: '${estProvider.profileData['owner_email']}',
-                      ),
-                      BTReadonlyTextField(
-                        label: 'Phone Number',
-                        text: '${estProvider.profileData['owner_phone']}',
-                      ),
-                    ],
-                  ),
-                ),
-                BTFullWidthButton(
-                  onPressed: () {
-                    Navigator.push(context, CupertinoPageRoute(
-                      builder: (context) {
-                        return const BTEstablishmentUpdateProfile();
-                      },
-                    ));
-                  },
-                  height: 50.0,
-                  child: const Text(
-                    'Update Profile',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.0),
-                  ),
-                ),
-                BTRedBtnWithBorder(
-                  height: 45.0,
-                  labelText: 'LOG OUT',
-                  action: () {
-                    showDialog(
-                        context: context,
-                        builder: ((context) {
-                          return AlertDialog(
-                            title: const Text(
-                              'Log out',
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Column(
+                          children: [
+                            BTReadonlyTextField(
+                              label: 'Establishment Name',
+                              text: '${estProvider.profileData['name']}',
                             ),
-                            content:
-                                const Text('Are you sure you want to log out?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the alert dialog
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  logout(context);
-                                },
-                                child: const Text(
-                                  'Log out',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          );
-                        }));
-                  },
+                            BTReadonlyTextField(
+                              label: 'Establishment Type',
+                              text: '${estTypes?.firstWhere(
+                                (eType) =>
+                                    eType['id'] ==
+                                    estProvider.profileData['type_id'],
+                                orElse: () => {'value': 'Item not found'},
+                              )['name']}',
+                            ),
+                            BTReadonlyTextField(
+                              label: 'Contact Number',
+                              text:
+                                  '${estProvider.profileData['contact_number']}',
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Column(
+                          children: [
+                            appText.heading(text: 'Location'),
+                            BTReadonlyTextField(
+                              label: 'City/Municipality',
+                              text:
+                                  '${estProvider.profileData['city_municipality']}',
+                            ),
+                            BTReadonlyTextField(
+                              label: 'Barangay',
+                              text: '${estProvider.profileData['barangay']}',
+                            ),
+                            BTReadonlyTextField(
+                              label: 'Address 1',
+                              text:
+                                  '${estProvider.profileData['address_1'] ?? ''}',
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Column(
+                          children: [
+                            appText.heading(text: 'Owner\'s Information'),
+                            BTReadonlyTextField(
+                              label: 'Name',
+                              text: '${estProvider.profileData['owner_name']}',
+                            ),
+                            BTReadonlyTextField(
+                              label: 'Email Address',
+                              text: '${estProvider.profileData['owner_email']}',
+                            ),
+                            BTReadonlyTextField(
+                              label: 'Phone Number',
+                              text: '${estProvider.profileData['owner_phone']}',
+                            ),
+                          ],
+                        ),
+                      ),
+                      BTFullWidthButton(
+                        onPressed: () {
+                          Navigator.push(context, CupertinoPageRoute(
+                            builder: (context) {
+                              return const BTEstablishmentUpdateProfile();
+                            },
+                          ));
+                        },
+                        height: 50.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.penToSquare,
+                              size: 20.0,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              'Update Profile',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: PropValues().btnTextSize),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      BTRedBtnWithBorder(
+                        icon: FontAwesomeIcons.arrowRightFromBracket,
+                        labelText: 'Log out',
+                        action: () {
+                          showDialog(
+                              context: context,
+                              builder: ((context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Log out',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                  content: const Text(
+                                      'Are you sure you want to log out?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the alert dialog
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        logout(context);
+                                      },
+                                      child: const Text(
+                                        'Log out',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }));
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      )
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 40.0,
-                )
-              ],
-            ),
+              ),
+      ),
     );
   }
 }
