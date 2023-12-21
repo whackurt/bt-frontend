@@ -12,6 +12,7 @@ import 'package:bt_frontend/features/auth/screens/signup/tourist/create_account.
 import 'package:bt_frontend/features/auth/screens/signup/tourist/upload_picture.dart';
 import 'package:bt_frontend/features/auth/screens/signup/tourist/verify_details.dart';
 import 'package:bt_frontend/features/establishment/establishment_container.dart';
+import 'package:bt_frontend/features/establishment/providers/entry_logs.provider.dart';
 import 'package:bt_frontend/features/establishment/providers/est_profile.provider.dart';
 import 'package:bt_frontend/features/tourist/providers/complaint.provider.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_hub.provider.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TouristProfileProvider()),
         ChangeNotifierProvider(create: (context) => TouristHubProvider()),
         ChangeNotifierProvider(create: (context) => ComplaintProvider()),
+        ChangeNotifierProvider(create: (context) => EntryLogsProvider()),
         ChangeNotifierProvider(
             create: (context) => EstablishmentAuthProvider()),
         ChangeNotifierProvider(
