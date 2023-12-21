@@ -1,9 +1,9 @@
 import 'package:bt_frontend/features/establishment/home_screen.dart';
 import 'package:bt_frontend/features/establishment/features/profile/screens/establishment_profile.dart';
 import 'package:bt_frontend/features/establishment/features/scan_qr/screens/scan_qr_code.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EstablishmentContainer extends StatefulWidget {
   const EstablishmentContainer({super.key});
@@ -25,22 +25,34 @@ class _EstablishmentContainerState extends State<EstablishmentContainer> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 label: 'Home',
-                icon: FaIcon(
-                  FontAwesomeIcons.house,
+                activeIcon: Icon(
+                  FluentIcons.home_12_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.home_12_regular,
                   size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Scan',
-                icon: FaIcon(
-                  FontAwesomeIcons.qrcode,
+                activeIcon: Icon(
+                  FluentIcons.scan_qr_code_24_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.scan_qr_code_24_regular,
                   size: 23.0,
                 ),
               ),
               BottomNavigationBarItem(
                 label: 'Profile',
-                icon: FaIcon(
-                  FontAwesomeIcons.userLarge,
+                activeIcon: Icon(
+                  FluentIcons.person_12_filled,
+                  size: 23.0,
+                ),
+                icon: Icon(
+                  FluentIcons.person_12_regular,
                   size: 23.0,
                 ),
               ),
