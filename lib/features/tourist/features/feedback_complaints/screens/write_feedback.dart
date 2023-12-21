@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/controllers/complaint.controller.dart';
 import 'package:bt_frontend/features/tourist/features/feedback_complaints/controllers/feedback.controller.dart';
@@ -36,18 +37,11 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
   final _complaintKey = GlobalKey<FormState>();
 
   List<String> rate = ["1", "2", "3", "4", "5"];
-  String? selectedEstablishment = "";
-  List<String> establishments = [
-    "DL Bonita Merchandise",
-    "Tres Marias Cafe",
-    "Balai sa Baibai",
-    "Villa Paraiso",
-    "GV Hotel",
-    "Others"
-  ];
 
+  String? selectedEstablishment = "";
   String? selectedRating;
   String? involvedEstablishment;
+
   bool loading = false;
   bool emptyRating = false;
   bool emptyEstablishment = false;
@@ -69,6 +63,7 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
     )
         .then((res) {
       if (res['success']) {
+        BotToast.showText(text: 'Feedback successful.');
         setState(() {
           success = true;
           selectedRating = null;
@@ -106,8 +101,8 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
       description: complaintDescriptionController.text.toString(),
     ))
         .then((res) {
-      print(res);
       if (res['success']) {
+        BotToast.showText(text: 'Complaint suubmitted.');
         setState(() {
           success = true;
         });

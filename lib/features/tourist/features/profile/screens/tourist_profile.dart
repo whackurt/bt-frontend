@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/screens/login/login_screen.dart';
 import 'package:bt_frontend/features/tourist/features/profile/controllers/tourist_profile.controller.dart';
@@ -53,6 +54,8 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     pref.clear();
+
+    BotToast.showText(text: 'Logout successful.');
 
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const LoginScreen()),
@@ -258,7 +261,7 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                                 },
                               ),
                               const SizedBox(
-                                height: 20.0,
+                                height: 30.0,
                               )
                             ]),
                     )

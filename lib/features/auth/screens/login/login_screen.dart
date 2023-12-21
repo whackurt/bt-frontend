@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
-import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/controllers/auth.controller.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bot_toast/bot_toast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -44,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     await authController.login(user).then((res) {
       if (res['success']) {
+        BotToast.showText(text: 'Login successful.');
         pref.setString('token', res['data']['token']);
         pref.setInt('userId', res['data']['id']['userId']);
 
@@ -59,12 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     : EstablishmentContainer()),
             (route) => false);
       } else {
-        AnimatedSnackBar.material(
-          '${res['data']['message']}',
-          type: AnimatedSnackBarType.error,
-          mobileSnackBarPosition: MobileSnackBarPosition.top,
-          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
-        ).show(context);
+        BotToast.showText(text: 'Invalid email or password.');
       }
 
       setState(() {
@@ -128,16 +124,31 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Image(
-                          width: 130.0,
-                          height: 130.0,
+                          width: 100.0,
+                          height: 100.0,
                           image: AssetImage('assets/images/app-icon.png')),
-                      Text(
-                        'Camiguin\nBantay Turista',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20.0,
-                            color: Colors.white),
+                      Column(
+                        children: [
+                          Text(
+                            'Camiguin',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                                color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            'Bantay Turista',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 25.0,
+                                color: Colors.white),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -166,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Column(children: [
                         Text(
-                          'Login',
+                          'Login'.toUpperCase(),
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 24.0,
@@ -268,6 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 )
                               : SizedBox(),
                         ),
+                        const SizedBox(
+                          height: 30.0,
+                        ),
                         Column(
                           children: [
                             Form(
@@ -325,6 +339,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ))
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 30.0,
                         ),
                         BTFullWidthButton(
                           height: 50.0,

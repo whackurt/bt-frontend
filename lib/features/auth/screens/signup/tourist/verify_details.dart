@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, unnecessary_string_interpolations
 
-import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/features/auth/controllers/auth.controller.dart';
 import 'package:bt_frontend/features/auth/models/tourist.model.dart';
 import 'package:bt_frontend/features/auth/models/user.model.dart';
@@ -48,15 +48,12 @@ class _TouristVerifyDetailsState extends State<TouristVerifyDetails> {
 
     await AuthController().registerTourist(tourist).then((res) {
       if (res['success']) {
+        BotToast.showText(text: 'Signed up successfully.');
+
         pref.setInt('userId', res['data']['id']['user_id']);
         pref.setInt('touristId', res['data']['id']['tourist_id']);
       } else {
-        AnimatedSnackBar.material(
-          '${res['data']['message']}: The email has already been taken.',
-          type: AnimatedSnackBarType.error,
-          mobileSnackBarPosition: MobileSnackBarPosition.top,
-          desktopSnackBarPosition: DesktopSnackBarPosition.topCenter,
-        ).show(context);
+        BotToast.showText(text: 'Email has already been taken.');
       }
     });
   }

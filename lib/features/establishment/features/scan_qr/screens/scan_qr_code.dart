@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/features/establishment/features/entry_logs/controllers/log.controller.dart';
 import 'package:bt_frontend/features/establishment/features/entry_logs/models/log.model.dart';
 import 'package:bt_frontend/features/establishment/providers/entry_logs.provider.dart';
@@ -34,8 +35,6 @@ class _BTScanQRState extends State<BTScanQR> {
       logDetails = [];
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
-      // ignore: avoid_print
-      print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -46,6 +45,10 @@ class _BTScanQRState extends State<BTScanQR> {
       qrCodeResult = barcodeScanRes;
     });
 
+    if (qrCodeResult == '-1') {
+      BotToast.showText(text: 'No QR code scanned.');
+    }
+
     if (qrCodeResult != '-1') {
       await createLog();
     }
@@ -53,11 +56,13 @@ class _BTScanQRState extends State<BTScanQR> {
 
   Future createLog() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     setState(() {
       loading = true;
       invalidQrCode = false;
       logDetails = [];
     });
+
     await entryLogsController
         .createLog(
             log: Log(
@@ -66,6 +71,8 @@ class _BTScanQRState extends State<BTScanQR> {
                 establishmentId: pref.getInt('establishmentId')))
         .then((res) {
       if (res['success']) {
+        BotToast.showText(text: 'Entry log recorded successfully.');
+
         setState(() {
           logDetails = res['data']['log'];
         });
@@ -75,6 +82,7 @@ class _BTScanQRState extends State<BTScanQR> {
         });
       }
     });
+
     setState(() {
       loading = false;
     });

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/features/auth/screens/login/login_screen.dart';
 import 'package:bt_frontend/features/auth/services/est_auth.services.dart';
 import 'package:bt_frontend/features/establishment/features/profile/controllers/establishment_profile.controller.dart';
@@ -36,6 +37,8 @@ class _BTEstProfileState extends State<BTEstProfile> {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     pref.clear();
+
+    BotToast.showText(text: 'Logged out.');
 
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const LoginScreen()),
@@ -261,7 +264,7 @@ class _BTEstProfileState extends State<BTEstProfile> {
                         },
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 30.0,
                       )
                     ],
                   ),

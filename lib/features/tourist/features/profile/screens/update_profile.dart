@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_profile.provider.dart';
@@ -149,14 +149,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
         address1Controller.clear();
         address2Controller.clear();
 
-        AnimatedSnackBar.rectangle(
-          'Success',
-          'Profile updated successfully.',
-          type: AnimatedSnackBarType.success,
-          brightness: Brightness.light,
-        ).show(
-          context,
-        );
+        BotToast.showText(text: 'Profile updated successfully.');
+      } else {
+        BotToast.showText(text: 'Failed to update profile.');
       }
     });
   }
@@ -420,6 +415,7 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
           ),
         ),
         BTFullWidthButton(
+          height: 50.0,
           onPressed: () async {
             if (_imageFile != null) {
               setState(() {
@@ -454,7 +450,6 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
               });
             }
           },
-          height: 50.0,
           child: loading
               ? const SpinKitRing(
                   color: Colors.white,
@@ -489,6 +484,9 @@ class _BTTouristUpdateProfileState extends State<BTTouristUpdateProfile> {
             Navigator.pop(context);
           },
         ),
+        const SizedBox(
+          height: 10.0,
+        )
       ]),
     );
   }

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/services/est_auth.services.dart';
 import 'package:bt_frontend/features/establishment/features/profile/controllers/establishment_profile.controller.dart';
@@ -25,12 +25,13 @@ class BTEstablishmentUpdateProfile extends StatefulWidget {
 }
 
 pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  XFile? _file = await _imagePicker.pickImage(source: source);
-  if (_file != null) {
-    return await _file.readAsBytes();
+  final ImagePicker imagePicker = ImagePicker();
+
+  XFile? file = await imagePicker.pickImage(source: source);
+
+  if (file != null) {
+    return await file.readAsBytes();
   }
-  print('No image selected');
 }
 
 class _BTEstablishmentUpdateProfileState
@@ -93,6 +94,8 @@ class _BTEstablishmentUpdateProfileState
             updateData: updateData)
         .then((res) {
       if (res['success']) {
+        BotToast.showText(text: 'Profile updated successfully.');
+
         getEstablishmentProfileData();
 
         nameController.clear();
@@ -102,15 +105,8 @@ class _BTEstablishmentUpdateProfileState
         oNameController.clear();
         oEmailController.clear();
         oPhoneController.clear();
-
-        AnimatedSnackBar.rectangle(
-          'Success',
-          'Profile updated successfully.',
-          type: AnimatedSnackBarType.success,
-          brightness: Brightness.light,
-        ).show(
-          context,
-        );
+      } else {
+        BotToast.showText(text: 'Failed to update profile.');
       }
     });
   }
@@ -245,7 +241,7 @@ class _BTEstablishmentUpdateProfileState
                     decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.circular(PropValues().borderRadius),
-                      color: Color.fromARGB(255, 247, 247, 247),
+                      color: const Color.fromARGB(255, 247, 247, 247),
                     ),
                     child: Center(
                       child: DropdownButtonFormField<String>(
@@ -416,7 +412,7 @@ class _BTEstablishmentUpdateProfileState
             },
           ),
           const SizedBox(
-            height: 40.0,
+            height: 60.0,
           )
         ],
       ),
