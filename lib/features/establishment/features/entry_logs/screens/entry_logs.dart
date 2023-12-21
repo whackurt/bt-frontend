@@ -1,7 +1,11 @@
+import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
+import 'package:bt_frontend/features/establishment/features/entry_logs/controllers/log.controller.dart';
 import 'package:bt_frontend/features/establishment/features/entry_logs/screens/widgets/entry_log_card.dart';
+import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BTEntryLogs extends StatefulWidget {
   const BTEntryLogs({super.key});
@@ -10,65 +14,81 @@ class BTEntryLogs extends StatefulWidget {
   State<BTEntryLogs> createState() => _BTEntryLogsState();
 }
 
-List<Map<String, dynamic>> entryLogs = [
-  {
-    "createdAt": "2023-11-03 12:34:00",
-    "tourist": {
-      "id": 45,
-      'qr_code': "BT63154232",
-      'first_name': "Jackilyn Mac Shane",
-      'last_name': 'Roberto',
-    },
-    "establishment": {"id": 45, "name": "DL Bonita Merchandise "}
-  },
-  {
-    "createdAt": "2023-11-03 12:34:00",
-    "tourist": {
-      "id": 45,
-      'qr_code': "BT63154232",
-      'first_name': "Jack",
-      'last_name': 'Roberto',
-    },
-    "establishment": {"id": 45, "name": "DL Bonita Merchandise "}
-  },
-];
-
-DateTime? logDate;
-
-// This is the new Entry Logs widget
-
 class _BTEntryLogsState extends State<BTEntryLogs> {
+  EntryLogsController entryLogsController = EntryLogsController();
+
+  List logs = [];
+  DateTime logDate = DateTime.now();
+
+  Future getEntryLogsToday() async {
+    await entryLogsController.getEntryLogsToday().then((res) {
+      if (res['success']) {
+        setState(() {
+          logs = res['data']['logs'];
+        });
+      }
+    });
+  }
+
+  Future getEntryLogsByDate() async {
+    await entryLogsController.getEntryLogsByDate(date: logDate).then((res) {
+      if (res['success']) {
+        setState(() {
+          logs = res['data']['logs'];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getEntryLogsToday();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BTContentWrapper(
       onRefresh: () async {
         // getTouristData();
       },
-      title: 'Entry Logs',
+      title: '',
       child: Column(
         children: [
-          // Row(
-          //   // mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     const Text(
-          //       'Today is: ',
-          //       style: TextStyle(fontSize: 18.0),
-          //     ),
-          //     Text(
-          //       DateFormat.yMMMd().format(DateTime.now()),
-          //       style: TextStyle(
-          //           color: Colors.blue[800],
-          //           fontSize: 20.0,
-          //           fontWeight: FontWeight.w600),
-          //     ),
-          //   ],
-          // ),
-          // const Divider(
-          //   thickness: 1.0,
-          // ),
+          Row(
+            children: [
+              FaIcon(
+                FontAwesomeIcons.listCheck,
+                size: 30.0,
+                color: Colors.red[400],
+              ),
+              const SizedBox(
+                width: 8.0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText().purpleBoldHeader(text: 'Entry Logs'),
+                  Text(
+                    'Track and Review Tourist Entry',
+                    style: TextStyle(color: Colors.grey[700]),
+                  )
+                ],
+              ),
+            ],
+          ),
+          const Divider(
+            thickness: 1.0,
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
           const Row(
             children: [
-              Text('Filter by Date'),
+              Text(
+                'Filter by Date',
+                style: TextStyle(color: Colors.indigo),
+              ),
             ],
           ),
           const SizedBox(
@@ -77,37 +97,38 @@ class _BTEntryLogsState extends State<BTEntryLogs> {
           DateTimeField(
             initialDate: DateTime.now(),
             lastDate: DateTime.now(),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 border: InputBorder.none,
                 filled: true,
-                fillColor: Colors.white),
+                fillColor: PropValues().secondary),
             mode: DateTimeFieldPickerMode.date,
             onDateSelected: (DateTime value) {
               setState(() {
                 logDate = value;
               });
+
+              getEntryLogsByDate();
             },
             selectedDate: logDate,
           ),
           const SizedBox(
             height: 5.0,
           ),
-          const Divider(
-            thickness: 1.0,
+          const SizedBox(
+            height: 20.0,
           ),
-          Column(
-            children: entryLogs.isEmpty
-                ? [
-                    const Text(
-                      'No entry logs recorded for this date',
-                      style: TextStyle(color: Colors.red),
-                    )
-                  ]
-                : entryLogs.map((log) {
-                    return BTEntryLogCard(
-                      entryLog: log,
-                    );
+          logs.isEmpty
+              ? Text(
+                  'No logs available',
+                  style: TextStyle(fontSize: 14.0, color: Colors.red[400]),
+                )
+              : Column(
+                  children: logs.map((log) {
+                    return BTEntryLogCard(entryLog: log);
                   }).toList(),
+                ),
+          const SizedBox(
+            height: 50.0,
           )
         ],
       ),
