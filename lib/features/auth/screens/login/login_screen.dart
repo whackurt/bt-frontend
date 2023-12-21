@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
+import 'package:bt_frontend/core/constants/decoration/app_data.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/controllers/auth.controller.dart';
 import 'package:bt_frontend/features/auth/models/user.model.dart';
@@ -127,29 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 100.0,
                           height: 100.0,
                           image: AssetImage('assets/images/app-icon.png')),
-                      Column(
-                        children: [
-                          Text(
-                            'Camiguin',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.0,
-                                color: Colors.white),
-                          ),
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Text(
-                            'Bantay Turista',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 25.0,
-                                color: Colors.white),
-                          ),
-                        ],
-                      )
+                      AppData().appNameLight()
                     ],
                   ),
                 ),

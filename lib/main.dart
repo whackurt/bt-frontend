@@ -87,8 +87,7 @@ class MyApp extends StatelessWidget {
             ? '/tourist'
             : tokenPresent && userType == 'establishment'
                 ? '/establishment'
-                : '/landing',
-        // home: const TouristContainer(),
+                : '/loading',
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case '/loading':

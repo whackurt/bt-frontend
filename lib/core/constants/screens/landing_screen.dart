@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
+import 'package:bt_frontend/core/constants/decoration/app_data.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/widgets/wrapper/init_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,15 @@ class Landing extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image(
-                    width: 150.0,
-                    height: 150.0,
-                    image: AssetImage('assets/images/app-icon.png')),
+                Column(
+                  children: [
+                    Image(
+                        width: 100.0,
+                        height: 100.0,
+                        image: AssetImage('assets/images/app-icon.png')),
+                    AppData().appNameLight()
+                  ],
+                ),
                 Column(
                   children: [
                     Padding(
