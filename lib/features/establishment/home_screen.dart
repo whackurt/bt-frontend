@@ -1,13 +1,16 @@
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
+import 'package:bt_frontend/features/establishment/features/entry_logs/controllers/log.controller.dart';
 import 'package:bt_frontend/features/establishment/features/entry_logs/screens/entry_logs.dart';
+import 'package:bt_frontend/features/establishment/features/entry_logs/screens/widgets/entry_log_card.dart';
+import 'package:bt_frontend/features/establishment/providers/entry_logs.provider.dart';
 import 'package:bt_frontend/features/establishment/providers/est_profile.provider.dart';
 import 'package:bt_frontend/features/establishment/services/profile.services.dart';
-import 'package:bt_frontend/widgets/appbar.dart';
+import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 
 class Logs {
   String name;
@@ -25,11 +28,13 @@ class BTEstHome extends StatefulWidget {
 
 class _BTEstHomeState extends State<BTEstHome> {
   AppColors appColors = AppColors();
+  EntryLogsController entryLogsController = EntryLogsController();
 
   Map userData = {};
   bool loading = false;
 
   List recentLogs = [];
+  List logsToday = [];
 
   List tourists = [];
 
@@ -48,17 +53,6 @@ class _BTEstHomeState extends State<BTEstHome> {
       setState(() {
         userData = res['data']['data']['establishment'];
 
-        tourists = res['data']['data']['tourists'];
-
-        if (tourists.isNotEmpty) {
-          for (int i = 2; i >= 0; i--) {
-            recentLogs.add(Logs(
-                name: tourists[i],
-                date: '${res['data']['data']['date'][i]}T00:00:00',
-                time: '2023-11-23T${res['data']['data']['time'][i]}'));
-          }
-        }
-
         context
             .read<EstablishmentProfileProvider>()
             .setHomeData(data: userData);
@@ -68,10 +62,25 @@ class _BTEstHomeState extends State<BTEstHome> {
     });
   }
 
+  Future getEntryLogsToday() async {
+    await entryLogsController.getEntryLogsToday().then((res) {
+      if (res['success']) {
+        setState(() {
+          logsToday = res['data']['logs'];
+        });
+
+        context
+            .read<EntryLogsProvider>()
+            .setEntryLogs(data: res['data']['logs']);
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getEstablishmentHome();
+    getEntryLogsToday();
   }
 
   @override
@@ -79,22 +88,69 @@ class _BTEstHomeState extends State<BTEstHome> {
     var estProvider =
         Provider.of<EstablishmentProfileProvider>(context, listen: true);
 
-    return Scaffold(
-        appBar: appBar(title: 'Home'),
-        backgroundColor: Colors.white,
-        body: loading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+    var logProvider = Provider.of<EntryLogsProvider>(context, listen: true);
+
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: loading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  // physics: const FixedExtentScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        height: 40.0,
+                      Container(
+                        height: MediaQuery.of(context).size.height * .15,
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(35.0),
+                            bottomRight: Radius.circular(35.0),
+                          ),
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.blue, Colors.indigo]),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 35,
+                                backgroundImage: NetworkImage(
+                                    '${estProvider.estHomeData['photo_url']}'),
+                                backgroundColor: Colors.white,
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Hi, ${estProvider.estHomeData['name']}',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const Text(
+                                    'Welcome to Bantay Turista!',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 232, 232, 232),
+                                        fontSize: 16.0),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                       Center(
                           child: Padding(
@@ -103,183 +159,127 @@ class _BTEstHomeState extends State<BTEstHome> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 75,
-                              backgroundImage: NetworkImage(
-                                  '${estProvider.estHomeData['photo_url']}'),
-                              backgroundColor: Colors.white,
-                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: Column(
                                 children: [
-                                  Text(
-                                    '${estProvider.estHomeData['name']}'
-                                        .toUpperCase(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20.0),
-                                  ),
-                                  const SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text(
-                                    '${estProvider.estHomeData['address_1'] ?? ''}, ${estProvider.estHomeData['barangay']}, ${estProvider.estHomeData['city_municipality']}',
-                                    style: const TextStyle(
-                                        color: Color.fromARGB(255, 65, 65, 65),
-                                        fontSize: 16.0),
-                                  ),
-                                  Text(
-                                    'Camiguin'.toUpperCase(),
-                                    style: const TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 102, 102, 102),
-                                        fontSize: 15.0),
+                                  const SizedBox(height: 15.0),
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      color: const Color.fromARGB(
+                                          255, 245, 245, 245),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 8.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '${estProvider.estHomeData['address_1'] ?? ''} ${estProvider.estHomeData['barangay']}, ${estProvider.estHomeData['city_municipality']}',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 97, 97, 97),
+                                              fontSize: 16.0),
+                                        ),
+                                        const SizedBox(
+                                          height: 8.0,
+                                        ),
+                                        Text(
+                                          'Camiguin'.toUpperCase(),
+                                          style: const TextStyle(
+                                              color: Colors.indigo,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const SizedBox(height: 15.0),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
+                            const Image(
+                              width: 120.0,
+                              height: 120.0,
+                              image: AssetImage('assets/images/app-icon.png'),
+                            ),
                             const SizedBox(height: 15.0),
-                            Stack(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * .70,
-                                  height: 256.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .white, // Set the background color
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // Set the radius
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey
-                                            .withOpacity(0.5), // Shadow color
-                                        spreadRadius: 2, // Spread radius
-                                        blurRadius: 5, // Blur radius
-                                        offset: const Offset(0,
-                                            3), // Offset (horizontal, vertical)
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .70,
-                                        height: 45.0,
-                                        decoration:
-                                            appColors.btnLinearGradient(),
-                                        child: const Center(
-                                            child: Text(
-                                          'Recent Logs',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.w600,
-                                              fontSize: 20.0),
-                                        )),
-                                      ),
-                                      recentLogs.isNotEmpty
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                children: recentLogs.map((log) {
-                                                  return Column(
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 8.0,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            '${log.name}'
-                                                                .toUpperCase(),
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontSize: 18.0),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 6.0),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Time: ${DateFormat('h:mm a').format(DateTime.parse(log.time))}',
-                                                            style:
-                                                                dateTimeStyle,
-                                                          ),
-                                                          Text(
-                                                            'Date: ${DateFormat('yMMMd').format(DateTime.parse(log.date))}',
-                                                            style:
-                                                                dateTimeStyle,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const Divider(
-                                                        thickness: 1.0,
-                                                      )
-                                                    ],
-                                                  );
-                                                }).toList(),
+                                AppText()
+                                    .darkHeading(text: 'Today\'s Entry Logs'),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                CupertinoPageRoute(
+                                                    builder: (context) {
+                                              return const BTEntryLogs();
+                                            }));
+                                          },
+                                          child: const Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'View More',
+                                                style: TextStyle(
+                                                    color: Colors.indigo,
+                                                    // fontWeight: FontWeight.w600,
+                                                    fontSize: 14.0),
                                               ),
-                                            )
-                                          : const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 70.0),
-                                              child: Text('No logs available.'),
-                                            )
-                                    ],
-                                  ),
+                                              Divider(),
+                                              FaIcon(
+                                                FontAwesomeIcons.arrowRight,
+                                                size: 14,
+                                                color: Colors.indigo,
+                                              )
+                                            ],
+                                          )),
+                                    ),
+                                    const Divider(),
+                                  ],
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 15.0,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * .70,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    decoration: appColors.btnLinearGradient(),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    height: 35.0,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              CupertinoPageRoute(
-                                            builder: (context) {
-                                              return const BTEntryLogs();
-                                            },
-                                          ));
-                                        },
-                                        child: const Text(
-                                          'View All',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15.0),
-                                        )),
+                            const Divider(),
+                            logsToday.isEmpty
+                                ? Text(
+                                    'No logs available',
+                                    style: TextStyle(
+                                        fontSize: 14.0, color: Colors.red[400]),
                                   )
-                                ],
-                              ),
-                            )
+                                : Column(
+                                    children:
+                                        logProvider.entryLogsToday.length > 5
+                                            ? logProvider.entryLogsToday
+                                                .take(5)
+                                                .map((log) {
+                                                return BTEntryLogCard(
+                                                    entryLog: log);
+                                              }).toList()
+                                            : logProvider.entryLogsToday
+                                                .map((log) {
+                                                return BTEntryLogCard(
+                                                    entryLog: log);
+                                              }).toList(),
+                                  ),
+                            const SizedBox(height: 15.0),
                           ],
                         ),
                       )),
                     ],
                   ),
-                ),
-              ));
+                )),
+    );
   }
 }
