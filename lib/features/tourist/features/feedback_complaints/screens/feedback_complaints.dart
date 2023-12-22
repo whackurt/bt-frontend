@@ -6,6 +6,7 @@ import 'package:bt_frontend/widgets/custom_buttons/full_width_btn.dart';
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,8 +23,14 @@ class BTFeedbackComplaints extends StatefulWidget {
 class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
   ComplaintController complaintController = ComplaintController();
 
+  bool loading = false;
+
   Future getComplaints() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
+    setState(() {
+      loading = true;
+    });
 
     await complaintController
         .getComplaints(id: pref.getInt('touristId').toString())
@@ -31,6 +38,10 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
       context
           .read<ComplaintProvider>()
           .setComplaints(data: res['data']['complaints']);
+    });
+
+    setState(() {
+      loading = false;
     });
   }
 
@@ -110,20 +121,27 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                   const Divider(
                     thickness: 1.0,
                   ),
-                  Column(
-                    children: complaintProvider.complaints
-                        .where((complaint) => complaint['resolved'] == 0)
-                        .map((complaint) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3.0),
-                        child: complaint['resolved'] == 0
-                            ? BTPendingComplaintCard(
-                                complaint: complaint,
-                              )
-                            : null,
-                      );
-                    }).toList(),
-                  ),
+                  loading
+                      ? const SpinKitRing(
+                          color: Colors.indigo,
+                          lineWidth: 3,
+                          size: 30.0,
+                        )
+                      : Column(
+                          children: complaintProvider.complaints
+                              .where((complaint) => complaint['resolved'] == 0)
+                              .map((complaint) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 3.0),
+                              child: complaint['resolved'] == 0
+                                  ? BTPendingComplaintCard(
+                                      complaint: complaint,
+                                    )
+                                  : null,
+                            );
+                          }).toList(),
+                        ),
                   complaintProvider.complaints
                           .where((complaint) => complaint['resolved'] == 0)
                           .isEmpty
@@ -139,20 +157,27 @@ class _BTFeedbackComplaintsState extends State<BTFeedbackComplaints> {
                   const Divider(
                     thickness: 1.0,
                   ),
-                  Column(
-                    children: complaintProvider.complaints
-                        .where((complaint) => complaint['resolved'] == 1)
-                        .map((complaint) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3.0),
-                        child: complaint['resolved'] == 1
-                            ? BTResolvedComplaintCard(
-                                complaint: complaint,
-                              )
-                            : null,
-                      );
-                    }).toList(),
-                  ),
+                  loading
+                      ? const SpinKitRing(
+                          color: Colors.indigo,
+                          lineWidth: 3,
+                          size: 30.0,
+                        )
+                      : Column(
+                          children: complaintProvider.complaints
+                              .where((complaint) => complaint['resolved'] == 1)
+                              .map((complaint) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 3.0),
+                              child: complaint['resolved'] == 1
+                                  ? BTResolvedComplaintCard(
+                                      complaint: complaint,
+                                    )
+                                  : null,
+                            );
+                          }).toList(),
+                        ),
                   complaintProvider.complaints
                           .where((complaint) => complaint['resolved'] == 1)
                           .isEmpty

@@ -8,6 +8,7 @@ import 'package:bt_frontend/features/establishment/services/profile.services.dar
 import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -128,26 +129,34 @@ class _BTEstHomeState extends State<BTEstHome> {
                               const SizedBox(
                                 width: 10.0,
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Hi, ${estProvider.estHomeData['name']}',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24.0,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const Text(
-                                    'Welcome to Bantay Turista!',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 232, 232, 232),
-                                        fontSize: 16.0),
-                                  ),
-                                ],
-                              )
+                              loading
+                                  ? const SpinKitRing(
+                                      color: Colors.indigo,
+                                      lineWidth: 3,
+                                      size: 30.0,
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Hi, ${estProvider.estHomeData['name']}',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const Text(
+                                          'Welcome to Bantay Turista!',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 232, 232, 232),
+                                              fontSize: 15.0),
+                                        ),
+                                      ],
+                                    )
                             ],
                           ),
                         ),
@@ -162,43 +171,50 @@ class _BTEstHomeState extends State<BTEstHome> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 15.0),
-                                  Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: const Color.fromARGB(
-                                          255, 245, 245, 245),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 8.0),
-                                    child: Column(
+                              child: loading
+                                  ? const SpinKitRing(
+                                      color: Colors.indigo,
+                                      lineWidth: 3,
+                                      size: 30.0,
+                                    )
+                                  : Column(
                                       children: [
-                                        Text(
-                                          '${estProvider.estHomeData['address_1'] ?? ''} ${estProvider.estHomeData['barangay']}, ${estProvider.estHomeData['city_municipality']}',
-                                          style: const TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 97, 97, 97),
-                                              fontSize: 16.0),
-                                        ),
-                                        const SizedBox(
-                                          height: 8.0,
-                                        ),
-                                        Text(
-                                          'Camiguin'.toUpperCase(),
-                                          style: const TextStyle(
-                                              color: Colors.indigo,
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.w600),
-                                        ),
                                         const SizedBox(height: 15.0),
+                                        Container(
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            color: const Color.fromARGB(
+                                                255, 245, 245, 245),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 8.0),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '${estProvider.estHomeData['address_1'] ?? ''} ${estProvider.estHomeData['barangay']}, ${estProvider.estHomeData['city_municipality']}',
+                                                style: const TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 97, 97, 97),
+                                                    fontSize: 16.0),
+                                              ),
+                                              const SizedBox(
+                                                height: 8.0,
+                                              ),
+                                              Text(
+                                                'Camiguin'.toUpperCase(),
+                                                style: const TextStyle(
+                                                    color: Colors.indigo,
+                                                    fontSize: 18.0,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
                             ),
                             const Image(
                               width: 120.0,
@@ -252,27 +268,35 @@ class _BTEstHomeState extends State<BTEstHome> {
                               ],
                             ),
                             const Divider(),
-                            logsToday.isEmpty
-                                ? Text(
-                                    'No logs available',
-                                    style: TextStyle(
-                                        fontSize: 14.0, color: Colors.red[400]),
+                            loading
+                                ? const SpinKitRing(
+                                    color: Colors.indigo,
+                                    lineWidth: 3,
+                                    size: 30.0,
                                   )
-                                : Column(
-                                    children:
-                                        logProvider.entryLogsToday.length > 5
-                                            ? logProvider.entryLogsToday
-                                                .take(5)
-                                                .map((log) {
-                                                return BTEntryLogCard(
-                                                    entryLog: log);
-                                              }).toList()
-                                            : logProvider.entryLogsToday
-                                                .map((log) {
-                                                return BTEntryLogCard(
-                                                    entryLog: log);
-                                              }).toList(),
-                                  ),
+                                : logsToday.isEmpty
+                                    ? Text(
+                                        'No logs available',
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.red[400]),
+                                      )
+                                    : Column(
+                                        children:
+                                            logProvider.entryLogsToday.length >
+                                                    5
+                                                ? logProvider.entryLogsToday
+                                                    .take(5)
+                                                    .map((log) {
+                                                    return BTEntryLogCard(
+                                                        entryLog: log);
+                                                  }).toList()
+                                                : logProvider.entryLogsToday
+                                                    .map((log) {
+                                                    return BTEntryLogCard(
+                                                        entryLog: log);
+                                                  }).toList(),
+                                      ),
                             const SizedBox(height: 15.0),
                           ],
                         ),

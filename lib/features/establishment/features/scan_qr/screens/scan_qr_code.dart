@@ -133,16 +133,22 @@ class _BTScanQRState extends State<BTScanQR> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                logDetails!.isNotEmpty
-                    ? CircleAvatar(
-                        radius: 75,
-                        backgroundImage: NetworkImage(
-                            '${logDetails![0]['tourist']['photo_url']}'),
-                        backgroundColor: Colors.white,
+                loading
+                    ? const SpinKitRing(
+                        color: Colors.indigo,
+                        lineWidth: 3,
+                        size: 30.0,
                       )
-                    : const SizedBox(
-                        height: 150.0,
-                      ),
+                    : logDetails!.isNotEmpty
+                        ? CircleAvatar(
+                            radius: 75,
+                            backgroundImage: NetworkImage(
+                                '${logDetails![0]['tourist']['photo_url']}'),
+                            backgroundColor: Colors.white,
+                          )
+                        : const SizedBox(
+                            height: 150.0,
+                          ),
                 const SizedBox(
                   height: 30.0,
                 ),
@@ -191,19 +197,25 @@ class _BTScanQRState extends State<BTScanQR> {
                                     height: 200.0,
                                     width: 180.0,
                                   )
-                                : QrImageView(
-                                    data: qrCodeResult,
-                                    version: QrVersions.auto,
-                                    size: 200,
-                                    errorStateBuilder: (ctx, err) {
-                                      return const Center(
-                                        child: Text(
-                                          'Something went wrong!!!',
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                : loading
+                                    ? const SpinKitRing(
+                                        color: Colors.indigo,
+                                        lineWidth: 3,
+                                        size: 30.0,
+                                      )
+                                    : QrImageView(
+                                        data: qrCodeResult,
+                                        version: QrVersions.auto,
+                                        size: 200,
+                                        errorStateBuilder: (ctx, err) {
+                                          return const Center(
+                                            child: Text(
+                                              'Something went wrong!!!',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        },
+                                      ),
                           ],
                         ),
                 ),

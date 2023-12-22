@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
-import 'package:bt_frontend/core/constants/decoration/app_data.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/auth/controllers/auth.controller.dart';
 import 'package:bt_frontend/features/auth/models/user.model.dart';
@@ -125,10 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Image(
-                          width: 100.0,
-                          height: 100.0,
-                          image: AssetImage('assets/images/app-icon.png')),
-                      AppData().appNameLight()
+                          width: 200.0,
+                          height: 200.0,
+                          image: AssetImage('assets/images/icon-group.png')),
                     ],
                   ),
                 ),
@@ -181,8 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(
                                         PropValues().borderRadius),
                                   ),
-                                  backgroundColor: Color.fromARGB(255, 247, 247,
-                                      247), // Set the background color to white
+                                  backgroundColor: Color.fromARGB(255, 243, 243,
+                                      243), // Set the background color to white
                                 ),
                                 child: Column(
                                   children: [
@@ -190,14 +188,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Icons.person_2_outlined,
                                       size: 80.0,
                                       color: selectedUser == 'Tourist'
-                                          ? Colors.red[300]
+                                          ? Colors.indigo
                                           : Color.fromARGB(255, 97, 97, 97),
                                     ),
                                     Text(
                                       'Tourist',
                                       style: TextStyle(
                                         color: selectedUser == 'Tourist'
-                                            ? Colors.red[300]
+                                            ? Colors.indigo
                                             : Color.fromARGB(255, 97, 97, 97),
                                         fontSize: 15.0,
                                       ),
@@ -217,13 +215,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 25.0, vertical: 15.0),
+                                      horizontal: 16.0, vertical: 15.0),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         PropValues().borderRadius),
                                   ),
-                                  backgroundColor: Color.fromARGB(255, 247, 247,
-                                      247), // Set the background color to white
+                                  backgroundColor: Color.fromARGB(255, 243, 243,
+                                      243), // Set the background color to white
                                 ),
                                 child: Column(
                                   children: [
@@ -231,14 +229,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Icons.domain,
                                       size: 80.0,
                                       color: selectedUser == 'Establishment'
-                                          ? Colors.red[300]
+                                          ? Colors.indigo
                                           : Color.fromARGB(255, 97, 97, 97),
                                     ),
                                     Text(
                                       'Establishment',
                                       style: TextStyle(
                                         color: selectedUser == 'Establishment'
-                                            ? Colors.red[300]
+                                            ? Colors.indigo
                                             : Color.fromARGB(255, 97, 97, 97),
                                         fontSize: 15.0,
                                       ),

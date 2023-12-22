@@ -1,12 +1,9 @@
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
 import 'package:bt_frontend/core/constants/decoration/app_colors.dart';
 import 'package:bt_frontend/core/constants/decoration/prop_values.dart';
 import 'package:bt_frontend/features/tourist/features/profile/controllers/tourist_profile.controller.dart';
 import 'package:bt_frontend/features/tourist/providers/tourist_profile.provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,64 +51,12 @@ class _BTTouristHomeState extends State<BTTouristHome> {
     getTouristHomeData();
   }
 
-  Future<void> _captureAndSavePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          _qrkey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      var image = await boundary.toImage(pixelRatio: 3.0);
-
-      //Drawing White Background because Qr Code is Black
-      final whitePaint = Paint()..color = Colors.white;
-      final recorder = PictureRecorder();
-      final canvas = Canvas(recorder,
-          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()));
-      canvas.drawRect(
-          Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
-          whitePaint);
-      canvas.drawImage(image, Offset.zero, Paint());
-      final picture = recorder.endRecording();
-      final img = await picture.toImage(image.width, image.height);
-      ByteData? byteData = await img.toByteData(format: ImageByteFormat.png);
-      Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-      //Check for duplicate file name to avoid Override
-      String fileName = '${userData['qr_code']}';
-      int i = 1;
-      while (await File('$externalDir/$fileName.png').exists()) {
-        fileName = '${userData['qr_code']}_$i';
-        i++;
-      }
-
-      // Check if Directory Path exists or not
-      dirExists = await File(externalDir).exists();
-      //if not then create the path
-      if (!dirExists) {
-        await Directory(externalDir).create(recursive: true);
-        dirExists = true;
-      }
-
-      final file = await File('$externalDir/$fileName.png').create();
-      await file.writeAsBytes(pngBytes);
-
-      if (!mounted) return;
-      const snackBar = SnackBar(content: Text('QR code saved to gallery'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } catch (e) {
-      if (!mounted) return;
-      const snackBar = SnackBar(content: Text('Something went wrong!!!'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var touristProvider =
         Provider.of<TouristProfileProvider>(context, listen: true);
 
     return Scaffold(
-      // onRefresh: () async {
-      //   getTouristHomeData();
-      // },
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
@@ -131,38 +76,47 @@ class _BTTouristHomeState extends State<BTTouristHome> {
               ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundImage: NetworkImage(
-                          '${touristProvider.touristHomeData['photo_url']}'),
-                      backgroundColor: const Color.fromARGB(255, 131, 73, 73),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hi, ${touristProvider.touristHomeData['full_name']}',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w600),
+                child: Expanded(
+                  child: loading
+                      ? const SpinKitRing(
+                          color: Colors.white,
+                          lineWidth: 3,
+                          size: 30.0,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundImage: NetworkImage(
+                                  '${touristProvider.touristHomeData['photo_url']}'),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 131, 73, 73),
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Hi, ${touristProvider.touristHomeData['full_name']}',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const Text(
+                                  'Welcome to Bantay Turista!',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 232, 232, 232),
+                                      fontSize: 15.0),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
-                        const Text(
-                          'Welcome to Bantay Turista!',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 232, 232, 232),
-                              fontSize: 16.0),
-                        ),
-                      ],
-                    )
-                  ],
                 ),
               ),
             ),
@@ -179,7 +133,7 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                         height: 120.0,
                         image: AssetImage('assets/images/app-icon.png'),
                       ),
-                      Text('Your Travel Companion: Bantay Turista',
+                      Text('Bantay Turista: Your Travel Companion',
                           style: TextStyle(
                               color: Colors.grey[600], fontSize: 15.0)),
                       const SizedBox(
@@ -240,21 +194,27 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                               const SizedBox(
                                 height: 10.0,
                               ),
-                              QrImageView(
-                                data: touristProvider
-                                        .touristHomeData['qr_code'] ??
-                                    '',
-                                version: QrVersions.auto,
-                                size: 180,
-                                errorStateBuilder: (ctx, err) {
-                                  return const Center(
-                                    child: Text(
-                                      'Something went wrong!!!',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                },
-                              )
+                              loading
+                                  ? const SpinKitRing(
+                                      color: Colors.indigo,
+                                      lineWidth: 3,
+                                      size: 30.0,
+                                    )
+                                  : QrImageView(
+                                      data: touristProvider
+                                              .touristHomeData['qr_code'] ??
+                                          '',
+                                      version: QrVersions.auto,
+                                      size: 180,
+                                      errorStateBuilder: (ctx, err) {
+                                        return const Center(
+                                          child: Text(
+                                            'Something went wrong!!!',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      },
+                                    )
                             ],
                           )
                         ],
@@ -280,27 +240,33 @@ class _BTTouristHomeState extends State<BTTouristHome> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 8.0),
                     // width: MediaQuery.of(context).size.width * .55,
-                    child: Column(
-                      children: [
-                        Text(
-                          '${touristProvider.touristHomeData['address_1']}, ${touristProvider.touristHomeData['city_municipality']}, ${touristProvider.touristHomeData['state_province']}',
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 97, 97, 97),
-                              fontSize: 16.0),
-                        ),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                        Text(
-                          '${touristProvider.touristHomeData['country']}'
-                              .toUpperCase(),
-                          style: const TextStyle(
-                              color: Colors.indigo,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
+                    child: loading
+                        ? const SpinKitRing(
+                            color: Colors.indigo,
+                            lineWidth: 3,
+                            size: 30.0,
+                          )
+                        : Column(
+                            children: [
+                              Text(
+                                '${touristProvider.touristHomeData['address_1']}, ${touristProvider.touristHomeData['city_municipality']}, ${touristProvider.touristHomeData['state_province']}',
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 97, 97, 97),
+                                    fontSize: 16.0),
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text(
+                                '${touristProvider.touristHomeData['country']}'
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                    color: Colors.indigo,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
                   ),
                 ],
               ),

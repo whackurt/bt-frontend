@@ -12,6 +12,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -26,37 +27,71 @@ class _BTTouristHubState extends State<BTTouristHub> {
   AppText appText = AppText();
   TouristHubController touristhubController = TouristHubController();
 
+  bool loading = false;
+
   Future getTouristSpots() async {
+    setState(() {
+      loading = true;
+    });
+
     await touristhubController.getTouristSpots().then((res) {
       context
           .read<TouristHubProvider>()
           .setTouristSpots(data: res['data']['tourist_spots']);
     });
+
+    setState(() {
+      loading = false;
+    });
   }
 
   Future getEssentialProviders() async {
+    setState(() {
+      loading = true;
+    });
+
     await touristhubController.getEssentialServiceProviders().then((res) {
       // print(res['data']['providers']);
       context
           .read<TouristHubProvider>()
           .setEssentialServiceProviders(data: res['data']['providers']);
     });
+
+    setState(() {
+      loading = false;
+    });
   }
 
   Future getHotlines() async {
+    setState(() {
+      loading = true;
+    });
+
     await touristhubController.getEmergencyHotlineNumbers().then((res) {
       context
           .read<TouristHubProvider>()
           .setHotlines(data: res['data']['hotlines']);
     });
+
+    setState(() {
+      loading = false;
+    });
   }
 
   Future getSchedules() async {
+    setState(() {
+      loading = true;
+    });
+
     await touristhubController.getSchedules().then((res) {
       // print(res);
       context
           .read<TouristHubProvider>()
           .setSchedules(data: res['data']['schedules']);
+    });
+
+    setState(() {
+      loading = false;
     });
   }
 
@@ -151,21 +186,27 @@ class _BTTouristHubState extends State<BTTouristHub> {
                           ),
                         ],
                       ),
-                      CarouselSlider(
-                          items: touristHubProvider.touristSpots
-                              .map((spot) => BTTouristSpotCard(
-                                    touristSpot: spot,
-                                  ))
-                              .toList(),
-                          options: CarouselOptions(
-                            height: 188,
-                            viewportFraction: 1,
-                            initialPage: 0,
-                            enableInfiniteScroll: true,
-                            reverse: true,
-                            autoPlay: false,
-                            scrollDirection: Axis.horizontal,
-                          )),
+                      loading
+                          ? const SpinKitRing(
+                              color: Colors.indigo,
+                              lineWidth: 3,
+                              size: 30.0,
+                            )
+                          : CarouselSlider(
+                              items: touristHubProvider.touristSpots
+                                  .map((spot) => BTTouristSpotCard(
+                                        touristSpot: spot,
+                                      ))
+                                  .toList(),
+                              options: CarouselOptions(
+                                height: 188,
+                                viewportFraction: 1,
+                                initialPage: 0,
+                                enableInfiniteScroll: true,
+                                reverse: true,
+                                autoPlay: false,
+                                scrollDirection: Axis.horizontal,
+                              )),
                     ],
                   ),
                 ),
@@ -220,21 +261,28 @@ class _BTTouristHubState extends State<BTTouristHub> {
                           ),
                         ],
                       ),
-                      CarouselSlider(
-                          items: touristHubProvider.essentialServiceProviders
-                              .map((prov) => BTEssentialProviderCard(
-                                    provider: prov,
-                                  ))
-                              .toList(),
-                          options: CarouselOptions(
-                            height: 80,
-                            viewportFraction: 1,
-                            initialPage: 0,
-                            enableInfiniteScroll: true,
-                            reverse: true,
-                            autoPlay: false,
-                            scrollDirection: Axis.horizontal,
-                          )),
+                      loading
+                          ? const SpinKitRing(
+                              color: Colors.indigo,
+                              lineWidth: 3,
+                              size: 30.0,
+                            )
+                          : CarouselSlider(
+                              items:
+                                  touristHubProvider.essentialServiceProviders
+                                      .map((prov) => BTEssentialProviderCard(
+                                            provider: prov,
+                                          ))
+                                      .toList(),
+                              options: CarouselOptions(
+                                height: 80,
+                                viewportFraction: 1,
+                                initialPage: 0,
+                                enableInfiniteScroll: true,
+                                reverse: true,
+                                autoPlay: false,
+                                scrollDirection: Axis.horizontal,
+                              )),
                     ],
                   ),
                 ),
@@ -247,31 +295,43 @@ class _BTTouristHubState extends State<BTTouristHub> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    BTWhiteBtnWithBorder(
-                      url: touristHubProvider.schedules.isNotEmpty
-                          ? touristHubProvider.schedules
-                              .where((sched) => sched['type'] == "Flight")
-                              .toList()[0]['scheduleUrl']
-                          : '',
-                      height: 45.0,
-                      labelText: 'Flight Schedule',
-                      iconData: FluentIcons.airplane_take_off_20_regular,
-                      action: () {},
-                    ),
+                    loading
+                        ? const SpinKitRing(
+                            color: Colors.indigo,
+                            lineWidth: 3,
+                            size: 30.0,
+                          )
+                        : BTWhiteBtnWithBorder(
+                            url: touristHubProvider.schedules.isNotEmpty
+                                ? touristHubProvider.schedules
+                                    .where((sched) => sched['type'] == "Flight")
+                                    .toList()[0]['scheduleUrl']
+                                : '',
+                            height: 45.0,
+                            labelText: 'Flight Schedule',
+                            iconData: FluentIcons.airplane_take_off_20_regular,
+                            action: () {},
+                          ),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    BTWhiteBtnWithBorder(
-                      url: touristHubProvider.schedules.isNotEmpty
-                          ? touristHubProvider.schedules
-                              .where((sched) => sched['type'] == "Ferry")
-                              .toList()[0]['scheduleUrl']
-                          : '',
-                      height: 45.0,
-                      labelText: 'Ferry Schedule',
-                      iconData: FluentIcons.vehicle_ship_16_regular,
-                      action: () {},
-                    ),
+                    loading
+                        ? const SpinKitRing(
+                            color: Colors.indigo,
+                            lineWidth: 3,
+                            size: 30.0,
+                          )
+                        : BTWhiteBtnWithBorder(
+                            url: touristHubProvider.schedules.isNotEmpty
+                                ? touristHubProvider.schedules
+                                    .where((sched) => sched['type'] == "Ferry")
+                                    .toList()[0]['scheduleUrl']
+                                : '',
+                            height: 45.0,
+                            labelText: 'Ferry Schedule',
+                            iconData: FluentIcons.vehicle_ship_16_regular,
+                            action: () {},
+                          ),
                   ],
                 ),
                 const SizedBox(
@@ -280,18 +340,24 @@ class _BTTouristHubState extends State<BTTouristHub> {
                 Column(
                   children: [
                     appText.darkHeading(text: 'Emergency Hotline Numbers'),
-                    Column(
-                      children: touristHubProvider.hotlines
-                          .map(
-                            (hotline) => BTEmergencyHotline(
-                              agency: '${hotline['agencyName']}',
-                              imgUrl: '${hotline['agencyLogo']}',
-                              location: '${hotline['address']}',
-                              contactno: '${hotline['hotlineNumber']}',
-                            ),
+                    loading
+                        ? const SpinKitRing(
+                            color: Colors.indigo,
+                            lineWidth: 3,
+                            size: 30.0,
                           )
-                          .toList(),
-                    ),
+                        : Column(
+                            children: touristHubProvider.hotlines
+                                .map(
+                                  (hotline) => BTEmergencyHotline(
+                                    agency: '${hotline['agencyName']}',
+                                    imgUrl: '${hotline['agencyLogo']}',
+                                    location: '${hotline['address']}',
+                                    contactno: '${hotline['hotlineNumber']}',
+                                  ),
+                                )
+                                .toList(),
+                          ),
                   ],
                 ),
                 const SizedBox(

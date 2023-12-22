@@ -102,7 +102,7 @@ class _BTWriteFeedbackState extends State<BTWriteFeedback> {
     ))
         .then((res) {
       if (res['success']) {
-        BotToast.showText(text: 'Complaint suubmitted.');
+        BotToast.showText(text: 'Complaint submitted.');
         setState(() {
           success = true;
         });

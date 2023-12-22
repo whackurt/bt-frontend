@@ -5,6 +5,7 @@ import 'package:bt_frontend/widgets/custom_text/app_text.dart';
 import 'package:bt_frontend/widgets/wrapper/content_wrapper.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BTEntryLogs extends StatefulWidget {
@@ -19,8 +20,13 @@ class _BTEntryLogsState extends State<BTEntryLogs> {
 
   List logs = [];
   DateTime logDate = DateTime.now();
+  bool loading = false;
 
   Future getEntryLogsToday() async {
+    setState(() {
+      loading = true;
+    });
+
     await entryLogsController.getEntryLogsToday().then((res) {
       if (res['success']) {
         setState(() {
@@ -28,15 +34,27 @@ class _BTEntryLogsState extends State<BTEntryLogs> {
         });
       }
     });
+
+    setState(() {
+      loading = false;
+    });
   }
 
   Future getEntryLogsByDate() async {
+    setState(() {
+      loading = true;
+    });
+
     await entryLogsController.getEntryLogsByDate(date: logDate).then((res) {
       if (res['success']) {
         setState(() {
           logs = res['data']['logs'];
         });
       }
+    });
+
+    setState(() {
+      loading = false;
     });
   }
 
@@ -117,16 +135,22 @@ class _BTEntryLogsState extends State<BTEntryLogs> {
           const SizedBox(
             height: 20.0,
           ),
-          logs.isEmpty
-              ? Text(
-                  'No logs available',
-                  style: TextStyle(fontSize: 14.0, color: Colors.red[400]),
+          loading
+              ? const SpinKitRing(
+                  color: Colors.indigo,
+                  lineWidth: 3,
+                  size: 30.0,
                 )
-              : Column(
-                  children: logs.map((log) {
-                    return BTEntryLogCard(entryLog: log);
-                  }).toList(),
-                ),
+              : logs.isEmpty
+                  ? Text(
+                      'No logs available',
+                      style: TextStyle(fontSize: 14.0, color: Colors.red[400]),
+                    )
+                  : Column(
+                      children: logs.map((log) {
+                        return BTEntryLogCard(entryLog: log);
+                      }).toList(),
+                    ),
           const SizedBox(
             height: 50.0,
           )

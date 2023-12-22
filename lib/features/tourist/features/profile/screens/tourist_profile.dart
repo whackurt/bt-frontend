@@ -55,7 +55,7 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
 
     pref.clear();
 
-    BotToast.showText(text: 'Logout successful.');
+    BotToast.showText(text: 'Logged out.');
 
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
         CupertinoPageRoute(builder: (context) => const LoginScreen()),
