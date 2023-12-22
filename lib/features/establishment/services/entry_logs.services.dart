@@ -49,7 +49,7 @@ class EntryLogsServices {
         await http.post(Uri.parse('${api.logsUrl}/create'), body: log.toJson());
 
     Map jsonRes = jsonDecode(response.body) as Map<dynamic, dynamic>;
-    print(jsonRes);
+
     if (response.statusCode == 201) {
       return {"success": true, "data": jsonRes};
     } else {

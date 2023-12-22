@@ -43,7 +43,7 @@ class EstablishmentProfileServices {
         body: jsonEncode(updateData));
 
     Map jsonRes = jsonDecode(response.body) as Map<dynamic, dynamic>;
-    print(jsonRes);
+
     if (response.statusCode == 200) {
       return {"success": true, "data": jsonRes};
     } else {
@@ -64,7 +64,7 @@ class EstablishmentProfileServices {
       final responseData = await response.stream.toBytes();
       final responseString = String.fromCharCodes(responseData);
       final jsonMap = jsonDecode(responseString);
-      print(jsonMap['url']);
+
       return jsonMap['url'];
     }
   }

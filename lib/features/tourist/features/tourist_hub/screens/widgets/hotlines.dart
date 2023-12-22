@@ -69,6 +69,7 @@ class _BTEmergencyHotlineState extends State<BTEmergencyHotline> {
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url);
                       } else {
+                        // ignore: avoid_print
                         print('Cannot launch url: ');
                       }
                     },
