@@ -111,8 +111,16 @@ class _BTTouristProfileState extends State<BTTouristProfile> {
                           : Column(children: [
                               CircleAvatar(
                                 radius: 75,
-                                backgroundImage: NetworkImage(
-                                    '${touristProvider.touristData['photo_url']}'),
+                                backgroundImage: touristProvider
+                                                .touristData['photo_url'] !=
+                                            null &&
+                                        touristProvider
+                                            .touristData['photo_url'].isNotEmpty
+                                    ? NetworkImage(touristProvider
+                                            .touristData['photo_url'])
+                                        as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/app-icon.png'), // Use a placeholder image
                                 backgroundColor:
                                     const Color.fromARGB(255, 138, 138, 138),
                               ),

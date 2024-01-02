@@ -117,10 +117,15 @@ class _BTEstProfileState extends State<BTEstProfile> {
                       ),
                       CircleAvatar(
                         radius: 75,
-                        backgroundImage: NetworkImage(
-                            '${estProvider.profileData['photo_url']}'),
+                        backgroundImage: estProvider.profileData['photo_url'] !=
+                                    null &&
+                                estProvider.profileData['photo_url'].isNotEmpty
+                            ? NetworkImage(estProvider.profileData['photo_url'])
+                                as ImageProvider
+                            : const AssetImage(
+                                'assets/images/app-icon.png'), // Use a placeholder image
                         backgroundColor:
-                            const Color.fromARGB(255, 138, 138, 138),
+                            const Color.fromARGB(255, 233, 233, 233),
                       ),
                       const SizedBox(
                         height: 20.0,
@@ -135,12 +140,12 @@ class _BTEstProfileState extends State<BTEstProfile> {
                             ),
                             BTReadonlyTextField(
                               label: 'Establishment Type',
-                              text: '${estTypes?.firstWhere(
+                              text: estTypes?.firstWhere(
                                 (eType) =>
                                     eType['id'] ==
                                     estProvider.profileData['type_id'],
                                 orElse: () => {'value': 'Item not found'},
-                              )['name']}',
+                              )['name'],
                             ),
                             BTReadonlyTextField(
                               label: 'Contact Number',
