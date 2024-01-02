@@ -1,25 +1,25 @@
 class Api {
-  String baseUrl = 'http://192.168.254.105:8000/api';
+  String baseUrl = 'http://192.168.13.167:8000/api';
 
-  String touristBaseUrl = "http://192.168.254.105:8000/api/v1/tourist";
+  String touristBaseUrl = "http://192.168.13.167:8000/api/v1/tourist";
   String establishmentBaseUrl =
-      "http://192.168.254.105:8000/api/v1/establishment";
+      "http://192.168.13.167:8000/api/v1/establishment";
 
   String cloudinaryUrl = "https://api.cloudinary.com/v1_1/dyi2sla5u/upload";
 
-  String touristSpotUrl = "http://192.168.254.105:8000/api/v1/tourist-spot";
+  String touristSpotUrl = "http://192.168.13.167:8000/api/v1/tourist-spot";
 
   String essentialServiceProvidersUrl =
-      "http://192.168.254.105:8000/api/v1/essential-service-provider";
+      "http://192.168.13.167:8000/api/v1/essential-service-provider";
 
   String emergencyHotlineNumbersUrl =
-      "http://192.168.254.105:8000/api/v1/hotline";
+      "http://192.168.13.167:8000/api/v1/hotline";
 
-  String schedulesUrl = "http://192.168.254.105:8000/api/v1/schedule";
+  String schedulesUrl = "http://192.168.13.167:8000/api/v1/schedule";
 
-  String complaintsUrl = "http://192.168.254.105:8000/api/v1/complaint";
+  String complaintsUrl = "http://192.168.13.167:8000/api/v1/complaint";
 
-  String feedbacksUrl = "http://192.168.254.105:8000/api/v1/feedback";
+  String feedbacksUrl = "http://192.168.13.167:8000/api/v1/feedback";
 
-  String logsUrl = "http://192.168.254.105:8000/api/v1/log";
+  String logsUrl = "http://192.168.13.167:8000/api/v1/log";
 }
