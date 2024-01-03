@@ -274,7 +274,7 @@ class _BTEstHomeState extends State<BTEstHome> {
                                     lineWidth: 3,
                                     size: 30.0,
                                   )
-                                : logsToday.isEmpty
+                                : logProvider.entryLogsToday.isEmpty
                                     ? Text(
                                         'No logs available',
                                         style: TextStyle(
